@@ -40,11 +40,11 @@ Letra A (y también R), y letra M:
 
 > __NOTAS__
 >
->    - Para integrar use un reticulado con h~0.2[cm]. 
+>    - Para integrar use un reticulado con h~0.2[cm].
 >    - Use el método de sobre-relajación sucesiva con distintos w y estudie
 >      cuantas iteraciones hacen falta para converger en cada caso.
 >    - Tenga cuidado al implementar el método de sobre-relajación sucesiva,
->      recuerde la modificación indicada en clase. 
+>      recuerde la modificación indicada en clase.
 >    - Note que tendrá que derivar el algoritmo de iteración para los puntos
 >      adyacentes al segmento con condición de borde derivativa y para el
 >      segmento mismo.
@@ -54,8 +54,10 @@ Letra A (y también R), y letra M:
 >    - Como hicimos en clase, parta con un setup simple y vaya agregando
 >      complejidad, asegurándose primero de que los casos simples funcionan.
 >      Vaya dejando el rastro de su trabajo en git.
+>    - Asegúrese de incluír gráficos que demuestren de forma efectiva la
+>      solución obtenida. Éstos pueden incluir, gráficos de superficie en 2D y
+>      3D, líneas de contorno, cortes transversales, etc.
 
- 
 __Otras Notas.__
 
 - Utilice `git` durante el desarrollo de la tarea para mantener un historial de
