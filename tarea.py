@@ -31,10 +31,11 @@ def poner_linea(caja , condiciones):
     derivativas y sus valores, y las implementa en la caja'''
 
 
-def poner_carga():
+def poner_carga(caja,carga):
     '''recibe las coordenadas para setear el arreglo de cargas inicial '''
-
-
+    for par in carga:
+        caja[par[1],par[0]] = 1
+    return caja
 def iteracion_zona_1():
     '''avanza el algoritmo de sobre relajación 1 vez, en la zona 1 (fuera del
     cuadrado de la letra, y lejos de la linea)'''
@@ -89,10 +90,14 @@ def mostrar(f_caja,caja,titulo):
                            linewidth=0, antialiased=False, shade=False)
 #main
 #pdb.set_trace()
+carga = [(0,0),(2,2)]
+
 caja_carga = crear_caja(ANCHO,ALTO,H)
 caja_potencial = crear_caja(ANCHO,ALTO,H)
 
-caja_carga = poner_carga()
+
+caja_carga = poner_carga(caja_carga,carga)
+
 '''
 caja = poner_condiciones_borde()
 caja = poner_linea()
