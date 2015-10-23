@@ -7,9 +7,9 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import LinearLocator, FixedLocator, FormatStrFormatter
 import pdb
 
-ANCHO = 3.+1
-ALTO = 4.+1
-H = 1
+ANCHO = 10.+1
+ALTO = 15.+1
+H = 0.2
 
 def crear_caja(ancho , alto, h):
     '''recibe las dimensiones de la caja  y el tamaño del reticulado
@@ -31,11 +31,15 @@ def poner_linea(caja , condiciones):
     derivativas y sus valores, y las implementa en la caja'''
 
 
-def poner_carga(caja,carga):
-    '''recibe las coordenadas para setear el arreglo de cargas inicial '''
+def poner_carga(caja,carga,total):
+    '''recibe la caja a modificar, la carga total a colocar y
+     las coordenadas para setear el arreglo de cargas inicial '''
+    carga_en_un_punto = total / len(carga)
     for par in carga:
-        caja[par[1],par[0]] = 1
+        caja[par[1],par[0]] = carga_en_un_punto
     return caja
+
+
 def iteracion_zona_1():
     '''avanza el algoritmo de sobre relajación 1 vez, en la zona 1 (fuera del
     cuadrado de la letra, y lejos de la linea)'''
@@ -91,12 +95,13 @@ def mostrar(f_caja,caja,titulo):
 #main
 #pdb.set_trace()
 carga = [(0,0),(2,2)]
+carga_total = 1.
 
 caja_carga = crear_caja(ANCHO,ALTO,H)
 caja_potencial = crear_caja(ANCHO,ALTO,H)
 
 
-caja_carga = poner_carga(caja_carga,carga)
+caja_carga = poner_carga(caja_carga,carga,carga_total)
 
 '''
 caja = poner_condiciones_borde()
