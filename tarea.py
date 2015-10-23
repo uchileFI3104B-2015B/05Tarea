@@ -35,8 +35,19 @@ def poner_carga():
     '''recibe las coordenadas para setear el arreglo de cargas inicial '''
 
 
-def hacer_una_iteracion():
-    '''avanza el algoritmo de sobre relajación 1 vez'''
+def iteracion_zona_1():
+    '''avanza el algoritmo de sobre relajación 1 vez, en la zona 1 (fuera del
+    cuadrado de la letra, y lejos de la linea)'''
+
+
+def iteracion_zona_2():
+    '''avanza el algoritmo de sobre relajación 1 vez, en la zona 2 (detnro del
+    cuadrado de laletra)'''
+
+
+def iteracion_zona_3():
+    '''avanza el algoritmo de sobre relajación 1 vez, en la zona 3 (cerca
+    de la linea)'''
 
 
 def converge():
@@ -44,13 +55,19 @@ def converge():
     pedida'''
 
 
-def f(x,y):
+def f_caja_carga(x,y):
     '''función auxilar para plotear, recibe la coordenada x e y y devuelve
-    el valor de la malla en esas coordenadas'''
-    return caja[y,x]
+    el valor de la malla de carga en esas coordenadas'''
+    return caja_carga[y,x]
 
 
-def mostrar(caja):
+def f_caja_potencial(x,y):
+    '''función auxilar para plotear, recibe la coordenada x e y y devuelve
+    el valor de la malla de potencial en esas coordenadas'''
+    return caja_potencial[y,x]
+
+
+def mostrar(f_caja,caja,titulo):
     '''plotea la solución en 3D'''
     #pdb.set_trace()
     (alto,ancho) = caja.shape
@@ -59,29 +76,36 @@ def mostrar(caja):
 
     xg, yg = np.meshgrid(x, y)
 
-    vector_f = np.vectorize(f)
+    vector_f = np.vectorize(f_caja)
     z = vector_f(xg,yg)
+
 
     fig = plt.figure()
     ax = fig.gca(projection='3d')
+    plt.title(titulo)
     #ax.plot_surface(xg, yg, z, rstride=1, cstride=1, cmap=cm.coolwarm,
     #    linewidth=0, antialiased=False)
     surf = ax.plot_surface(xg, yg, z, rstride=1, cstride=1,
                            linewidth=0, antialiased=False, shade=False)
-    plt.show()
 #main
 #pdb.set_trace()
-caja = crear_caja(ANCHO,ALTO,H)
+caja_carga = crear_caja(ANCHO,ALTO,H)
+caja_potencial = crear_caja(ANCHO,ALTO,H)
+
+caja_carga = poner_carga()
 '''
 caja = poner_condiciones_borde()
 caja = poner_linea()
-caja = poner_carga()
 
 while(i<20)
-    caja = hacer_una_iteracion()
+    caja = iteración_zona_1()
+    caja = iteración_zona_2()
+    caja = iteración_zona_3()
     if converge():
         break
 
 print("numero iteraciones = "+str(i))
 '''
-mostrar(caja)
+mostrar(f_caja_carga,caja_carga,"distribucion carga")
+mostrar (f_caja_potencial,caja_potencial,"potencial")
+plt.show()
