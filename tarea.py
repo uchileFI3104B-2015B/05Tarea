@@ -92,9 +92,51 @@ def mostrar(f_caja,caja,titulo):
     #    linewidth=0, antialiased=False)
     surf = ax.plot_surface(xg, yg, z, rstride=1, cstride=1,
                            linewidth=0, antialiased=False, shade=False)
+
+
+
+    def es_horizontal(ini, fin):
+        '''retorna true si el traso es horizontal, o false si es vertical'''
+        return (ini[0]==fin[0])
+
+
+    def trazo(ini,fin,ancho):
+        '''recibe la coordenada de inicio del trazo, el final y el ancho del
+        trazo, devuelve un arregl con las coordenadas de los puntos que lo
+        conformman. Sólo funciona para trazos rectos.
+        (recibe los puntos más izquierdos, o más  abajo del trazo)'''
+        actual = ini
+        trazo = np.array([])
+        if es_horizontal(ini,fin):
+            paso = np.array([0,1])
+            ancho_1 = np.array([0,ancho])
+        else:
+            paso = np.array([1,0])
+            ancho_1 = np.array([0,ancho])
+        for a in range(ancho)
+
+
+        return trazo
+
+
+    def armar_letra():
+        '''devuelve el arreglo de coordenaas que conforman la letra'''
+        ini = np.array([])
+        fin = np.array([])
+        ancho = 1
+        trazo_1 = trazo(ini, fin , ancho)
+
+        ini2 = np.array([])
+        fin2 = np.array([])
+        trazo_2 = trazo(ini2,fin2,ancho)
+
+        letra = [trazo_1,trazo_2]
+        return letra
+
+
 #main
 #pdb.set_trace()
-carga = [(0,0),(2,2)]
+carga = armar_letra()
 carga_total = 1.
 
 caja_carga = crear_caja(ANCHO,ALTO,H)
