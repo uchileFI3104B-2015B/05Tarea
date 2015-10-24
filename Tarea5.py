@@ -28,7 +28,7 @@ esquina de caja = (0,0)
 '''
 Lx = 10.           #[cm] largo de la caja en eje x
 Ly = 15.           #[cm] largo de la caja en eje y
-h = 0.4           #[cm] tamanho del paso
+h = 0.25           #[cm] tamanho del paso
 Nx = (Lx / h) + 1  #numero de pasos a dar en eje x
 Ny = (Ly / h) + 1  #numero de pasos a dar en eje y
 
@@ -48,7 +48,7 @@ if Ny % 2 == 0:
 #construir letra
 '''
 dentro de caja de 5cmx7cm
-construir letra M
+construir letra M (con h = 0.25 o 0.3 queda bien)
 grosor 1cm
 '''
 Llx = 5              #largo caja de letra eje x
