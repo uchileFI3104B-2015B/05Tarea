@@ -87,7 +87,7 @@ def iteracion_linea(caja, caja_next,caja_carga,numero_pasos,h,w=1):
     casilleros cercanos a la línea'''
     rango_x = np.array([2/h,8/h])
     rango_y = np.array([1/h,3/h])
-    g_1 = 1
+    g_1 = -1
     g_2 = 1
 
     for i in range(int(rango_x[0]),int(rango_x[1]+1)):
@@ -128,10 +128,11 @@ def mostrar(f_caja,caja,titulo):
     vector_f = np.vectorize(f_caja)
     z = vector_f(xg,yg)
     '''
-    fig = plt.figure()
+    fig = plt.figure(1)
     fig.clf()
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(xg,yg,z, rstride=1, cstride=1)'''
+    ax.plot_surface(xg,yg,z, rstride=1, cstride=1)
+    '''
     fig2 = plt.figure()
     fig2.clf()
     ax2 = fig2.add_subplot(111)
@@ -190,14 +191,19 @@ def armar_letra():
     fin = np.array([1,3.5])
     ini2 = np.array([-2,-3.5])
     fin2 = np.array([1,-3.5])
+    ini3 = np.array([-2,-2.5])
+    fin3 = np.array([-2,0])
 
     ancho_transf = ancho /H
     ini,fin = transformar(ini),transformar(fin)
     ini2,fin2 = transformar(ini2),transformar(fin2)
+    ini3,fin3 = transformar(ini3),transformar(fin3)
 
     trazo_1 = trazo(ini, fin ,ancho_transf)
     trazo_2 = trazo(ini2,fin2,ancho_transf)
+    trazo_3 = trazo(ini3,fin3,ancho_transf)
     letra = np.append(trazo_1,trazo_2,axis=0)
+    letra = np.append(letra,trazo_3,axis=0)
     return letra
 
 
@@ -236,6 +242,6 @@ while contador<800:
     iteracion_resto(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w)
     contador += 1
 
-#mostrar(f_caja_carga,caja_carga,"distribucion carga")
+mostrar(f_caja_carga,caja_carga,"distribucion carga")
 mostrar (f_caja_potencial_next,caja_potencial_next,"potencial")
 plt.show()
