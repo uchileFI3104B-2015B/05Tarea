@@ -32,11 +32,13 @@ class Caja(object):
         pass
 
     def agregar_letra_B(self):
+        h = self.reticulado
+        Lx = self.largo_x
+        Ly = self.largo_y
         if not (Lx == 10 and Ly == 15 and h == 0.2):
             print "Método para agregar letra B a la caja solamente está",
             print "implementado para las dimensiones por defecto."
             return
-        h = self.reticulado
         #Límites de la letra
         i_min, i_max, j_min, j_inter, j_max = (13, 37, 21, 36, 54)
         #Densidad asociada [C/cm^2]
@@ -70,4 +72,8 @@ class Caja(object):
         pass
 
     def get_carga(self):
-        pass
+        carga = np.zeros((self.N_y, self.N_x))
+        for i in range(self.N_x):
+            for j in range(self.N_y):
+                carga[j][i] = self.carga[i][j]
+        return carga
