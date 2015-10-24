@@ -9,22 +9,20 @@ class Caja(object):
         Inicializa caja vacía
         '''
         self.reticulado = 1.0 * h
-        self.largo_x = 1.0 * Lx
-        self.largo_y = 1.0 * Ly
-        self.N_x = int((1.0 * Lx) / h + 1)
-        self.N_y = int((1.0 * Ly) / h + 1)
-        self.carga = np.zeros((self.N_x, self.N_y))
-        self.potencial = np.zeros((self.N_x, self.N_y))
+        self.Lx = 1.0 * Lx
+        self.Ly = 1.0 * Ly
+        self.Nx = int((1.0 * Lx) / h + 1)
+        self.Ny = int((1.0 * Ly) / h + 1)
+        self.carga = np.zeros((self.Nx, self.Ny))
+        self.potencial = np.zeros((self.Nx, self.Ny))
         self.pt_cond_der = {} #diccionario para puntos con condicion derivativa
         self.indices_lineas_horizontal = []
 
     def agregar_linea_horizontal(self, x_c=0, y_c=-5.5, L=6, dV=1):
         h = self.reticulado
-        Lx = self.largo_x
-        Ly = self.largo_y
         N_puntos = int(L / h + 1)
-        i_0 = int((x_c + (Lx - L) / 2.0) / h)
-        j_0 = int((y_c + Ly / 2.0) / h)
+        i_0 = int((x_c + (self.Lx - L) / 2.0) / h)
+        j_0 = int((y_c + self.Ly / 2.0) / h)
         self.indices_lineas_horizontal.append(j_0)
         for k in range(N_puntos):
             i = i_0 + k
@@ -33,9 +31,7 @@ class Caja(object):
 
     def agregar_letra_B(self):
         h = self.reticulado
-        Lx = self.largo_x
-        Ly = self.largo_y
-        if not (Lx == 10 and Ly == 15 and h == 0.2):
+        if not (self.Lx == 10 and self.Ly == 15 and h == 0.2):
             print "Método para agregar letra B a la caja solamente está",
             print "implementado para las dimensiones por defecto."
             return
@@ -57,7 +53,12 @@ class Caja(object):
         pass
 
     def adyacente_linea_horizontal(self, i, j):
-        pass
+        if (i, j - 1) in self.pt_cond_der.keys():
+            return True
+        elif (i, j + 1) in self.pt_cond_der.keys():
+            return True
+        else:
+            return False
 
     def paso_sobre_relajacion(self, i, j, w, region):
         pass
