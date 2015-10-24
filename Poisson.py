@@ -16,12 +16,20 @@ from mpl_toolkits.mplot3d import axes3d
 
 #Inicializacion
 
-Lx = 10
-Ly = 15
+L_x = 10
+L_y = 15
 h = 0.2
-N_pasos_x = (Lx / h) + 1
-N_pasos_y = (Ly / h) + 1
+N_pasos_x = (L_x / h) + 1
+N_pasos_y = (L_y / h) + 1
 
 V = np.zeros((N_pasos_x, N_pasos_y))
 V_next = np.zeros((N_pasos_x, N_pasos_y))
 
+#Iteracion
+
+Iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
+contador = 1
+while contador < 900 or no_converge(V, V_next, tolerancia=1e-7):
+    V = V_next.copy()
+    Iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
+    contador += 1
