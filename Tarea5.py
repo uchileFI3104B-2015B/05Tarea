@@ -18,6 +18,11 @@ import matplotlib.pyplot as pyplot
 #######################################################
 
 #construir caja
+'''
+caja de 10cmx15cm
+centro de caja = (0,0)
+'''
+caja = np.zeros((10,15))
 
 #######################################################
 
@@ -30,5 +35,6 @@ import matplotlib.pyplot as pyplot
 #######################################################
 
 #zona de pruebas
+print np.transpose(caja)
 
 #######################################################
