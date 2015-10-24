@@ -32,6 +32,26 @@ class Caja(object):
         pass
 
     def agregar_letra_B(self):
+        if not (Lx == 10 and Ly == 15 and h == 0.2):
+            print "Método para agregar letra B a la caja solamente está",
+            print "implementado para las dimensiones por defecto."
+            return
+        h = self.reticulado
+        #Límites de la letra
+        i_min, i_max, j_min, j_inter, j_max = (13, 37, 21, 36, 54)
+        #Densidad asociada [C/cm^2]
+        area_verticales = 2 * (j_max - j_min + 1) * h
+        area_transversales = 3 * (i_max - i_min - 9) * h
+        dens = 1.0/(area_verticales + area_transversales)
+        for j in range(j_min, j_max + 1):
+            for i in range(5):
+                self.carga[i + i_min][j] = dens
+                self.carga[i + i_max - 4][j] = dens
+        for i in range(i_min+5, i_max - 4):
+            for j in range(5):
+                self.carga[i][j + j_min] = dens
+                self.carga[i][j + j_inter] = dens
+                self.carga[i][j + j_max - 4] = dens
         pass
 
     def adyacente_linea_horizontal(self, i, j):
