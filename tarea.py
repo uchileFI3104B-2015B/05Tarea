@@ -39,10 +39,36 @@ def poner_condiciones_borde(caja):
     return caja
 
 
-def iteracion_resto():
+def esta_fuera_letra(i,j):
+    '''devuelve True si la coordenada está fuera de el bloque que contiene
+    la letra'''
+    if (i<3/H or i>7/H):
+        return True
+    elif (j<4/H or j>11/H):
+        return True
+    return False
+
+
+def esta_cerca_linea(i,j):
+    '''Devuele true si la coordenada no es adyacente a la linea
+    con condiciones de borde derivativas '''
+    if (j==2.5/H+1 or j==2.5/H-1):
+        if(2/H<i and i<8/H):
+            return True
+    return False
+
+
+def iteracion_resto(caja, caja_next,caja_carga,numero_pasos,h,w=1):
     '''avanza el algoritmo de sobre relajación 1 vez, fuera del rectangulo
     interior y lejos de la linea'''
-
+    rango_x = np.array([0/h,10/h])
+    rango_y = np.array([0/h,15/h])
+    for i in range(int(rango_x[0])+1,int(rango_x[1])):
+        for j in range(int(rango_y[0])+1,int(rango_y[1])):
+            if (esta_fuera_letra(i,j) and not(esta_cerca_linea(i,j))):
+                caja_next[i, j] = ((1 - w)  * caja[i, j] +
+                                  w / 4 * (caja[i+1, j] + caja_next[i-1, j] +
+                                           caja[i, j+1] + caja_next[i, j-1]))
 
 def iteracion_letra(caja, caja_next,caja_carga,numero_pasos,h,w=1):
     '''avanza el algoritmo de sobre relajación 1 vez, en el casillero interior
@@ -182,11 +208,13 @@ caja_carga = poner_carga(caja_carga,coordenadas_carga,carga_total)
 
 caja_potencial = poner_condiciones_borde(caja_potencial)
 
-caja_potencial = iteracion_letra(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w=1)
+iteracion_letra(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w=1)
+iteracion_resto(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w=1)
 contador = 1
-while contador<20:
+while contador<40:
     caja_potencial = caja_potencial_next.copy()
     iteracion_letra(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w=1)
+    iteracion_resto(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w=1)
     contador += 1
 '''
 while(i<20 and !converge())
