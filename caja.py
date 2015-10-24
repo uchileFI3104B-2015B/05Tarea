@@ -70,7 +70,11 @@ class Caja(object):
         pass
 
     def get_potencial(self):
-        pass
+        potencial = np.zeros((self.N_y, self.N_x))
+        for i in range(self.N_x):
+            for j in range(self.N_y):
+                potencial[j][i] = self.carga[i][j]
+        return potencial
 
     def get_carga(self):
         carga = np.zeros((self.N_y, self.N_x))
