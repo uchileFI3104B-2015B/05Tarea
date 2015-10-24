@@ -52,7 +52,7 @@ def esta_fuera_letra(i,j):
 def esta_cerca_linea(i,j):
     '''Devuele true si la coordenada no es adyacente a la linea
     con condiciones de borde derivativas '''
-    if (j==2.5/H+1 or j==2.5/H-1):
+    if (j==2/H+1 or j==2/H-1):
         if(2/H<i and i<8/H):
             return True
     return False
@@ -82,9 +82,24 @@ def iteracion_letra(caja, caja_next,caja_carga,numero_pasos,h,w=1):
                                        caja[i, j+1] + caja_next[i, j-1] +
                                        h**2 * caja_carga[i, j]))
 
-def iteracion_linea():
+def iteracion_linea(caja, caja_next,caja_carga,numero_pasos,h,w=1):
     '''avanza el algoritmo de sobre relajación 1 vez en los
     casilleros cercanos a la línea'''
+    rango_x = np.array([2/h,8/h])
+    rango_y = np.array([1/h,3/h])
+    g_1 = 1
+    g_2 = 1
+
+    for i in range(int(rango_x[0]),int(rango_x[1]+1)):
+        caja_next[i,int(rango_y[0])] = ((1-w)*caja[i,int(rango_y[0])] +
+                                       w/3*(caja_next[i-1,int(rango_y[0])] +
+                                       caja[i+1,int(rango_y[0])] +
+                                       caja_next[i,int(rango_y[0])-1] +
+                                       h*g_1))
+        caja_next[i,int(rango_y[0])+1] = caja_next[i,int(rango_y[0])] + h*g_1
+
+    for i in range(int(rango_x[0]),int(rango_x[1]+1)):
+        caja_next[i,int(rango_y[1])] = caja_next[i,int(rango_y[0])+1] + h*g_2
 
 
 def converge():
@@ -121,7 +136,7 @@ def mostrar(f_caja,caja,titulo):
     fig2.clf()
     ax2 = fig2.add_subplot(111)
     ax2.imshow(z, origin='bottom', interpolation='nearest')
-    #ax2.contour(z, origin='lower')
+    ax2.contour(z, origin='lower')
 
 def es_horizontal(ini, fin):
         '''retorna true si el trazo es horizontal, o false si es vertical'''
@@ -196,6 +211,7 @@ def poner_carga(caja,coordenadas,total):
 
 
 #main
+w=1.8
 numero_pasos = np.array([ANCHO/H + 1,ALTO/H + 1])
 coordenadas_carga = armar_letra()
 carga_total = 1.
@@ -208,24 +224,18 @@ caja_carga = poner_carga(caja_carga,coordenadas_carga,carga_total)
 
 caja_potencial = poner_condiciones_borde(caja_potencial)
 
-iteracion_letra(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w=1)
-iteracion_resto(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w=1)
-contador = 1
-while contador<40:
-    caja_potencial = caja_potencial_next.copy()
-    iteracion_letra(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w=1)
-    iteracion_resto(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w=1)
-    contador += 1
-'''
-while(i<20 and !converge())
-    caja = iteración_resto()
-    caja = iteración_letra()
-    caja = iteración_linea()
-    if converge():
-        break
+iteracion_letra(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w)
+iteracion_linea(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w)
+iteracion_resto(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w)
 
-print("numero iteraciones = "+str(i))
-'''
-mostrar(f_caja_carga,caja_carga,"distribucion carga")
+contador = 1
+while contador<800:
+    caja_potencial = caja_potencial_next.copy()
+    iteracion_letra(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w)
+    iteracion_linea(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w)
+    iteracion_resto(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w)
+    contador += 1
+
+#mostrar(f_caja_carga,caja_carga,"distribucion carga")
 mostrar (f_caja_potencial_next,caja_potencial_next,"potencial")
 plt.show()
