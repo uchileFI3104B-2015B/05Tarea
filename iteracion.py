@@ -27,10 +27,7 @@ plt.colorbar()
 plt.show()
 plt.draw()
 
-C.pasada_sobre_relajacion(1,'up')
-C.pasada_sobre_relajacion(1,'down')
-C.pasada_sobre_relajacion(1,'up')
-C.pasada_sobre_relajacion(1,'down')
+C.relaja(1,100)
 
 V2 = C.get_potencial()
 

@@ -101,6 +101,11 @@ class Caja(object):
         pass
 
     def relaja(self, w, N_pasadas):
+        counter = 0
+        while counter < N_pasadas:
+            self.pasada_sobre_relajacion(w,'up')
+            self.pasada_sobre_relajacion(w,'down')
+            counter += 1
         pass
 
     def get_potencial(self):
