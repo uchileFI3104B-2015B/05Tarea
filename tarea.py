@@ -91,7 +91,7 @@ def iteracion_linea(caja, caja_next, caja_carga, numero_pasos, h, w=1):
     casilleros cercanos a la línea'''
     rango_x = np.array([2/h, 8/h])
     rango_y = np.array([1/h, 3/h])
-    g_1 = -1
+    g_1 = 1
     g_2 = 1
 
     for i in range(int(rango_x[0]), int(rango_x[1]+1)):
