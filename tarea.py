@@ -20,10 +20,22 @@ def crear_caja(ancho , alto, h):
     return caja
 
 
-def poner_condiciones_borde(caja , condiciones):
-    '''recibe un arrreglo para las condiciones de borde y las reemplaza en la
-    posición respectiva de la caja'''
+def poner_condiciones_borde(caja):
+    '''conecta a tierra el perímetro de la caja, la segunda iteración
+    (bordes laterales) se itera desde borde+1, hasta borde para evitar pasar
+    2 veces por las esquinas'''
+    borde_inferior = np.array([np.array([-5,-7.5]),np.array([5,-7.5])])
+    borde_superior = np.array([np.array([-5,7.5]),np.array([5,7.5])])
+    borde_inferior[0],borde_inferior[1] = transformar(borde_inferior[0]),transformar(borde_inferior[1])
+    borde_superior[0],borde_superior[1] = transformar(borde_superior[0]),transformar(borde_superior[1])
 
+    for i in range(int(borde_inferior[0][0]),int(borde_inferior[1][0])+1):
+        caja[i,borde_inferior[0][1]] = 0
+        caja[i,borde_superior[0][1]] = 0
+    for i in range(int(borde_inferior[0][1])+1,int(borde_superior[0][1])):
+        caja[borde_inferior[0][0],i] = 0
+        caja[borde_superior[1][0],i] = 0
+    return caja
 
 def poner_linea(caja , condiciones):
     '''recibe un arreglo con las coordenadas para condiciones de borde
@@ -80,7 +92,7 @@ def mostrar(f_caja,caja,titulo):
     fig2.clf()
     ax2 = fig2.add_subplot(111)
     ax2.imshow(z, origin='bottom', interpolation='nearest')
-    ax2.contour(z, origin='lower')
+    #ax2.contour(z, origin='lower')
 
 def es_horizontal(ini, fin):
         '''retorna true si el trazo es horizontal, o false si es vertical'''
@@ -118,9 +130,10 @@ def transformar(coordenada):
     ''' recibe coordenadas considerando 0,0 como el centro y
     las dimensiones originales en centímetros, a las unidades de la grilla
     . Notar que se utiliza Ancho+1 porque el arreglo se define desde 0'''
+
     x,y = coordenada[0],coordenada[1]
-    x_tran = (x + (ANCHO)/2)/H
-    y_tran = (y + (ALTO)/2)/H
+    x_tran = int((x + (ANCHO)/2)/H)
+    y_tran = int((y + (ALTO)/2)/H)
     return x_tran,y_tran
 
 
@@ -162,8 +175,8 @@ caja_potencial = crear_caja(ANCHO,ALTO,H)
 
 caja_carga = poner_carga(caja_carga,coordenadas_carga,carga_total)
 
+caja_potencial = poner_condiciones_borde(caja_potencial)
 '''
-caja = poner_condiciones_borde()
 caja = poner_linea()
 
 while(i<20)
