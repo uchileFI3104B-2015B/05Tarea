@@ -26,9 +26,10 @@ def poner_condiciones_borde(caja):
     2 veces por las esquinas'''
     borde_inferior = np.array([np.array([-5,-7.5]),np.array([5,-7.5])])
     borde_superior = np.array([np.array([-5,7.5]),np.array([5,7.5])])
-    borde_inferior[0],borde_inferior[1] = transformar(borde_inferior[0]),transformar(borde_inferior[1])
-    borde_superior[0],borde_superior[1] = transformar(borde_superior[0]),transformar(borde_superior[1])
-
+    borde_inferior[0] = transformar(borde_inferior[0])
+    borde_inferior[1] = transformar(borde_inferior[1])
+    borde_superior[0] = transformar(borde_superior[0])
+    borde_superior[1] = transformar(borde_superior[1])
     for i in range(int(borde_inferior[0][0]),int(borde_inferior[1][0])+1):
         caja[i,borde_inferior[0][1]] = 0
         caja[i,borde_superior[0][1]] = 0
@@ -37,25 +38,27 @@ def poner_condiciones_borde(caja):
         caja[borde_superior[1][0],i] = 0
     return caja
 
-def poner_linea(caja , condiciones):
-    '''recibe un arreglo con las coordenadas para condiciones de borde
-    derivativas y sus valores, y las implementa en la caja'''
+
+def iteracion_resto():
+    '''avanza el algoritmo de sobre relajación 1 vez, fuera del rectangulo
+    interior y lejos de la linea'''
 
 
+def iteracion_letra(caja, caja_next,caja_carga,numero_pasos,h,w=1):
+    '''avanza el algoritmo de sobre relajación 1 vez, en el casillero interior
+    que contiene la letra'''
+    rango_x = np.array([3/h,7/h])
+    rango_y = np.array([4/h,11/h])
+    for i in range(int(rango_x[0]),int(rango_x[1]+1)):
+        for j in range(int(rango_y[0]),int(rango_y[1]+1)):
+            caja_next[i, j] = ((1 - w)  * caja[i, j] +
+                              w / 4 * (caja[i+1, j] + caja_next[i-1, j] +
+                                       caja[i, j+1] + caja_next[i, j-1] +
+                                       h**2 * caja_carga[i, j]))
 
-def iteracion_zona_1():
-    '''avanza el algoritmo de sobre relajación 1 vez, en la zona 1 (fuera del
-    cuadrado de la letra, y lejos de la linea)'''
-
-
-def iteracion_zona_2():
-    '''avanza el algoritmo de sobre relajación 1 vez, en la zona 2 (detnro del
-    cuadrado de laletra)'''
-
-
-def iteracion_zona_3():
-    '''avanza el algoritmo de sobre relajación 1 vez, en la zona 3 (cerca
-    de la linea)'''
+def iteracion_linea():
+    '''avanza el algoritmo de sobre relajación 1 vez en los
+    casilleros cercanos a la línea'''
 
 
 def converge():
@@ -69,10 +72,10 @@ def f_caja_carga(x,y):
     return caja_carga[x,y]
 
 
-def f_caja_potencial(x,y):
+def f_caja_potencial_next(x,y):
     '''función auxilar para plotear, recibe la coordenada x e y y devuelve
     el valor de la malla de potencial en esas coordenadas'''
-    return caja_potencial[x,y]
+    return caja_potencial_next[x,y]
 
 
 def mostrar(f_caja,caja,titulo):
@@ -167,27 +170,34 @@ def poner_carga(caja,coordenadas,total):
 
 
 #main
+numero_pasos = np.array([ANCHO/H + 1,ALTO/H + 1])
 coordenadas_carga = armar_letra()
 carga_total = 1.
 
 caja_carga = crear_caja(ANCHO,ALTO,H)
 caja_potencial = crear_caja(ANCHO,ALTO,H)
+caja_potencial_next = crear_caja(ANCHO,ALTO,H)
 
 caja_carga = poner_carga(caja_carga,coordenadas_carga,carga_total)
 
 caja_potencial = poner_condiciones_borde(caja_potencial)
-'''
-caja = poner_linea()
 
-while(i<20)
-    caja = iteración_zona_1()
-    caja = iteración_zona_2()
-    caja = iteración_zona_3()
+caja_potencial = iteracion_letra(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w=1)
+contador = 1
+while contador<20:
+    caja_potencial = caja_potencial_next.copy()
+    iteracion_letra(caja_potencial, caja_potencial_next,caja_carga,numero_pasos,H,w=1)
+    contador += 1
+'''
+while(i<20 and !converge())
+    caja = iteración_resto()
+    caja = iteración_letra()
+    caja = iteración_linea()
     if converge():
         break
 
 print("numero iteraciones = "+str(i))
 '''
 mostrar(f_caja_carga,caja_carga,"distribucion carga")
-mostrar (f_caja_potencial,caja_potencial,"potencial")
+mostrar (f_caja_potencial_next,caja_potencial_next,"potencial")
 plt.show()
