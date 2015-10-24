@@ -16,14 +16,13 @@ class Caja(object):
         self.carga = np.zeros((self.Nx, self.Ny))
         self.potencial = np.zeros((self.Nx, self.Ny))
         self.pt_cond_der = {} #diccionario para puntos con condicion derivativa
-        self.indices_lineas_horizontal = []
 
     def agregar_linea_horizontal(self, x_c=0, y_c=-5.5, L=6, dV=1):
         h = self.reticulado
         N_puntos = int(L / h + 1)
         i_0 = int((x_c + (self.Lx - L) / 2.0) / h)
         j_0 = int((y_c + self.Ly / 2.0) / h)
-        self.indices_lineas_horizontal.append(j_0)
+        self.indice_linea = j_0
         for k in range(N_puntos):
             i = i_0 + k
             self.pt_cond_der[(i, j_0)] = dV
@@ -61,24 +60,59 @@ class Caja(object):
             return False
 
     def paso_sobre_relajacion(self, i, j, w, region):
+        h = self.reticulado
+        if (i,j) in self.pt_cond_der.keys():
+            dV = self.pt_cond_der[(i,j)]
+            if region == "up":
+                self.potencial[i][j] = self.potencial[i][j+1] - dV * h
+            else:
+                self.potencial[i][j] = self.potencial[i][j-1] + dV * h
+        elif self.adyacente_linea_horizontal(i,j):
+            P0 = self.potencial[i][j] * (1.0 - w)
+            P1 = self.potencial[i-1][j]
+            P2 = self.potencial[i+1][j]
+            if region == "up":
+                P3 = self.potencial[i][j+1]
+                P4 = - h * self.pt_cond_der[(i,j-1)]
+            else:
+                P3 = self.potencial[i][j-1]
+                P4 = h * self.pt_cond_der[(i,j+1)]
+            P5 = h**2 * self.carga[i][j]
+            self.potencial[i][j] = P0 + w * (P1 + P2 + P3 + P4 + P5)/3.0
+        else:
+            P0 = self.potencial[i][j] * (1.0 - w)
+            P1 = self.potencial[i-1][j]
+            P2 = self.potencial[i+1][j]
+            P3 = self.potencial[i][j-1]
+            P4 = self.potencial[i][j+1]
+            P5 = h**2 * self.carga[i][j]
+            self.potencial[i][j] = P0 + w * (P1 + P2 + P3 + P4 + P5)/4.0
         pass
 
     def pasada_sobre_relajacion(self, w, region):
+        if region == 'up':
+            for i in range(1, self.Nx - 1):
+                for j in range(self.Ny - 2, self.indice_linea - 1, -1):
+                    self.paso_sobre_relajacion(i, j, w, region)
+        else:
+            for i in range(1, self.Nx - 1):
+                for j in range(1, self.indice_linea + 1):
+                    self.paso_sobre_relajacion(i, j, w, region)
         pass
 
     def relaja(self, w, N_pasadas):
         pass
 
     def get_potencial(self):
-        potencial = np.zeros((self.N_y, self.N_x))
-        for i in range(self.N_x):
-            for j in range(self.N_y):
-                potencial[j][i] = self.carga[i][j]
+        potencial = np.zeros((self.Ny, self.Nx))
+        for i in range(self.Nx):
+            for j in range(self.Ny):
+                potencial[j][i] = self.potencial[i][j]
         return potencial
 
     def get_carga(self):
-        carga = np.zeros((self.N_y, self.N_x))
-        for i in range(self.N_x):
-            for j in range(self.N_y):
+        carga = np.zeros((self.Ny, self.Nx))
+        for i in range(self.Nx):
+            for j in range(self.Ny):
                 carga[j][i] = self.carga[i][j]
         return carga
