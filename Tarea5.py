@@ -28,7 +28,7 @@ esquina de caja = (0,0)
 '''
 Lx = 10.           #[cm] largo de la caja en eje x
 Ly = 15.           #[cm] largo de la caja en eje y
-h = 0.25           #[cm] tamanho del paso
+h = 0.25            #[cm] tamanho del paso
 Nx = (Lx / h) + 1  #numero de pasos a dar en eje x
 Ny = (Ly / h) + 1  #numero de pasos a dar en eje y
 
@@ -48,7 +48,7 @@ if Ny % 2 == 0:
 #construir letra
 '''
 dentro de caja de 5cmx7cm
-construir letra M (con h = 0.25 o 0.3 queda bien)
+construir letra M (con h = 0.25 o 0.3 o 0.5 queda bien)
 grosor 1cm
 '''
 Llx = 5              #largo caja de letra eje x
@@ -60,18 +60,22 @@ rho = 1 #densidad
 cajal = np.zeros( (Nlx , Nly) ) #se construye caja de letra
 N_pasos_1cm = 1. / h
 
-#Construccion de la letra M
+#######################################################
+'''
+Construccion de la letra M
+'''
 cajal[0 : 0 + N_pasos_1cm , : ] = rho
 cajal[Nlx - N_pasos_1cm : Nlx , : ] = rho
 cajal[ : , 1 : 1 + N_pasos_1cm] = rho
 cajal[Nlx / 2 - 1 : Nlx / 2 + 2 , 1 + N_pasos_1cm : 1 + 2 * N_pasos_1cm] = rho
 
-borde_x_caja1 = ((Lx / 2 + 1) - (Llx / 2 + 1)) / h
-borde_y_caja1 = ((Ly / 2 + 1) - (Lly / 2 + 1)) / h
-borde_x_caja2 = ((Lx / 2 + 1) + (Llx / 2 + 1)) / h
-borde_y_caja2 = ((Ly / 2 + 1) + (Lly / 2 + 1)) / h
+#######################################################
+#asignacion de la letra a la caja principal
 
-#caja[borde_x_caja1 : borde_x_caja2 , borde_y_caja1 : borde_y_caja2] = cajal
+bordex_caja = round((Nx / 2 ) - (Nlx / 2 ))
+bordey_caja = round((Ny / 2 ) - (Nly / 2 ))
+
+caja[bordex_caja : bordex_caja + Nlx , bordey_caja : bordey_caja + Nly] = cajal
 
 #######################################################
 
@@ -80,13 +84,12 @@ borde_y_caja2 = ((Ly / 2 + 1) + (Lly / 2 + 1)) / h
 #######################################################
 
 #zona de pruebas
-print borde_x_caja1
-print borde_y_caja1
-print borde_x_caja2
-print borde_y_caja2
+print bordex_caja
+print bordey_caja
+
 #caja[(Nx-1)/2,(Ny-1)/2] = 1
 
-#print np.transpose(caja)
+print np.transpose(caja)
 print np.transpose(cajal)
 
 #######################################################
