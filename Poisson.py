@@ -11,9 +11,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 
-def rho():
-    if dentro_letra_B:
-        return 1 / Area B
+def dentro_letra_B(x, y, h):
+    
+
+def rho(x, y, h):
+    if dentro_letra_B(x, y, h):
+        return 1 / 20
     else:
         return 0
 
@@ -23,9 +26,16 @@ def Iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w):
             V_next[i, j] = ((1 - w) * V[i, j] +
                             w / 4 * (V[i+1, j] + V[i-1, j]
                                     + V[i, j+1] + V[i, j-1] + 
-                                    h**2 * rho))
+                                    h**2 * rho(i, j, h)))
 
-
+def no_converge(V, V_next, tolerancia=1e-7):
+    not_zero = (V_next != 0)
+    diff_relativa = (V - V_next)[not_zero] / V_next[not_zero]
+    max_diff = np.max(np.fabs(diff_relativa))
+    if max_diff > tolerancia:
+        return True
+    else:
+        return False
 
 #Main
 
@@ -48,3 +58,4 @@ while contador < 900 or no_converge(V, V_next, tolerancia=1e-7):
     V = V_next.copy()
     Iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
     contador += 1
+    
