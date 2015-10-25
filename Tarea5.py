@@ -31,15 +31,15 @@ def crea_caja(Lx,Ly,h):
 
 #######################################################
 
-def letra_M(caja, Lx, Ly, h, rho):
+def letra_M(caja, h, rho):
     '''
     construye letra M densidad de carga rho
     en caja de largo Lx x Ly y con paso h
     '''
-    Llx = Lx              #largo caja de letra eje x
-    Lly = Ly              #largo caja de letra eje y
-    Nlx = (Llx / h) + 1   #numero de pasos en caja de letra a dar en eje x
-    Nly = (Lly / h) + 1   #numero de pasos en caja de ltera a dar en eje y
+    Llx = (len(caja[:, 0]) - 1 ) * h              #largo caja de letra eje x
+    Lly = (len(caja[0, :]) - 1 ) * h              #largo caja de letra eje y
+    Nlx = len(caja[:, 0])  #numero de pasos en caja de letra a dar en eje x
+    Nly = len(caja[0, :])   #numero de pasos en caja de ltera a dar en eje y
     N_pasos_1cm = 1. / h  #numero de pasos para tener 1 cm
 
     cajal = crea_caja(Llx, Lly, h)
@@ -65,10 +65,10 @@ def asignar_letra(caja, Lx , Ly, cajal, Llx, Lly, h):
     caja de letra cajal Llx x Lly
     paso h
     '''
-    Nx = (Lx / h) + 1  #numero de pasos a dar en eje x
-    Ny = (Ly / h) + 1  #numero de pasos a dar en eje y
-    Nlx = (Llx / h) + 1   #numero de pasos en caja de letra a dar en eje x
-    Nly = (Lly / h) + 1   #numero de pasos en caja de ltera a dar en eje y
+    Nx = len(caja[:, 0])   #numero de pasos a dar en eje x
+    Ny = len(caja[0, :])  #numero de pasos a dar en eje y
+    Nlx = len(cajal[:, 0])    #numero de pasos en caja de letra a dar en eje x
+    Nly = len(cajal[0, :])   #numero de pasos en caja de ltera a dar en eje y
 
     bordex_caja = round((Nx / 2 ) - (Nlx / 2 ))
     bordey_caja = round((Ny / 2 ) - (Nly / 2 ))
@@ -117,17 +117,17 @@ def asignar_letra(caja, Lx , Ly, cajal, Llx, Lly, h):
 
 #######################################################
 
-def asignar_caja_letra(caja, Lx , Ly, cajal, Llx, Lly, h):
+def asignar_caja_letra(caja, cajal, h):
     '''
     asigna la caja de letra a la caja principal
     caja principal caja Lx x Ly
     caja de letra cajal Llx x Lly
     paso h
     '''
-    Nx = (Lx / h) + 1  #numero de pasos a dar en eje x
-    Ny = (Ly / h) + 1  #numero de pasos a dar en eje y
-    Nlx = (Llx / h) + 1   #numero de pasos en caja de letra a dar en eje x
-    Nly = (Lly / h) + 1   #numero de pasos en caja de ltera a dar en eje y
+    Nx = len(caja[:, 0])   #numero de pasos a dar en eje x
+    Ny = len(caja[0, :])  #numero de pasos a dar en eje y
+    Nlx = len(cajal[:, 0])    #numero de pasos en caja de letra a dar en eje x
+    Nly = len(cajal[0, :])   #numero de pasos en caja de ltera a dar en eje y
 
     bordex_caja = round((Nx / 2 ) - (Nlx / 2 ))
     bordey_caja = round((Ny / 2 ) - (Nly / 2 ))
@@ -169,13 +169,13 @@ Lly = 7.       #largo caja de letra eje y
 rho = 1       #densidad de carga
 
 cajal = crea_caja(Llx, Lly, h)    #se construye caja de letra
-cajal = letra_M(cajal, Llx, Lly, h, rho) #se construye letra M en la caja de letra
+cajal = letra_M(cajal, h, rho) #se construye letra M en la caja de letra
 
 '''
 asignacion de la letra a la caja principal
 '''
 
-caja = asignar_caja_letra(caja, Lx, Ly, cajal, Llx, Lly ,h) #se asigna letra a caja principal
+caja = asignar_caja_letra(caja, cajal, h) #se asigna letra a caja principal
 
 #######################################################
 
@@ -185,8 +185,8 @@ voltaje en los borde = 0 ... construir en la iteracion
 '''
 #crear linea
 
-cajalinea = crea_caja(Lx,Ly,h)
-caja[round(2/h) : round(8/h)][round((Ly/2 + 5.5)/h)] = 3
+#cajalinea = crea_caja(Lx,Ly,h)
+#caja[round(2/h) : round(8/h)][round((Ly/2 + 5.5)/h)] = 3
 
 
 
