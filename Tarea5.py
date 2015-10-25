@@ -28,20 +28,11 @@ esquina de caja = (0,0)
 '''
 Lx = 10.           #[cm] largo de la caja en eje x
 Ly = 15.           #[cm] largo de la caja en eje y
-h = 1            #[cm] tamanho del paso
+h = 0.3            #[cm] tamanho del paso
 Nx = (Lx / h) + 1  #numero de pasos a dar en eje x
 Ny = (Ly / h) + 1  #numero de pasos a dar en eje y
 
 caja = np.zeros( (Nx , Ny) )  #se construye caja
-
-'''
-busca el centro? creo que no
-caja[Nx/2,Ny/2] = 1
-if Nx % 2 == 0:
-    caja[(Nx / 2) - 1 ,Ny / 2] = 1
-if Ny % 2 == 0:
-    caja[Nx / 2 ,(Ny / 2) - 1] = 1
-'''
 
 #######################################################
 
@@ -73,24 +64,77 @@ cajal[Nlx / 2 - N_pasos_1cm / 2 : Nlx / 2 + N_pasos_1cm / 2 + 1 ,
 cajal[Nlx / 2 - N_pasos_1cm / 2 : Nlx / 2 + N_pasos_1cm / 2 + 1 ,
 1 : 1 + N_pasos_1cm ] = 0
 
-#######################################################
-#asignacion de la letra a la caja principal
-
+'''
+asignacion de la letra a la caja principal
+''''''
+busca el centro? creo que no
+caja[Nx/2,Ny/2] = 1
+if Nx % 2 == 0:
+    caja[(Nx / 2) - 1 ,Ny / 2] = 1
+if Ny % 2 == 0:
+    caja[Nx / 2 ,(Ny / 2) - 1] = 1
+'''
 bordex_caja = round((Nx / 2 ) - (Nlx / 2 ))
 bordey_caja = round((Ny / 2 ) - (Nly / 2 ))
 
-for i in range(Nlx):
-    for j in range(Nly):
-        if cajal[i][j] != 0:
-            if cajal[i][j] != 0:
-                caja[bordex_caja : bordex_caja + Nlx ,
-                bordey_caja : bordey_caja + Nly][i][j] = cajal[i][j]
+#ly = int(round(Nlx))
+#lx = int(round(Nly))
 
+try:
+    lx = int(round(Nly))
+    try:
+        ly = int(round(Nlx))
+        for i in range(ly):
+            for j in range(lx):
+                if cajal[i][j] != 0:
+                    if cajal[i][j] != 0:
+                        caja[bordex_caja : bordex_caja + Nlx ,
+                        bordey_caja : bordey_caja + Nly][i][j] = cajal[i][j]
+    except:
+        ly = int(round(Nlx)) -1
+        for i in range(ly):
+            for j in range(lx):
+                if cajal[i][j] != 0:
+                    if cajal[i][j] != 0:
+                        caja[bordex_caja : bordex_caja + Nlx ,
+                        bordey_caja : bordey_caja + Nly][i][j] = cajal[i][j]
+except:
+    lx = int(round(Nly)) - 1
+    try:
+        ly = int(round(Nlx))
+        for i in range(ly):
+            for j in range(lx):
+                if cajal[i][j] != 0:
+                    if cajal[i][j] != 0:
+                        caja[bordex_caja : bordex_caja + Nlx ,
+                        bordey_caja : bordey_caja + Nly][i][j] = cajal[i][j]
+    except:
+        ly = int(round(Nlx)) -1
+        for i in range(ly):
+            for j in range(lx):
+                if cajal[i][j] != 0:
+                    if cajal[i][j] != 0:
+                        caja[bordex_caja : bordex_caja + Nlx ,
+                        bordey_caja : bordey_caja + Nly][i][j] = cajal[i][j]
+
+
+'''
+asignar la caja entera a la caja principal
+
+caja[bordex_caja : bordex_caja + Nlx ,
+bordey_caja : bordey_caja + Nly] = cajal
+'''
 #######################################################
 
 #construir condiciiones
 
 #######################################################
+
+#aplicar metodo de sobrerelajacion
+
+
+#######################################################
+
 
 #zona de pruebas
 print bordex_caja
