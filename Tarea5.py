@@ -1,4 +1,6 @@
 #######################################################
+#######################################################
+#######################################################
 '''
 Metodos Numericos para la Ciencia e Ingenieria
 FI3104-1
@@ -7,12 +9,15 @@ Maximiliano Dirk Vega Aguilera
 18.451.231-9
 '''
 #######################################################
+#######################################################
+#######################################################
 
 import numpy as np
 import matplotlib.pyplot as pyplot
 
 #######################################################
-
+#######################################################
+#######################################################
 #funciones
 
 def crea_caja(Lx,Ly,h):
@@ -24,6 +29,7 @@ def crea_caja(Lx,Ly,h):
     caja = np.zeros( (Nx , Ny) )  #se construye caja
     return caja
 
+#######################################################
 
 def letra_M(caja, Lx, Ly, h, rho):
     '''
@@ -49,6 +55,8 @@ def letra_M(caja, Lx, Ly, h, rho):
      Nlx / 2 + N_pasos_1cm / 2 + 1 , N_pasos_1cm : 2 * N_pasos_1cm ]
 
     return cajal
+
+#######################################################
 
 def asignar_letra(caja, Lx , Ly, cajal, Llx, Lly, h):
     '''
@@ -107,9 +115,11 @@ def asignar_letra(caja, Lx , Ly, cajal, Llx, Lly, h):
 
     return caja
 
-def asignar_caja(caja, Lx , Ly, cajal, Llx, Lly, h):
+#######################################################
+
+def asignar_caja_letra(caja, Lx , Ly, cajal, Llx, Lly, h):
     '''
-    asigna la cajal a la caja principal
+    asigna la caja de letra a la caja principal
     caja principal caja Lx x Ly
     caja de letra cajal Llx x Lly
     paso h
@@ -127,6 +137,8 @@ def asignar_caja(caja, Lx , Ly, cajal, Llx, Lly, h):
 
     return caja
 
+#######################################################
+#######################################################
 #######################################################
 
 #construir caja
@@ -152,8 +164,8 @@ dentro de caja de 5cmx7cm
 construir letra M
 grosor 1cm
 '''
-Llx = 5       #largo caja de letra eje x
-Lly = 7       #largo caja de letra eje y
+Llx = 5.       #largo caja de letra eje x
+Lly = 7.       #largo caja de letra eje y
 rho = 1       #densidad de carga
 
 cajal = crea_caja(Llx, Lly, h)    #se construye caja de letra
@@ -163,11 +175,20 @@ cajal = letra_M(cajal, Llx, Lly, h, rho) #se construye letra M en la caja de let
 asignacion de la letra a la caja principal
 '''
 
-caja = asignar_caja(caja, Lx, Ly, cajal, Llx, Lly ,h) #se asigna letra a caja principal
+caja = asignar_caja_letra(caja, Lx, Ly, cajal, Llx, Lly ,h) #se asigna letra a caja principal
 
 #######################################################
 
 #construir condiciiones
+'''
+voltaje en los borde = 0 ... construir en la iteracion
+'''
+#crear linea
+
+cajalinea = crea_caja(Lx,Ly,h)
+caja[round(2/h) : round(8/h)][round((Ly/2 + 5.5)/h)] = 3
+
+
 
 #######################################################
 
