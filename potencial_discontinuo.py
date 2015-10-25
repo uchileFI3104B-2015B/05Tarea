@@ -9,7 +9,7 @@ import pdb
 ANCHO = 10
 ALTO = 15
 H = 0.2
-
+DERIVADA= 1#1E-3*3
 
 def crear_caja(ancho, alto, h):
     '''recibe las dimensiones de la caja  y el tamaño del reticulado
@@ -119,7 +119,7 @@ def iteracion_letra(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
 def iteracion_linea(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
     '''evalua el potencial en la linea con la condición de que la derivada
     debe ser 1'''
-    g_1 = 1
+    g_1 = DERIVADA
     caja_next[i, j] = caja_next[i, j-1] + h*g_1
 
 
@@ -127,7 +127,7 @@ def iteracion_bajo_linea(i, j, caja, caja_next, caja_carga,
                          numero_pasos, h, w=1):
     '''avanza el algoritmo de sobre relajación 1 vez en los
     casilleros inferiores vecinos a la linea'''
-    g_1 = 1
+    g_1 = DERIVADA
     y = 2 / H - 1
     caja_next[i, y] = ((1-w)*caja[i, y] + w/3*(caja_next[i-1, y] +
                                                caja[i+1, y] +
@@ -138,7 +138,7 @@ def iteracion_sobre_linea(i, j, caja, caja_next, caja_carga,
                           numero_pasos, h, w=1):
     '''avanza el algoritmo de sobre relajación 1 vez en los
     casilleros superiores vecinos a la linea'''
-    g_1 = 1
+    g_1 = DERIVADA
     y = 2 / H + 1
     caja_next[i, y] = ((1-w)*caja[i, y] + w/3*(caja_next[i-1, y] +
                                                caja[i+1, y] +
