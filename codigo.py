@@ -12,10 +12,9 @@ def muestra_V(V):
 #Setup
 Lx = 10
 Ly = 15
-N_pasosx = 11
-N_pasosy= 16
-hx = Lx / (N_pasosx - 1)
-hy = Ly / (N_pasosy - 1)
+h= 0.2
+N_pasosx = (Lx / h) + 1
+N_pasosy = (Ly / h) + 1
 
 
 V = np.zeros((N_pasosy, N_pasosx))
