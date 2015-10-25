@@ -164,9 +164,9 @@ dentro de caja de 5cmx7cm
 construir letra M
 grosor 1cm
 '''
-Llx = 5.       #largo caja de letra eje x
-Lly = 7.       #largo caja de letra eje y
-rho = 1       #densidad de carga
+Llx = 5.              #largo caja de letra eje x
+Lly = 7.              #largo caja de letra eje y
+rho = (1. /  17.) * h**2       #densidad de carga
 
 cajal = crea_caja(Llx, Lly, h)    #se construye caja de letra
 cajal = letra_M(cajal, h, rho) #se construye letra M en la caja de letra
@@ -204,6 +204,7 @@ voltaje en los borde = 0 ... construir en la iteracion
 
 #caja[(Nx-1)/2,(Ny-1)/2] = 1
 
+print sum(sum(cajal))
 print np.transpose(caja)
 print np.transpose(cajal)
 
