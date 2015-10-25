@@ -43,8 +43,8 @@ def poner_condiciones_borde(caja):
 def esta_en_letra(i, j):
     '''devuelve True si la coordenada está dentro del bloque que contiene
     la letra'''
-    if (2.5 / H <= i and i <= 7.5 / H ):
-        if(4/ H <= j and j <= 11 / H):
+    if (2.5 / H <= i and i <= 7.5 / H):
+        if(4 / H <= j and j <= 11 / H):
             return True
     return False
 
@@ -84,10 +84,13 @@ def iterar(caja, caja_next, caja_carga, numero_pasos, h, w=1):
         for j in range(int(rango_y[0]) + 1, int(rango_y[1])):
             if (esta_bajo_linea(i, j)):
                 iteracion_bajo_linea(i, j, caja, caja_next, caja_carga,
-                                numero_pasos, h, w=1)
-            elif esta_sobre_linea(i, j) or esta_en_linea(i, j):
+                                     numero_pasos, h, w=1)
+            elif esta_en_linea(i, j):
                 iteracion_linea(i, j, caja, caja_next, caja_carga,
                                 numero_pasos, h, w=1)
+            elif esta_sobre_linea(i, j):
+                iteracion_sobre_linea(i, j, caja, caja_next, caja_carga,
+                                      numero_pasos, h, w=1)
             elif (esta_en_letra(i, j)):
                 iteracion_letra(i, j, caja, caja_next, caja_carga,
                                 numero_pasos, h, w=1)
@@ -100,31 +103,46 @@ def iteracion_resto(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
     '''avanza el algoritmo de sobre relajación 1 vez, fuera del rectangulo
     interior y lejos de la linea'''
     caja_next[i, j] = ((1 - w) * caja[i, j] +
-                        w / 4 * (caja[i + 1, j] + caja_next[i - 1, j] +
-                                    caja[i, j+1] + caja_next[i, j-1]))
+                       w / 4 * (caja[i + 1, j] + caja_next[i - 1, j] +
+                                caja[i, j+1] + caja_next[i, j-1]))
 
 
 def iteracion_letra(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
     '''avanza el algoritmo de sobre relajación 1 vez, en el casillero interior
     que contiene la letra'''
     caja_next[i, j] = ((1 - w) * caja[i, j] +
-                        w / 4 * (caja[i+1, j] + caja_next[i-1, j] +
-                                    caja[i, j+1] + caja_next[i, j-1] +
-                                    h**2 * caja_carga[i, j]))
+                       w / 4 * (caja[i+1, j] + caja_next[i-1, j] +
+                                caja[i, j+1] + caja_next[i, j-1] +
+                                h**2 * caja_carga[i, j]))
+
 
 def iteracion_linea(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
+    '''evalua el potencial en la linea con la condición de que la derivada
+    debe ser 1'''
     g_1 = 1
-    caja_next[i,j] = caja_next[i, j-1] + h*g_1
+    caja_next[i, j] = caja_next[i, j-1] + h*g_1
 
 
-def iteracion_bajo_linea(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
+def iteracion_bajo_linea(i, j, caja, caja_next, caja_carga,
+                         numero_pasos, h, w=1):
     '''avanza el algoritmo de sobre relajación 1 vez en los
     casilleros inferiores vecinos a la linea'''
     g_1 = 1
-    y = 2 / H -1
+    y = 2 / H - 1
     caja_next[i, y] = ((1-w)*caja[i, y] + w/3*(caja_next[i-1, y] +
-                                                caja[i+1, y] +
-                                                caja_next[i, y-1] + h*g_1))
+                                               caja[i+1, y] +
+                                               caja_next[i, y-1] + h*g_1))
+
+
+def iteracion_sobre_linea(i, j, caja, caja_next, caja_carga,
+                          numero_pasos, h, w=1):
+    '''avanza el algoritmo de sobre relajación 1 vez en los
+    casilleros superiores vecinos a la linea'''
+    g_1 = 1
+    y = 2 / H + 1
+    caja_next[i, y] = ((1-w)*caja[i, y] + w/3*(caja_next[i-1, y] +
+                                               caja[i+1, y] +
+                                               caja_next[i, y+1] - h*g_1))
 
 
 def convergio(caja, caja_next, tolerancia):
