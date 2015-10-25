@@ -67,7 +67,8 @@ Construccion de la letra M
 cajal[0 : 0 + N_pasos_1cm , : ] = rho
 cajal[Nlx - N_pasos_1cm : Nlx , : ] = rho
 cajal[ : , 1 : 1 + N_pasos_1cm] = rho
-cajal[Nlx / 2 - 1 : Nlx / 2 + 2 , 1 + N_pasos_1cm : 1 + 2 * N_pasos_1cm] = rho
+cajal[Nlx / 2 - N_pasos_1cm/2 : Nlx / 2 + N_pasos_1cm/2 + 1 , 1 + N_pasos_1cm : 1 + 2 * N_pasos_1cm] = rho
+cajal[Nlx / 2 - N_pasos_1cm/2 : Nlx / 2 + N_pasos_1cm/2 + 1 , 1 : 1 + N_pasos_1cm ] = 0
 
 #######################################################
 #asignacion de la letra a la caja principal
