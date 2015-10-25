@@ -31,32 +31,6 @@ def crea_caja(Lx,Ly,h):
 
 #######################################################
 
-
-def letra_N(caja, h, rho):
-    '''
-    construye letra M densidad de carga rho
-    en caja de largo Lx x Ly y con paso h
-    '''
-    Llx = (len(caja[:, 0]) - 1 ) * h              #largo caja de letra eje x
-    Lly = (len(caja[0, :]) - 1 ) * h              #largo caja de letra eje y
-    Nlx = len(caja[:, 0])  #numero de pasos en caja de letra a dar en eje x
-    Nly = len(caja[0, :])   #numero de pasos en caja de ltera a dar en eje y
-    N_pasos_1cm = 1. / h  #numero de pasos para tener 1 cm
-
-    cajal = crea_caja(Llx, Lly, h)
-    cajal[0 : 0 + N_pasos_1cm , : ] = rho
-    cajal[Nlx - N_pasos_1cm : Nlx , : ] = rho
-    cajal[N_pasos_1cm : 2 * N_pasos_1cm,  N_pasos_1cm : 2 * N_pasos_1cm] = rho
-
-    cajal[Nlx - 2 * N_pasos_1cm : Nlx - N_pasos_1cm ,
-    Nly - 2 * N_pasos_1cm : Nly - N_pasos_1cm] = rho
-
-    cajal[Nlx / 2 - N_pasos_1cm / 2 : Nlx / 2 + N_pasos_1cm / 2 + 1 ,
-    2 * N_pasos_1cm : Nly - N_pasos_1cm] = rho
-
-    return cajal
-
-
 def letra_M(caja, h, rho):
     '''
     construye letra M densidad de carga rho
@@ -69,16 +43,18 @@ def letra_M(caja, h, rho):
     N_pasos_1cm = 1. / h  #numero de pasos para tener 1 cm
 
     cajal = crea_caja(Llx, Lly, h)
-    cajal[0 : 0 + N_pasos_1cm , : ] = rho
-    cajal[Nlx - N_pasos_1cm : Nlx , : ] = rho
-    cajal[ : , N_pasos_1cm : 2 * N_pasos_1cm] = rho
+
+    cajal[0 : 0 + N_pasos_1cm , : ] = rho    # |iz
+    cajal[Nlx - N_pasos_1cm : Nlx , : ] = rho #|der
+
+    cajal[ : , N_pasos_1cm : 2 * N_pasos_1cm] = rho #-superior
 
     cajal[Nlx / 2 - N_pasos_1cm / 2 : Nlx / 2 + N_pasos_1cm / 2 + 1 ,
-    2 * N_pasos_1cm : 3 * N_pasos_1cm] = rho
+    2 * N_pasos_1cm : 3 * N_pasos_1cm] = rho   #-centro inferior
 
     cajal[Nlx / 2 - N_pasos_1cm / 2 : Nlx / 2 + N_pasos_1cm / 2 + 1 ,
     N_pasos_1cm : 2 * N_pasos_1cm ] = caja[Nlx / 2 - N_pasos_1cm / 2 :
-     Nlx / 2 + N_pasos_1cm / 2 + 1 , N_pasos_1cm : 2 * N_pasos_1cm ]
+     Nlx / 2 + N_pasos_1cm / 2 + 1 , N_pasos_1cm : 2 * N_pasos_1cm ] #-centrosup
 
     return cajal
 
@@ -194,9 +170,8 @@ Llx = 5.       #largo caja de letra eje x
 Lly = 7.       #largo caja de letra eje y
 
 rho = (1. /  17.) * h**2      #densidad de carga, son 17cm2 de letra
-rho =1
 cajal = crea_caja(Llx, Lly, h)    #se construye caja de letra
-cajal = letra_N(cajal, h, rho) #se construye letra M en la caja de letra
+cajal = letra_M(cajal, h, rho) #se construye letra M en la caja de letra
 
 '''
 asignacion de la letra a la caja principal
@@ -231,7 +206,7 @@ voltaje en los borde = 0 ... construir en la iteracion
 
 #caja[(Nx-1)/2,(Ny-1)/2] = 1
 
-print sum(sum(cajal))
+print sum(sum(cajal)) #carga total en letra
 print np.transpose(caja)
 print np.transpose(cajal)
 
