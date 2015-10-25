@@ -9,7 +9,7 @@ import pdb
 ANCHO = 10
 ALTO = 15
 H = 0.2
-DERIVADA = 1#1E-3*3
+DERIVADA = 1  # 1E-3 * 3
 
 
 def crear_caja(ancho, alto, h):
@@ -146,6 +146,13 @@ def iteracion_sobre_linea(i, j, caja, caja_next,
 def convergio(caja, caja_next, tolerancia):
     '''compara 2 estados de la malla, y decide si converge según la tolerancia
     pedida'''
+    not_zero = (caja_next != 0)
+    diff_relativa = (caja - caja_next)[not_zero] / caja_next[not_zero]
+    max_diff = np.max(np.fabs(diff_relativa))
+    if max_diff > tolerancia:
+        return False
+    else:
+        return True
 
 
 def f_caja_carga(x, y):
@@ -274,7 +281,7 @@ caja_potencial = poner_condiciones_borde(caja_potencial)
 
 iterar(caja_potencial, caja_potencial_next, caja_carga, numero_pasos, H, w)
 contador = 1
-tolerancia = 1e-100
+tolerancia = 1e-2
 while (contador < 800 and not convergio(caja_potencial, caja_potencial_next,
                                         tolerancia)):
     caja_potencial = caja_potencial_next.copy()
