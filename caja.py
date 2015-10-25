@@ -91,12 +91,12 @@ class Caja(object):
 
     def pasada_sobre_relajacion(self, w, region):
         if region == 'up':
-            for i in range(1, self.Nx - 1):
-                for j in range(self.Ny - 2, self.indice_linea - 1, -1):
+            for j in range(self.Ny - 2, self.indice_linea - 1, -1):
+                for i in range(1, self.Nx - 1):
                     self.paso_sobre_relajacion(i, j, w, region)
         else:
-            for i in range(1, self.Nx - 1):
-                for j in range(1, self.indice_linea + 1):
+            for j in range(1, self.indice_linea + 1):
+                for i in range(1, self.Nx - 1):
                     self.paso_sobre_relajacion(i, j, w, region)
         pass
 

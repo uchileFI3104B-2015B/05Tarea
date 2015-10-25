@@ -10,15 +10,19 @@ def sobre_relajacion(C, w):
     C.relaja(w,1)
     V_actual = C.get_potencial()
     chi2 = np.sum(np.power(V_actual - V_anterior, 2))
+    chi2ant = 0
     N_pasos = 1
     print chi2
     while chi2 > 0.001:
-        pasos = np.floor(10 * np.power(chi2, 0.1) + 1)
-        C.relaja(w, pasos)
+        if chi2ant==0:
+            paso = 10
+        else:
+            paso = np.floor(10 * chi2 / abs(chi2 - chi2ant) + 1)
+        C.relaja(w, paso)
         V_anterior = C.get_potencial()
         C.relaja(w, 1)
         V_actual = C.get_potencial()
-        N_pasos += pasos + 1
+        N_pasos += paso + 1
         chi2ant = chi2
         chi2 = np.sum(np.power(V_actual - V_anterior, 2))
         print chi2
@@ -47,17 +51,21 @@ plt.colorbar()
 plt.savefig('carga.eps')
 
 y = C.reticulado * np.array(range(C.Ny))
+
+plt.clf()
 for n in range(9):
     V = V_iter[n]
     V_y = np.zeros(C.Ny)
     for k in range(C.Ny):
         V_y[k] = V[k][20]
+
     fig = plt.figure(2*n+2)
     ax = fig.add_subplot(111)
     ax.plot(y,V_y)
     ax.set_aspect('equal')
-    plt.savefig('perfil'+str(int(10 * rango_w[n])+'.eps')
+    plt.savefig('perfil'+str(int(10 * rango_w[n]))+'.eps')
+
     plt.figure(2*n+3)
-    plt.imshow(V, origin='bottom', interpolation='nearest', vmin=-3, vmax=3)
+    plt.imshow(V, origin='bottom', interpolation='nearest') #, vmin=-3, vmax=3)
     plt.colorbar()
     plt.savefig('potencial'+str(int(10 * rango_w[n]))+'.eps')
