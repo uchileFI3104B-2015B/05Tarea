@@ -121,3 +121,7 @@ class Caja(object):
             for j in range(self.Ny):
                 carga[j][i] = self.carga[i][j]
         return carga
+
+    def resetea_potencial(self):
+        self.potencial = np.zeros((self.Nx, self.Ny))
+        pass
