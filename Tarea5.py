@@ -13,7 +13,7 @@ Maximiliano Dirk Vega Aguilera
 #######################################################
 
 import numpy as np
-import matplotlib.pyplot as pyplot
+import matplotlib.pyplot as plt
 
 #######################################################
 #######################################################
@@ -140,6 +140,18 @@ def asignar_caja_letra(caja, cajal, h):
     return caja
 
 #######################################################
+
+def una_iteracion(V, V_next, Rho, h, w=1.):
+    Nx = len(V[:,0])
+    Ny = len(V[0,:])
+    for i in range(1, Nx - 1):
+        for j in range(1, Ny - 1):
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                              w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                                       V[i, j + 1] + V_next[i, j - 1] +
+                                       h**2 * Rho[i,j]))
+
+#######################################################
 #######################################################
 #######################################################
 
@@ -154,7 +166,7 @@ esquina de caja = (0,0)
 '''
 Lx = 10.           #[cm] largo de la caja en eje x
 Ly = 15.           #[cm] largo de la caja en eje y
-h = 0.5           #[cm] tamanho del paso (recomiendo 0.25 (?))
+h = 0.25           #[cm] tamanho del paso (recomiendo 0.25 (?))
 
 caja = crea_caja(Lx, Ly, h)  #se construye caja
 
@@ -201,6 +213,18 @@ caja[2 / h : 8 / h + 1 , 13 / h] = 3  #linea
 #######################################################
 
 #aplicar metodo de sobrerelajacion
+'''
+rho solo existe en la letra, en los demas puntos es cero
+'''
+Rho = crea_caja(Lx, Ly, h)
+Rho = asignar_caja_letra(Rho, cajal, h) #G_ij
+
+V = crea_caja(Lx, Ly, h)
+V_next = crea_caja(Lx, Ly, h)
+
+
+
+
 
 
 #######################################################
@@ -212,8 +236,20 @@ caja[2 / h : 8 / h + 1 , 13 / h] = 3  #linea
 
 #caja[(Nx-1)/2,(Ny-1)/2] = 1
 
-print sum(sum(cajal)) #carga total en letra
-print np.transpose(caja)
-print np.transpose(cajal)
+#print sum(sum(cajal)) #carga total en letra
+#print np.transpose(caja)
+#print np.transpose(cajal)
+#print np.transpose(Rho)
+
+una_iteracion(V, V_next, Rho, h, w=1.2)
+counter = 1
+while counter < 50 :
+    V = V_next.copy()
+    una_iteracion(V, V_next, Rho, h, w=1.2)
+    counter += 1
+
+
+plt.imshow(np.transpose(V_next), interpolation = 'nearest')
+plt.show()
 
 #######################################################
