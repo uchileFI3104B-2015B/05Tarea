@@ -11,13 +11,19 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 
+def rho():
+    if dentro_letra_B:
+        return 1 / Area B
+    else:
+        return 0
+
 def Iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w):
     for i in range(1, N_pasos_x-1):
         for j in range (1, N_pasos_y-1):
             V_next[i, j] = ((1 - w) * V[i, j] +
                             w / 4 * (V[i+1, j] + V[i-1, j]
                                     + V[i, j+1] + V[i, j-1] + 
-                                    h**2 * roh(i,j,h))
+                                    h**2 * rho))
 
 
 
