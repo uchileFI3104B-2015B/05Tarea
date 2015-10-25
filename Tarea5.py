@@ -154,7 +154,7 @@ esquina de caja = (0,0)
 '''
 Lx = 10.           #[cm] largo de la caja en eje x
 Ly = 15.           #[cm] largo de la caja en eje y
-h = 0.25           #[cm] tamanho del paso (recomiendo 0.25 (?))
+h = 0.5           #[cm] tamanho del paso (recomiendo 0.25 (?))
 
 caja = crea_caja(Lx, Ly, h)  #se construye caja
 
@@ -170,6 +170,7 @@ Llx = 5.       #largo caja de letra eje x
 Lly = 7.       #largo caja de letra eje y
 
 rho = (1. /  17.) * h**2      #densidad de carga, son 17cm2 de letra
+rho=1
 cajal = crea_caja(Llx, Lly, h)    #se construye caja de letra
 cajal = letra_M(cajal, h, rho) #se construye letra M en la caja de letra
 
@@ -184,11 +185,16 @@ caja = asignar_caja_letra(caja, cajal, h) #se asigna letra a caja principal
 #construir condiciiones
 '''
 voltaje en los borde = 0 ... construir en la iteracion
+rho esta en la definicion de la letra
 '''
 #crear linea
+'''
+la linea se encuetra en el cm 13 en y, y entre el cm 2 y 8 en x
+'''
 
-#cajalinea = crea_caja(Lx,Ly,h)
-#caja[round(2/h) : round(8/h)][round((Ly/2 + 5.5)/h)] = 3
+
+cajalinea = crea_caja(Lx,Ly,h)
+caja[2 / h : 8 / h + 1 , 13 / h] = 3  #linea
 
 
 
