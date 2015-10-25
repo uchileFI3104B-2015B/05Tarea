@@ -25,7 +25,7 @@ def crea_caja(Lx,Ly,h):
     return caja
 
 
-def letra_M(Lx, Ly, h, rho):
+def letra_M(caja, Lx, Ly, h, rho):
     '''
     construye letra M densidad de carga rho
     en caja de largo Lx x Ly y con paso h
@@ -105,10 +105,25 @@ def asignar_letra(caja, Lx , Ly, cajal, Llx, Lly, h):
                             caja[bordex_caja : bordex_caja + Nlx ,
                             bordey_caja : bordey_caja + Nly][i][j] = cajal[i][j]
 
+    return caja
 
-    #asignar la caja entera a la caja principal
-    #caja[bordex_caja : bordex_caja + Nlx ,
-    #bordey_caja : bordey_caja + Nly] = cajal
+def asignar_caja(caja, Lx , Ly, cajal, Llx, Lly, h):
+    '''
+    asigna la cajal a la caja principal
+    caja principal caja Lx x Ly
+    caja de letra cajal Llx x Lly
+    paso h
+    '''
+    Nx = (Lx / h) + 1  #numero de pasos a dar en eje x
+    Ny = (Ly / h) + 1  #numero de pasos a dar en eje y
+    Nlx = (Llx / h) + 1   #numero de pasos en caja de letra a dar en eje x
+    Nly = (Lly / h) + 1   #numero de pasos en caja de ltera a dar en eje y
+
+    bordex_caja = round((Nx / 2 ) - (Nlx / 2 ))
+    bordey_caja = round((Ny / 2 ) - (Nly / 2 ))
+
+    caja[bordex_caja : bordex_caja + Nlx ,
+    bordey_caja : bordey_caja + Nly] = cajal
 
     return caja
 
@@ -125,7 +140,7 @@ esquina de caja = (0,0)
 '''
 Lx = 10.           #[cm] largo de la caja en eje x
 Ly = 15.           #[cm] largo de la caja en eje y
-h = 1            #[cm] tamanho del paso
+h = 0.25           #[cm] tamanho del paso (recomiendo 0.25 (?))
 
 caja = crea_caja(Lx, Ly, h)  #se construye caja
 
@@ -142,13 +157,13 @@ Lly = 7       #largo caja de letra eje y
 rho = 1       #densidad de carga
 
 cajal = crea_caja(Llx, Lly, h)    #se construye caja de letra
-cajal = letra_M(Llx, Lly, h, rho) #se construye letra M en la caja
+cajal = letra_M(cajal, Llx, Lly, h, rho) #se construye letra M en la caja de letra
 
 '''
 asignacion de la letra a la caja principal
 '''
 
-caja = asignar_letra(caja, Lx, Ly, cajal, Llx, Lly ,h)
+caja = asignar_caja(caja, Lx, Ly, cajal, Llx, Lly ,h) #se asigna letra a caja principal
 
 #######################################################
 
