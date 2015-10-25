@@ -31,6 +31,32 @@ def crea_caja(Lx,Ly,h):
 
 #######################################################
 
+
+def letra_N(caja, h, rho):
+    '''
+    construye letra M densidad de carga rho
+    en caja de largo Lx x Ly y con paso h
+    '''
+    Llx = (len(caja[:, 0]) - 1 ) * h              #largo caja de letra eje x
+    Lly = (len(caja[0, :]) - 1 ) * h              #largo caja de letra eje y
+    Nlx = len(caja[:, 0])  #numero de pasos en caja de letra a dar en eje x
+    Nly = len(caja[0, :])   #numero de pasos en caja de ltera a dar en eje y
+    N_pasos_1cm = 1. / h  #numero de pasos para tener 1 cm
+
+    cajal = crea_caja(Llx, Lly, h)
+    cajal[0 : 0 + N_pasos_1cm , : ] = rho
+    cajal[Nlx - N_pasos_1cm : Nlx , : ] = rho
+    cajal[N_pasos_1cm : 2 * N_pasos_1cm,  N_pasos_1cm : 2 * N_pasos_1cm] = rho
+
+    cajal[Nlx - 2 * N_pasos_1cm : Nlx - N_pasos_1cm ,
+    Nly - 2 * N_pasos_1cm : Nly - N_pasos_1cm] = rho
+
+    cajal[Nlx / 2 - N_pasos_1cm / 2 : Nlx / 2 + N_pasos_1cm / 2 + 1 ,
+    2 * N_pasos_1cm : Nly - N_pasos_1cm] = rho
+
+    return cajal
+
+
 def letra_M(caja, h, rho):
     '''
     construye letra M densidad de carga rho
@@ -164,12 +190,13 @@ dentro de caja de 5cmx7cm
 construir letra M
 grosor 1cm
 '''
-Llx = 5.              #largo caja de letra eje x
-Lly = 7.              #largo caja de letra eje y
-rho = (1. /  17.) * h**2       #densidad de carga
+Llx = 5.       #largo caja de letra eje x
+Lly = 7.       #largo caja de letra eje y
 
+rho = (1. /  17.) * h**2      #densidad de carga, son 17cm2 de letra
+rho =1
 cajal = crea_caja(Llx, Lly, h)    #se construye caja de letra
-cajal = letra_M(cajal, h, rho) #se construye letra M en la caja de letra
+cajal = letra_N(cajal, h, rho) #se construye letra M en la caja de letra
 
 '''
 asignacion de la letra a la caja principal
