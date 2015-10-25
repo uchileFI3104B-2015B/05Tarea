@@ -28,7 +28,7 @@ esquina de caja = (0,0)
 '''
 Lx = 10.           #[cm] largo de la caja en eje x
 Ly = 15.           #[cm] largo de la caja en eje y
-h = 0.25            #[cm] tamanho del paso
+h = 1            #[cm] tamanho del paso
 Nx = (Lx / h) + 1  #numero de pasos a dar en eje x
 Ny = (Ly / h) + 1  #numero de pasos a dar en eje y
 
@@ -56,19 +56,22 @@ Lly = 7              #largo caja de letra eje y
 Nlx = (Llx / h) + 1  #numero de pasos en caja de letra a dar en eje x
 Nly = (Lly / h) + 1  #numero de pasos en caja de ltera a dar en eje y
 
-rho = 1 #densidad
+rho = 1 #densidad de carga
 cajal = np.zeros( (Nlx , Nly) ) #se construye caja de letra
-N_pasos_1cm = 1. / h
+N_pasos_1cm = 1. / h  #numero de pasos para tener 1 cm
 
-#######################################################
 '''
 Construccion de la letra M
 '''
 cajal[0 : 0 + N_pasos_1cm , : ] = rho
 cajal[Nlx - N_pasos_1cm : Nlx , : ] = rho
 cajal[ : , 1 : 1 + N_pasos_1cm] = rho
-cajal[Nlx / 2 - N_pasos_1cm/2 : Nlx / 2 + N_pasos_1cm/2 + 1 , 1 + N_pasos_1cm : 1 + 2 * N_pasos_1cm] = rho
-cajal[Nlx / 2 - N_pasos_1cm/2 : Nlx / 2 + N_pasos_1cm/2 + 1 , 1 : 1 + N_pasos_1cm ] = 0
+
+cajal[Nlx / 2 - N_pasos_1cm / 2 : Nlx / 2 + N_pasos_1cm / 2 + 1 ,
+1 + N_pasos_1cm : 1 + 2 * N_pasos_1cm] = rho
+
+cajal[Nlx / 2 - N_pasos_1cm / 2 : Nlx / 2 + N_pasos_1cm / 2 + 1 ,
+1 : 1 + N_pasos_1cm ] = 0
 
 #######################################################
 #asignacion de la letra a la caja principal
@@ -76,7 +79,12 @@ cajal[Nlx / 2 - N_pasos_1cm/2 : Nlx / 2 + N_pasos_1cm/2 + 1 , 1 : 1 + N_pasos_1c
 bordex_caja = round((Nx / 2 ) - (Nlx / 2 ))
 bordey_caja = round((Ny / 2 ) - (Nly / 2 ))
 
-caja[bordex_caja : bordex_caja + Nlx , bordey_caja : bordey_caja + Nly] = cajal
+for i in range(Nlx):
+    for j in range(Nly):
+        if cajal[i][j] != 0:
+            if cajal[i][j] != 0:
+                caja[bordex_caja : bordex_caja + Nlx ,
+                bordey_caja : bordey_caja + Nly][i][j] = cajal[i][j]
 
 #######################################################
 
