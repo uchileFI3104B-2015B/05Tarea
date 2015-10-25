@@ -40,70 +40,91 @@ def poner_condiciones_borde(caja):
     return caja
 
 
-def esta_fuera_letra(i, j):
-    '''devuelve True si la coordenada está fuera de el bloque que contiene
+def esta_en_letra(i, j):
+    '''devuelve True si la coordenada está dentro del bloque que contiene
     la letra'''
-    if (i < 3 / H or i > 7 / H):
-        return True
-    elif (j < 4 / H or j > 11 / H):
-        return True
-    return False
-
-
-def esta_cerca_linea(i, j):
-    '''Devuele true si la coordenada no es adyacente a la linea
-    con condiciones de borde derivativas '''
-    if (j == 2 / H + 1 or j == 2 / H - 1):
-        if(2 / H < i and i < 8 / H):
+    if (2.5 / H <= i and i <= 7.5 / H ):
+        if(4/ H <= j and j <= 11 / H):
             return True
     return False
 
 
-def iteracion_resto(caja, caja_next, caja_carga, numero_pasos, h, w=1):
-    '''avanza el algoritmo de sobre relajación 1 vez, fuera del rectangulo
-    interior y lejos de la linea'''
+def esta_bajo_linea(i, j):
+    '''Devuele true si la coordenada es inmediatamente bajo la linea '''
+    if (j == 2 / H - 1):
+        if(2 / H <= i and i <= 8 / H):
+            return True
+    return False
+
+
+def esta_sobre_linea(i, j):
+    '''Devuelve true si la coordenada esta sobre la linea con condiciones
+    derivativas'''
+    if(j == 2 / H + 1):
+        if(2 / H <= i and i <= 8 / H):
+            return True
+    return False
+
+
+def esta_en_linea(i, j):
+    '''Devuelve true si la coordenada pertenece a la linea'''
+    if(j == 2 / H):
+        if(2 / H <= i and i <= 8 / H):
+            return True
+    return False
+
+
+def iterar(caja, caja_next, caja_carga, numero_pasos, h, w=1):
+    '''avanza el algoritmo de sobre relajación y llama a la iteración
+    correspondiente para cada coordenada, (el rango a iterar no es todo x ni
+    todo y pues omitimos los bordes)'''
     rango_x = np.array([0 / h, 10 / h])
     rango_y = np.array([0 / h, 15 / h])
     for i in range(int(rango_x[0]) + 1, int(rango_x[1])):
         for j in range(int(rango_y[0]) + 1, int(rango_y[1])):
-            if (esta_fuera_letra(i, j) and not(esta_cerca_linea(i, j))):
-                caja_next[i, j] = ((1 - w) * caja[i, j] +
-                                   w / 4 * (caja[i + 1, j] +
-                                   caja_next[i - 1, j] +
-                                   caja[i, j+1] + caja_next[i, j-1]))
+            if (esta_bajo_linea(i, j)):
+                iteracion_bajo_linea(i, j, caja, caja_next, caja_carga,
+                                numero_pasos, h, w=1)
+            elif esta_sobre_linea(i, j) or esta_en_linea(i, j):
+                iteracion_linea(i, j, caja, caja_next, caja_carga,
+                                numero_pasos, h, w=1)
+            elif (esta_en_letra(i, j)):
+                iteracion_letra(i, j, caja, caja_next, caja_carga,
+                                numero_pasos, h, w=1)
+            else:
+                iteracion_resto(i, j, caja, caja_next, caja_carga,
+                                numero_pasos, h, w=1)
 
 
-def iteracion_letra(caja, caja_next, caja_carga, numero_pasos, h, w=1):
+def iteracion_resto(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
+    '''avanza el algoritmo de sobre relajación 1 vez, fuera del rectangulo
+    interior y lejos de la linea'''
+    caja_next[i, j] = ((1 - w) * caja[i, j] +
+                        w / 4 * (caja[i + 1, j] + caja_next[i - 1, j] +
+                                    caja[i, j+1] + caja_next[i, j-1]))
+
+
+def iteracion_letra(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
     '''avanza el algoritmo de sobre relajación 1 vez, en el casillero interior
     que contiene la letra'''
-    rango_x = np.array([3 / h, 7 / h])
-    rango_y = np.array([4 / h, 11 / h])
-    for i in range(int(rango_x[0]), int(rango_x[1] + 1)):
-        for j in range(int(rango_y[0]), int(rango_y[1] + 1)):
-            caja_next[i, j] = ((1 - w) * caja[i, j] +
-                               w / 4 * (caja[i+1, j] + caja_next[i-1, j] +
-                                        caja[i, j+1] + caja_next[i, j-1] +
-                                        h**2 * caja_carga[i, j]))
+    caja_next[i, j] = ((1 - w) * caja[i, j] +
+                        w / 4 * (caja[i+1, j] + caja_next[i-1, j] +
+                                    caja[i, j+1] + caja_next[i, j-1] +
+                                    h**2 * caja_carga[i, j]))
 
-
-def iteracion_linea(caja, caja_next, caja_carga, numero_pasos, h, w=1):
-    '''avanza el algoritmo de sobre relajación 1 vez en los
-    casilleros cercanos a la línea'''
-    rango_x = np.array([2/h, 8/h])
-    rango_y = np.array([1/h, 3/h])
+def iteracion_linea(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
     g_1 = 1
-    g_2 = 1
+    caja_next[i,j] = caja_next[i, j-1] + h*g_1
 
-    for i in range(int(rango_x[0]), int(rango_x[1]+1)):
-        caja_next[i, int(rango_y[0])] = ((1-w)*caja[i, int(rango_y[0])] +
-                                         w/3*(caja_next[i-1, int(rango_y[0])] +
-                                         caja[i+1, int(rango_y[0])] +
-                                         caja_next[i, int(rango_y[0])-1] +
-                                         h*g_1))
-        caja_next[i, int(rango_y[0])+1] = caja_next[i, int(rango_y[0])] + h*g_1
 
-    for i in range(int(rango_x[0]), int(rango_x[1]+1)):
-        caja_next[i, int(rango_y[1])] = caja_next[i, int(rango_y[0])+1] + h*g_2
+def iteracion_bajo_linea(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
+    '''avanza el algoritmo de sobre relajación 1 vez en los
+    casilleros inferiores vecinos a la linea'''
+    g_1 = 1
+    y = 2 / H -1
+    caja_next[i, y] = ((1-w)*caja[i, y] + w/3*(caja_next[i-1, y] +
+                                                caja[i+1, y] +
+                                                caja_next[i, y-1] + h*g_1))
 
 
 def convergio(caja, caja_next, tolerancia):
@@ -235,24 +256,14 @@ caja_carga = poner_carga(caja_carga, coordenadas_carga, carga_total)
 
 caja_potencial = poner_condiciones_borde(caja_potencial)
 
-iteracion_letra(caja_potencial, caja_potencial_next, caja_carga,
-                numero_pasos, H, w)
-iteracion_linea(caja_potencial, caja_potencial_next, caja_carga,
-                numero_pasos, H, w)
-iteracion_resto(caja_potencial, caja_potencial_next, caja_carga,
-                numero_pasos, H, w)
-
+iterar(caja_potencial, caja_potencial_next, caja_carga, numero_pasos, H, w)
 contador = 1
 tolerancia = 1e-100
 while (contador < 800 and not convergio(caja_potencial, caja_potencial_next,
                                         tolerancia)):
     caja_potencial = caja_potencial_next.copy()
-    iteracion_letra(caja_potencial, caja_potencial_next, caja_carga,
-                    numero_pasos, H, w)
-    iteracion_linea(caja_potencial, caja_potencial_next, caja_carga,
-                    numero_pasos, H, w)
-    iteracion_resto(caja_potencial, caja_potencial_next, caja_carga,
-                    numero_pasos, H, w)
+
+    iterar(caja_potencial, caja_potencial_next, caja_carga, numero_pasos, H, w)
     contador += 1
 print("numero iteraciones: "+str(contador))
 mostrar(f_caja_carga, caja_carga, "distribucion carga")
