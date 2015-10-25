@@ -28,7 +28,7 @@ esquina de caja = (0,0)
 '''
 Lx = 10.           #[cm] largo de la caja en eje x
 Ly = 15.           #[cm] largo de la caja en eje y
-h = 0.3            #[cm] tamanho del paso
+h = 0.9            #[cm] tamanho del paso
 Nx = (Lx / h) + 1  #numero de pasos a dar en eje x
 Ny = (Ly / h) + 1  #numero de pasos a dar en eje y
 
@@ -56,13 +56,13 @@ Construccion de la letra M
 '''
 cajal[0 : 0 + N_pasos_1cm , : ] = rho
 cajal[Nlx - N_pasos_1cm : Nlx , : ] = rho
-cajal[ : , 1 : 1 + N_pasos_1cm] = rho
+cajal[ : , N_pasos_1cm : 2 * N_pasos_1cm] = rho
 
 cajal[Nlx / 2 - N_pasos_1cm / 2 : Nlx / 2 + N_pasos_1cm / 2 + 1 ,
-1 + N_pasos_1cm : 1 + 2 * N_pasos_1cm] = rho
+2 * N_pasos_1cm : 3 * N_pasos_1cm] = rho
 
 cajal[Nlx / 2 - N_pasos_1cm / 2 : Nlx / 2 + N_pasos_1cm / 2 + 1 ,
-1 : 1 + N_pasos_1cm ] = 0
+N_pasos_1cm : 2 * N_pasos_1cm ] = 0
 
 '''
 asignacion de la letra a la caja principal
