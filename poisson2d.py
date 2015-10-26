@@ -25,4 +25,24 @@ from   scipy.optimize    import curve_fit
 #                                                                              #
 ################################################################################
 
+def caja(largo_x, largo_y, paso):
+  '''
+  Crea una matriz de ceros. El tamaño de la matriz esta determinado por el
+  el largo de la caja y el paso con el que se quiere crear la malla. Se
+  considerara la division entera de los largos y el paso.
+  '''
+  return np.zeros( ( int(largo_y/paso) , int(largo_x)/paso ) )
+  
 
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
