@@ -34,20 +34,20 @@ def rho(i, j, h):
 #linea neumann y=-5.5 entre x=[-3,3]
 def una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h=0.2, w=1.):
     for i in range(1, N_pasos_x-1):
-        #arriba
-        for j in range(1, 11):
+        #abajo
+        for j in range(1, 12):
             v_next[i, j] = ((1 - w) * v[i, j] +
                               w / 4 * (v[i+1, j] + v_next[i-1, j] +
                                        v[i, j+1] + v_next[i, j-1] +
                                        h**2 * rho(i, j, h)))
-        #abajo
+        #arriba
         for j in range(14, N_pasos_y-1):
             v_next[i, j] = ((1 - w) * v[i, j] +
                               w / 4 * (v[i+1, j] + v_next[i-1, j] +
                                        v[i, j+1] + v_next[i, j-1] +
                                        h**2 * rho(i, j, h)))
 
-    for j in range(11,14):
+    for j in range(11,15):
         #izq
         for i in range(1,10):
             v_next[i, j] = ((1 - w) * v[i, j] +
@@ -65,7 +65,7 @@ def una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h=0.2, w=1.):
 
     #vecinos, cuando v_next o v???
     for i in range(10,41):
-        for j in range(11,12):#abajo
+        for j in range(12,13):#abajo
             v_next[i,j] =  ((1 - w) * v[i, j] +
                           w / 3 * (v[i+1, j] + v_next[i-1, j] +
                                    v[i, j-1] + h**2 * rho(i, j, h) + h*(-1.)))
@@ -73,10 +73,7 @@ def una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h=0.2, w=1.):
             v_next[i,j] =  ((1 - w) * v[i, j] +
                           w / 3 * (v[i+1, j] + v_next[i-1, j] +
                                    v[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
-    #en la linea neumann
-    for j in range(12,13):
-        for i in range(10,41):
-            v_next[i,j] = v_next[i,j-1]+h*(1.)
+
 #Main
 #Setup
 
@@ -95,7 +92,7 @@ while counter < 100:
     v = v_next.copy()
     una_iteracion(v, v_next, N_pasos_x, N_pasos_y , h, w=1.)
     counter += 1
-    
+
 v_next_rotada=v_next.transpose()
 
 
