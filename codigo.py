@@ -7,18 +7,27 @@ import matplotlib.pyplot as plt
 def muestra_V(V):
     print(V[::-1,:])
 
+
 #Main
 
 #Setup
 Lx = 10
 Ly = 15
-h= 0.2
+h= 1
 N_pasosx = (Lx / h) + 1
 N_pasosy = (Ly / h) + 1
+w=1.0
+rho_letra = 1 / 15
+rho_blanco = 0
 
 
-V = np.zeros((N_pasosy, N_pasosx))
-V_next= np.zeros((N_pasosy, N_pasosx))
+V = np.zeros((N_pasosx, N_pasosy))
+V_next= np.zeros((N_pasosx, N_pasosy))
 
-V[0,0]=1
+
+#Una iteracion
+for i in range(1, int(N_pasosx) - 1):
+    for j in range(1, int(N_pasosy) - 1):
+        V[i, j] = (1 - w) * V[i, j] + w / 4 * (V[i+1,j] + V[i-1, j] + V[i, j+1] + V[i, j-1] + h**2 * rho_letra)
+
 muestra_V(V)
