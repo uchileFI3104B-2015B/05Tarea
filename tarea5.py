@@ -31,7 +31,7 @@ def rho(i, j, h):
 #hay una ec para los puntos lejanos a la linea neumann
 #hay otra para los inmediatamente vecinos a la linea neumann
 
-def una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h=0.2, w=1.):
+def una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h=0.2, w=1.2):
     for i in range(1, N_pasos_x-1):
         #abajo
         for j in range(1, 12):
@@ -73,24 +73,37 @@ def una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h=0.2, w=1.):
                           w / 3 * (v[i+1, j] + v_next[i-1, j] +
                                    v_next[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
 
+
+def no_ha_convergido(v, v_next, tolerancia=1e-3):
+    not_zero = (v_next != 0)
+    diff_relativa = (v - v_next)[not_zero] / v_next[not_zero]
+    max_diff = np.max(np.fabs(diff_relativa))
+    if max_diff > tolerancia:
+        return True
+    else:
+        return False
+
 #Main
 #Setup
 
 Lx = 10
 Ly = 15
 h = 0.2
+w=1.2
 N_pasos_x = int(Lx/h +1)
 N_pasos_y = int(Ly/h +1)
 
 v = np.zeros((N_pasos_x, N_pasos_y))
 v_next = np.zeros((N_pasos_x, N_pasos_y))
 
-una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h, w=0.7)
+una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h, w)
 counter = 1
-while counter < 100:
+while counter < 3000 and no_ha_convergido(v, v_next, tolerancia=1e-3):
     v = v_next.copy()
-    una_iteracion(v, v_next, N_pasos_x, N_pasos_y , h, w=1.)
+    una_iteracion(v, v_next, N_pasos_x, N_pasos_y , h, w)
     counter += 1
+
+print("counter = {}".format(counter))
 
 v_next_rotada=v_next.transpose()
 
