@@ -88,3 +88,17 @@ N_pasos_y = int(Ly/h +1)
 
 v = np.zeros((N_pasos_x, N_pasos_y))
 v_next = np.zeros((N_pasos_x, N_pasos_y))
+
+una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h, w=0.7)
+counter = 1
+while counter < 100:
+    v = v_next.copy()
+    una_iteracion(v, v_next, N_pasos_x, N_pasos_y , h, w=1.)
+    counter += 1
+
+fig2 = plt.figure(2)
+fig2.clf()
+ax2 = fig2.add_subplot(111)
+ax2.imshow(v_next origin='bottom', interpolation='nearest')
+fig2.show()
+plt.savefig('plot_imshow.png')
