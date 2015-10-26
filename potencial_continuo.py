@@ -10,7 +10,7 @@ ANCHO = 10
 ALTO = 15
 H = 0.2
 DERIVADA = 1  # 1E-3 * 3
-CARGA_TOTAL = 1 # 100*3
+CARGA_TOTAL = 1  # 100*3
 
 
 def crear_caja(ancho, alto, h):

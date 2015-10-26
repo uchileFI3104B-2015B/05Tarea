@@ -187,9 +187,8 @@ def mostrar(i, f_caja, caja, titulo):
     fig = plt.figure(1 + 2 * (i - 1))
     fig.clf()
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(xg,yg,z, rstride=1, cstride=1)
+    ax.plot_surface(xg, yg, z, rstride=1, cstride=1)
     ax.set_title(titulo)
-
 
     ax.set_xticks(x_scale)
     ax.set_xticklabels(x_original)
@@ -203,7 +202,6 @@ def mostrar(i, f_caja, caja, titulo):
     else:
         ax.set_zlabel("Carga [erg/C]")
         fig.savefig("distr_carga1.jpg")
-
 
     fig2 = plt.figure(2 + 2 * (i - 1))
     fig2.clf()
@@ -243,6 +241,8 @@ def mostrar(i, f_caja, caja, titulo):
             z[i] = caja[25, i]
         ax3.plot(x, z)
         fig3.savefig("corte_trans.jpg")
+
+
 def es_horizontal(ini, fin):
         '''retorna true si el trazo es horizontal, o false si es vertical'''
         return (ini[1] == fin[1])
