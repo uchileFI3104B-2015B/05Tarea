@@ -99,6 +99,6 @@ while counter < 100:
 fig2 = plt.figure(2)
 fig2.clf()
 ax2 = fig2.add_subplot(111)
-ax2.imshow(v_next origin='bottom', interpolation='nearest')
+ax2.imshow(v_next, origin='bottom', interpolation='nearest')
 fig2.show()
 plt.savefig('plot_imshow.png')
