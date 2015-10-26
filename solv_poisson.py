@@ -19,6 +19,8 @@ if __name__ == '__main__':
     box.draw_letter()
 
     # Escribir condiciones de borde constantes
+    
+
     # Escribir condicion de borde derivativa
     # Resolver
     # Presentar resultados
