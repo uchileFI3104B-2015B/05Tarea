@@ -8,6 +8,10 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 
 
+def muestra_v(v):
+    print(v[::-1, :])
+
+
 #Main
 #Setup
 
