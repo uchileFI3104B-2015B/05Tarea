@@ -12,6 +12,20 @@ def muestra_v(v):
     print(v[::-1, :])
 
 
+def rho(i, j, h):
+    x= i * h - 5
+    y= j * h - 7.5
+    if y>=2.5 and y<=3.5 and x>=-2.5 and x<=2.5:
+        return 1./15
+    if y>=1 and y<=2.5 and x>=-2.5 and x<=-1.5:
+        return 1./15
+    if y>=0 and y<=1 and x>=-2.5 and x<=2.5:
+        return 1./15
+    if y>=-3.5 and y<=0 and x>=-2.5 and x<=-1.5:
+        return 1./15
+    else:
+        return 0
+
 #Main
 #Setup
 
