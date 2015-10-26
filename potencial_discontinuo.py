@@ -10,6 +10,7 @@ ANCHO = 10
 ALTO = 15
 H = 0.2
 DERIVADA = 1  # 1E-3 * 3
+CARGA_TOTAL = 1
 
 
 def crear_caja(ancho, alto, h):
@@ -272,19 +273,18 @@ def poner_carga(caja, coordenadas, total):
 w = 1.8
 numero_pasos = np.array([ANCHO/H + 1, ALTO/H + 1])
 coordenadas_carga = armar_letra()
-carga_total = 1.
 
 caja_carga = crear_caja(ANCHO, ALTO, H)
 caja_potencial = crear_caja(ANCHO, ALTO, H)
 caja_potencial_next = crear_caja(ANCHO, ALTO, H)
 
-caja_carga = poner_carga(caja_carga, coordenadas_carga, carga_total)
+caja_carga = poner_carga(caja_carga, coordenadas_carga, CARGA_TOTAL)
 
 caja_potencial = poner_condiciones_borde(caja_potencial)
 
 iterar(caja_potencial, caja_potencial_next, caja_carga, numero_pasos, H, w)
 contador = 1
-tolerancia = 1e-100
+tolerancia = 1e-3
 while (contador < 800 and not convergio(caja_potencial, caja_potencial_next,
                                         tolerancia)):
     caja_potencial = caja_potencial_next.copy()
