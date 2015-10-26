@@ -3,6 +3,7 @@
 
 import numpy as np
 
+
 class Caja(object):
     def __init__(self, Lx=10, Ly=15, h=0.2):
         '''
@@ -15,7 +16,9 @@ class Caja(object):
         self.Ny = int((1.0 * Ly) / h + 1)
         self.carga = np.zeros((self.Nx, self.Ny))
         self.potencial = np.zeros((self.Nx, self.Ny))
-        self.pt_cond_der = {} #diccionario para puntos con condicion derivativa
+        # diccionario para puntos con condicion derivativa
+        self.pt_cond_der = {}
+        self.indice_linea = -1
 
     def agregar_linea_horizontal(self, x_c=0, y_c=-5.5, L=6, dV=1):
         h = self.reticulado
@@ -34,9 +37,9 @@ class Caja(object):
             print "Método para agregar letra B a la caja solamente está",
             print "implementado para las dimensiones por defecto."
             return
-        #Límites de la letra
+        # Límites de la letra
         i_min, i_max, j_min, j_inter, j_max = (13, 37, 21, 36, 54)
-        #Densidad asociada [C/cm^2]
+        # Densidad asociada [C/cm^2]
         area_verticales = 2 * (j_max - j_min + 1) * h
         area_transversales = 3 * (i_max - i_min - 9) * h
         dens = 1.0/(area_verticales + area_transversales)
@@ -61,22 +64,22 @@ class Caja(object):
 
     def paso_sobre_relajacion(self, i, j, w, region):
         h = self.reticulado
-        if (i,j) in self.pt_cond_der.keys():
-            dV = self.pt_cond_der[(i,j)]
+        if (i, j) in self.pt_cond_der.keys():
+            dV = self.pt_cond_der[(i, j)]
             if region == "up":
                 self.potencial[i][j] = self.potencial[i][j+1] - dV * h
             else:
                 self.potencial[i][j] = self.potencial[i][j-1] + dV * h
-        elif self.adyacente_linea_horizontal(i,j):
+        elif self.adyacente_linea_horizontal(i, j):
             P0 = self.potencial[i][j] * (1.0 - w)
             P1 = self.potencial[i-1][j]
             P2 = self.potencial[i+1][j]
             if region == "up":
                 P3 = self.potencial[i][j+1]
-                P4 = - h * self.pt_cond_der[(i,j-1)]
+                P4 = - h * self.pt_cond_der[(i, j-1)]
             else:
                 P3 = self.potencial[i][j-1]
-                P4 = h * self.pt_cond_der[(i,j+1)]
+                P4 = h * self.pt_cond_der[(i, j+1)]
             P5 = h**2 * self.carga[i][j]
             self.potencial[i][j] = P0 + w * (P1 + P2 + P3 + P4 + P5)/3.0
         else:
@@ -90,12 +93,16 @@ class Caja(object):
         pass
 
     def pasada_sobre_relajacion(self, w, region):
-        if region == 'up':
+        if region == "up":
             for j in range(self.Ny - 2, self.indice_linea - 1, -1):
                 for i in range(1, self.Nx - 1):
                     self.paso_sobre_relajacion(i, j, w, region)
-        else:
+        elif region == "down":
             for j in range(1, self.indice_linea + 1):
+                for i in range(1, self.Nx - 1):
+                    self.paso_sobre_relajacion(i, j, w, region)
+        else:
+            for j in range(1, self.Ny - 1):
                 for i in range(1, self.Nx - 1):
                     self.paso_sobre_relajacion(i, j, w, region)
         pass
@@ -103,8 +110,8 @@ class Caja(object):
     def relaja(self, w, N_pasadas):
         counter = 0
         while counter < N_pasadas:
-            self.pasada_sobre_relajacion(w,'up')
-            self.pasada_sobre_relajacion(w,'down')
+            self.pasada_sobre_relajacion(w, "up")
+            self.pasada_sobre_relajacion(w, "down")
             counter += 1
         pass
 
