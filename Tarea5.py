@@ -27,6 +27,7 @@ def crea_caja(Lx,Ly,h):
     Nx = (Lx / h) + 1  #numero de pasos a dar en eje x
     Ny = (Ly / h) + 1  #numero de pasos a dar en eje y
     caja = np.zeros( (Nx , Ny) )  #se construye caja
+
     return caja
 
 #######################################################
@@ -152,6 +153,18 @@ def una_iteracion_normal(V, V_next, Rho, h, w=1.):
                                        h**2 * Rho[i,j]))   # + porque es -Rho
 
 #######################################################
+
+def una_iteracion_linea(V, V_next, Rho, h, w=1.):
+    Nx = len(V[:,0])
+    Ny = len(V[0,:])
+    cajalinea = crea_caja(Lx,Ly,h)
+    cajalinea[2 / h : 8 / h + 1 , 13 / h - 1 : 13 / h +1] = 3  #linea en 13 / h
+    Nlx = len(cajalinea[ 2 / h : 8 / h +1 , 13 / h])
+    for i in range(2 / h, 8 / h + 1):
+        V_next[i, 13 / h] = V[i, 13 / h - 1] + h  # condicion g=1
+        V_next[i, 13 / h + 1] = V[i, 13 / h] - h  # condicion g=-1
+
+
 #######################################################
 #######################################################
 
@@ -167,6 +180,7 @@ esquina de caja = (0,0)
 Lx = 10.           #[cm] largo de la caja en eje x
 Ly = 15.           #[cm] largo de la caja en eje y
 h = 0.25           #[cm] tamanho del paso (recomiendo 0.25 (?))
+w = 1.             # w parametro del metodo de sobrerelajacion
 
 caja = crea_caja(Lx, Ly, h)  #se construye caja
 
