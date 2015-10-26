@@ -142,7 +142,7 @@ def asignar_caja_letra(caja, cajal, h):
 
 #######################################################
 
-def una_iteracion_normal(V, V_next, Rho, h, w=1.):
+def una_iteracion_normal(V, V_next, Rho, h, w=1.2):
     Nx = len(V[:,0])
     Ny = len(V[0,:])
     for i in range(1, Nx - 1):
@@ -154,13 +154,15 @@ def una_iteracion_normal(V, V_next, Rho, h, w=1.):
 
 #######################################################
 
-def una_iteracion_linea(V, V_next, Rho, h, w=1.):
+def una_iteracion_linea(V, V_next, Rho, h, w=1.2):
     Nx = len(V[:,0])
     Ny = len(V[0,:])
     cajalinea = crea_caja(Lx,Ly,h)
     cajalinea[2 / h : 8 / h + 1 , 13 / h - 1 : 13 / h +1] = 3  #linea en 13 / h
     Nlx = len(cajalinea[ 2 / h : 8 / h +1 , 13 / h])
-    for i in range(2 / h, 8 / h + 1):
+    a = round(2 / h)
+    b = round(8 / h) + 1
+    for i in range(int(a), int(b)):
         V_next[i, 13 / h] = V[i, 13 / h - 1] + h  # condicion g=1
         V_next[i, 13 / h + 1] = V[i, 13 / h] - h  # condicion g=-1
 
@@ -254,12 +256,15 @@ V_next = crea_caja(Lx, Ly, h)
 #print np.transpose(caja)
 #print np.transpose(cajal)
 #print np.transpose(Rho)
-
+una_iteracion_linea(V, V_next, Rho, h, w=1.2)
 una_iteracion_normal(V, V_next, Rho, h, w=1.2)
+una_iteracion_linea(V, V_next, Rho, h, w=1.2)
 counter = 1
 while counter < 50 :
     V = V_next.copy()
+    una_iteracion_linea(V, V_next, Rho, h, w=1.2)
     una_iteracion_normal(V, V_next, Rho, h, w=1.2)
+    una_iteracion_linea(V, V_next, Rho, h, w=1.2)
     counter += 1
 
 
