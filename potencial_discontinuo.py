@@ -198,10 +198,10 @@ def mostrar(i, f_caja, caja, titulo):
     ax.set_xlabel("X [cm]")
     ax.set_ylabel("Y [cm]")
     if titulo == "valor del potencial":
-        ax.set_zlabel("Potencial [C $cm^2$]")
+        ax.set_zlabel("Potencial [erg/C]")
         fig.savefig("potencial1.jpg")
     else:
-        ax.set_zlabel("Carga [C]")
+        ax.set_zlabel("Carga [erg/C]")
         fig.savefig("distr_carga1.jpg")
 
 
@@ -220,7 +220,7 @@ def mostrar(i, f_caja, caja, titulo):
     cbar = fig2.colorbar(cax)
 
     if titulo == "valor del potencial":
-        cbar.set_label("Potencial [C $cm^2$]")
+        cbar.set_label("Potencial [erg/C]")
         fig2.savefig("potencial.jpg")
     else:
         cbar.set_label("Carga [C]")
@@ -235,7 +235,7 @@ def mostrar(i, f_caja, caja, titulo):
         ax3.set_xticks(y_scale)
         ax3.set_xticklabels(y_original)
         ax3.set_xlabel("Y [cm]")
-        ax3.set_ylabel("Potencial [C $cm^2$]")
+        ax3.set_ylabel("Potencial [erg/C]")
 
         x = np.linspace(0, 75, 75)
         z = np.zeros(75)
