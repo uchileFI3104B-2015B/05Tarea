@@ -34,14 +34,17 @@ def una_iteracion(v,v_next,Steps_x,Steps_y,h,w=1.): #aquí hay que separar para 
         for j in range(1,12): #abajo de la línea
             phi_next[i,j]=((1-w)*phi[i,j]+(w/4)*(phi[i+1,j]+phi_next[i-1,j]+phi[i,j+1]+phi_next[i,j-1]+h**2*rho(i,j,h)))
         for j in range(14,Steps_y-1)]: #arriba de la línea
-            phi_next[i,j]=((1-w)*phi[i,j]+(w/4)*(phi[i+1,j]+phi_next[i-1,j]+phi[i,j+1]+phi_next[i,j-1]+h**2*rho(i,j,h)))
+            phi_next[i,j]=((1-w)*phi[i,j]+(w/4.)*(phi[i+1,j]+phi_next[i-1,j]+phi[i,j+1]+phi_next[i,j-1]+h**2*rho(i,j,h)))
     for j in range(12,14):
         for i in range(1,10): #a la izquierda de la línea
-            phi_next[i,j]=((1-w)*phi[i,j]+(w/4)*(phi[i+1,j]+phi_next[i-1,j]+phi[i,j+1]+phi_next[i,j-1]+h**2*rho(i,j,h)))
+            phi_next[i,j]=((1-w)*phi[i,j]+(w/4.)*(phi[i+1,j]+phi_next[i-1,j]+phi[i,j+1]+phi_next[i,j-1]+h**2*rho(i,j,h)))
         for i in range(41,Steps_y-1): #a la derecha de la línea
-            phi_next[i,j]=((1-w)*phi[i,j]+(w/4)*(phi[i+1,j]+phi_next[i-1,j]+phi[i,j+1]+phi_next[i,j-1]+h**2*rho(i,j,h)))
+            phi_next[i,j]=((1-w)*phi[i,j]+(w/4.)*(phi[i+1,j]+phi_next[i-1,j]+phi[i,j+1]+phi_next[i,j-1]+h**2*rho(i,j,h)))
     for i in range(11,41):
-        for j in range(12,13):
-            phi_next
+        for j in range(12,13): #justo debajo de la línea, donde aplica la condición -1
+            phi_next[i,j]=((1-w)*phi[i,j]+(w/3.)*(phi[i+1,j]+phi_next[i-1,j]+phi_next[i,j-1]+h**2*rho(i,j,h)-h))
+        for j in range(13,14): #justo sobre la línea, donde aplica la condición +1
+            phi_next[i,j]=((1-w)*phi[i,j]+(w/3.)*(phi[i+1,j]+phi_next[i-1,j]+phi_next[i,j-1]+h**2*rho(i,j,h)+h))
+
 V=np.zeros((Steps_x,Steps_y))
 V_next=np.zeros((Steps_x,Steps_y))
