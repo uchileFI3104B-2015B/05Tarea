@@ -41,3 +41,43 @@ V_next= np.zeros((N_pasosx, N_pasosy))
 
 
 #Una iteracion
+#Iteracion Caja completa
+for i in range(1, int(N_pasosx) - 1):
+    #Debajo de la linea
+    for j in range(1,12):
+        V_next[i, j] = ((1 - w) * V[i, j] +
+                          w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                                   V[i, j+1] + V_next[i, j-1] +
+                                   h**2 * rho(i, j, h)))
+    #Encima de la linea
+    for j in range(14, int(N_pasosy) - 1):
+        V_next[i, j] = ((1 - w) * V[i, j] +
+                          w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                                   V[i, j+1] + V_next[i, j-1] +
+                                   h**2 * rho(i, j, h)))
+for j in range(12,14):
+    #A la izquierda de la linea
+    for i in range(1,11):
+        V_next[i, j] = ((1 - w) * V[i, j] +
+                          w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                                   V[i, j+1] + V_next[i, j-1] +
+                                   h**2 * rho(i, j, h)))
+    #Derecha de la linea
+    for i in range(41,int(N_pasosx)-1):
+        V_next[i, j] = ((1 - w) * V[i, j] +
+                          w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                                   V[i, j+1] + V_next[i, j-1] +
+                                   h**2 * rho(i, j, h)))
+
+#Iteracion condicion derivativa
+for i in range(11,41):
+    #Puntos debajo de la linea: -1
+    for j in range(12,13):
+        V_next[i,j] =  ((1 - w) * V[i, j] +
+                          w / 3 * (V[i+1, j] + V_next[i-1, j] +
+                                   V[i, j-1] + h**2 * rho(i, j, h) + h*(-1.)))
+    #Puntos sobre la linea: +1
+    for j in range(13,14):
+        V_next[i,j] =  ((1 - w) * V[i, j] +
+                          w / 3 * (V[i+1, j] + V_next[i-1, j] +
+                                   V[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
