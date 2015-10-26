@@ -30,8 +30,7 @@ def rho(i, j, h):
 # Se debe separar la iteracion en distintos segmentos:
 #hay una ec para los puntos lejanos a la linea neumann
 #hay otra para los inmediatamente vecinos a la linea neumann
-#y finalmente otra para los ptos de la linea neumann en si.
-#linea neumann y=-5.5 entre x=[-3,3]
+
 def una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h=0.2, w=1.):
     for i in range(1, N_pasos_x-1):
         #abajo
@@ -68,11 +67,11 @@ def una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h=0.2, w=1.):
         for j in range(12,13):#abajo
             v_next[i,j] =  ((1 - w) * v[i, j] +
                           w / 3 * (v[i+1, j] + v_next[i-1, j] +
-                                   v[i, j-1] + h**2 * rho(i, j, h) + h*(-1.)))
+                                   v_next[i, j-1] + h**2 * rho(i, j, h) + h*(-1.)))
         for j in range(13,14):#arriba
             v_next[i,j] =  ((1 - w) * v[i, j] +
                           w / 3 * (v[i+1, j] + v_next[i-1, j] +
-                                   v[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
+                                   v_next[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
 
 #Main
 #Setup
