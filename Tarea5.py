@@ -141,7 +141,7 @@ def asignar_caja_letra(caja, cajal, h):
 
 #######################################################
 
-def una_iteracion(V, V_next, Rho, h, w=1.):
+def una_iteracion_normal(V, V_next, Rho, h, w=1.):
     Nx = len(V[:,0])
     Ny = len(V[0,:])
     for i in range(1, Nx - 1):
@@ -149,7 +149,7 @@ def una_iteracion(V, V_next, Rho, h, w=1.):
             V_next[i, j] = ((1 - w) * V[i, j] +
                               w / 4 * (V[i+1, j] + V_next[i-1, j] +
                                        V[i, j + 1] + V_next[i, j - 1] +
-                                       h**2 * Rho[i,j]))
+                                       h**2 * Rho[i,j]))   # + porque es -Rho
 
 #######################################################
 #######################################################
@@ -206,7 +206,7 @@ la linea se encuetra en el cm 13 en y, y entre el cm 2 y 8 en x
 
 
 cajalinea = crea_caja(Lx,Ly,h)
-caja[2 / h : 8 / h + 1 , 13 / h] = 3  #linea
+cajalinea[2 / h : 8 / h + 1 , 13 / h - 1 : 13 / h +1] = 3  #linea en 13 / h
 
 
 
@@ -241,15 +241,15 @@ V_next = crea_caja(Lx, Ly, h)
 #print np.transpose(cajal)
 #print np.transpose(Rho)
 
-una_iteracion(V, V_next, Rho, h, w=1.2)
+una_iteracion_normal(V, V_next, Rho, h, w=1.2)
 counter = 1
 while counter < 50 :
     V = V_next.copy()
-    una_iteracion(V, V_next, Rho, h, w=1.2)
+    una_iteracion_normal(V, V_next, Rho, h, w=1.2)
     counter += 1
 
 
-plt.imshow(np.transpose(V_next), interpolation = 'nearest')
+plt.imshow(np.transpose(V_next) , interpolation = 'nearest')
 plt.show()
 
 #######################################################
