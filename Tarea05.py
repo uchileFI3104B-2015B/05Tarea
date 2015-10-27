@@ -11,23 +11,43 @@ from mpl_toolkits.mplot3d import axes3d
 class circuito(object):
 
     def __init__(self,ancho,largo,paso=0.2):
-        N_pasos_x=int(ancho/paso)+1
-        N_pasos_y=int(largo/paso)+1
+        self.N_puntos_x=int(ancho/paso)+1
+        self.N_puntos_y=int(largo/paso)+1
         self.x=np.linspace(-ancho/2,ancho/2,N_pasos_x)
         self.y=np.linspace(-largo/2,largo/2,N_pasos_y)
         self.v=np.zeros((x, y))
         self.dv=np.zeros((x, y))
         self.densidad_carga=np.zeros((x, y))
 
-    def hay_letra(self,ancho,largo):
+    def cargar_segmento(self,px,py,dx=1,dy=1,q,paso):
         '''
-        verifica si dentro del recuadro se encuentra parte de la letra
+        carga un segmento lineal desde la posicion (px,py)
+        con un ancho dx y un lago dy, por defecto se crea un cuadrado de area 1[cm^2]
+        todos los parametros se deben entregar en centimetros
         '''
         pass
+    def cargar_J(self,px,py,a,l):
+        '''
+        carga los segmentos necesatios para formar la letra J en una
+        caja de ancho "a" y largo "l"
+        '''
+        cargar_segmento(px,py,dx=a,dy=1)
+        cargar_segmento(px+a,py+1,dx=1,dy=l)
+        cargar_segmento(px+a,py+l,dx=a,dy=1)
+        cargar_segmento(px,py+l-1)
+
+
 
 #--------------------Ahora se calcula la solucion del sistema------------------#
+def iteracion_sobrerelajacion_dirichlet(V,V_next,DV,N_pasos_x,N_pasos_y,h,rho,w=1.2):
+    for i in range(1, N_pasos_x-1):
+        for j in range(1, N_pasos_y-1):
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                              w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                                       V[i, j+1] + V_next[i, j-1] +
+                                       h**2 * rho[i, j]))
 
-def iteracion_sobrerelajacion(V,V_next,DV,N_pasos_x,N_pasos_y,h,rho,w=1.2):
+def iteracion_sobrerelajacion_newman(V,V_next,DV,N_pasos_x,N_pasos_y,h,rho,w=1.2):
     for i in range(2, N_pasos_x-2):
         for j in range(2, N_pasos_y-2):
             V_next[i, j] = ((1 - w) * V[i, j] +
