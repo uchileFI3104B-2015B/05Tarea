@@ -65,17 +65,70 @@ def una_iter(phi, phi_n, p): # = N_x, N_y, Lx, Ly, h, w = 1.
     N_x, N_y, Lx, Ly, h, w = p
     N_x = int(N_x)
     N_y = int(N_y)
+    '''
     for i in range(1, N_x - 1):
         for j in range(1, N_y - 1):
             phi_n[i, j] = ((1 - w) * phi[i, j] +
                               w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
                                        phi[i, j+1] + phi_n[i, j-1] +
                                        h**2. * r(i, j, Lx, Ly, h)))
+    '''
+    for j in range(1, 12):
+        for i in range(1, N_x -1):
+            phi_n[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
+                                       phi[i, j+1] + phi_n[i, j-1] ))
+
+    for j in range(12, 14):
+        for i in range(1, N_x - 1):
+            phi_n[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
+                                       phi[i, j+1] + phi_n[i, j-1] ))
+
+        for i in range(1, 11):
+            phi_n[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
+                                       phi[i, j+1] + phi_n[i, j-1] ))
+        for i in range(41, N_x - 1):
+            phi_n[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
+                                       phi[i, j+1] + phi_n[i, j-1] ))
+
+        for j in range(12, 13): #redundante, pero me sirve para ordenar mi idea
+            for i in range(11, 41):
+                phi_n[i,j] =  ((1 - w) * phi[i, j] +
+                          w / 3 * (phi[i+1, j] + phi_n[i-1, j] +
+                                   phi_n[i, j-1] + h**2 * r(i, j, Lx, Ly, h) + h*(-1.)))
 
 
+        for j in range(13, 14): #redundante, pero me sirve para ordenar mi idea
+            for i in range(11, 41):
+                phi_n[i,j] =  ((1 - w) * phi[i, j] +
+                          w / 3 * (phi[i+1, j] + phi_n[i-1, j] +
+                                   phi_n[i, j-1] + h**2 * r(i, j, Lx, Ly, h) + h*(1.)))
 
-    pass
 
+    for j in range(14, 17):
+        for i in range(1, 12):
+            phi_n[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
+                                       phi[i, j+1] + phi_n[i, j-1] ))
+        for i in range(12, 38):
+            phi_n[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
+                                       phi[i, j+1] + phi_n[i, j-1] +
+                                       h**2. * r(i, j, Lx, Ly, h)))
+        for i in range(38, N_x -1):
+            phi_n[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
+                                       phi[i, j+1] + phi_n[i, j-1] ))
+    for j in range(17, N_y - 1):
+        for i in range(1, N_x -1):
+            phi_n[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
+                                       phi[i, j+1] + phi_n[i, j-1] ))
+
+#    pass
 
 def no_ha_convergido(phi, phi_n, toler = 1e-5):
     '''
@@ -99,6 +152,8 @@ h = 0.2
 w = 1
 N_x = Lx/ h
 N_y = Ly/ h
+print N_x
+print N_y
 
 
 phi = np.zeros((N_x, N_y))
@@ -124,24 +179,25 @@ while n < Nf and no_ha_convergido(phi, phi_s):
 
 #graficos (?)
 print("contador = {}".format(n))
-'''
-fig = plt.figure(1)
-fig.clf()
-ax = fig.add_subplot(111, projection='3d')
 
-x = np.linspace(-Lx/2, Lx, N_x)
-y = np.linspace(-Ly/2, Ly, N_y)
+phi_fin_trasp = phi_s.transpose()
 
-X, Y = np.meshgrid(x, y)
-
-ax.plot_surface(X, Y, phi_s, rstride=1, cstride=1)
-fig.show()
-'''
 fig2 = plt.figure(2)
 fig2.clf()
 ax2 = fig2.add_subplot(111)
-ax2.imshow(phi_s, origin='bottom', interpolation='nearest')
-ax2.contour(phi_s, origin='lower')
+ax2.imshow(phi_fin_trasp, origin='bottom', interpolation='nearest')
+ax2.contour(phi_fin_trasp, origin='lower')
+plt.savefig('fig1.png')
 fig2.show()
 
 plt.draw()
+
+fig = plt.figure(1)
+fig.clf()
+ax = fig.add_subplot(111,projection='3d')
+x = np.linspace(-1, 1, N_x)
+y = np.linspace(-1, 1, N_y)
+X, Y = np.meshgrid(x, y)
+ax.plot_surface(X, Y, phi_fin_trasp, rstride=1, cstride=1)
+plt.savefig('fig2.png')
+fig.show()
