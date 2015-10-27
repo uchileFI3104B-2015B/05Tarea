@@ -91,36 +91,18 @@ h = 0.2
 N_pasos_x = int(Lx / h + 1)
 N_pasos_y = int(Ly / h + 1)
 
-v = np.zeros((N_pasos_x, N_pasos_y))
-v_next = np.zeros((N_pasos_x, N_pasos_y))
 
-una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h, w=0.8)
-counter = 1
+w=[0.8, 1.0, 1.2, 1.4, 1.8]
+for w in w:
+    v = np.zeros((N_pasos_x, N_pasos_y))
+    v_next = np.zeros((N_pasos_x, N_pasos_y))
 
-while counter < 5000 and no_ha_convergido(v, v_next, tolerancia=1e-3):
-    v = v_next.copy()
-    una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h, w=0.8)
-    counter += 1
+    una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h, w)
+    counter = 1
 
-print("counter = {}".format(counter))
+    while counter < 5000 and no_ha_convergido(v, v_next, tolerancia=1e-3):
+        v = v_next.copy()
+        una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h, w)
+        counter += 1
 
-# trasponemos la matrix v_next
-v_next_rotada = v_next.transpose()
-
-# graficamos
-fig = plt.figure(1)
-fig.clf()
-ax = fig.add_subplot(111, projection='3d')
-x = np.linspace(-1, 1, N_pasos_x)
-y = np.linspace(-1, 1, N_pasos_y)
-X, Y = np.meshgrid(x, y)
-ax.plot_surface(X, Y, v_next_rotada, rstride=1, cstride=1)
-fig.show()
-plt.savefig('plot_surface_08.png')
-
-fig2 = plt.figure(2)
-fig2.clf()
-ax2 = fig2.add_subplot(111)
-ax2.imshow(v_next_rotada, origin='bottom', interpolation='nearest')
-fig2.show()
-plt.savefig('plot_imshow_08.png')
+    print("counter = {}".format(counter))
