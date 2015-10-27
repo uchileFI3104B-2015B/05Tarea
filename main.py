@@ -20,13 +20,13 @@ if __name__ == '__main__':
     box.draw_letter()
 
     # Escribir condiciones de borde constantes
-    box.define_border_conditions(0, 0, 0, 0)
+    box.def_border_conditions(0, 0, 0, 0)
 
     # Escribir condicion de borde derivativa
-    box.define_deritative_conditions(-3, 3, -5.5, -5.5, 0.001)
+    box.def_deritative_conditions(-3, 3, -5.5, -5.5, 0.001)
 
     # Resolver
-    box.solv_poisson( epsilon = 0.2, w = 0.8 , tolerance = 1e-4)
+    box.solv_poisson(epsilon=0.2, w=0.8, tolerance=1e-4)
 
     # Presentar resultados
 
