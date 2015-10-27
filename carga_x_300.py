@@ -10,7 +10,7 @@ ANCHO = 10
 ALTO = 15
 H = 0.2
 DERIVADA = 1  # 1E-3 * 3
-CARGA_TOTAL = 1  # 100*3
+CARGA_TOTAL = 500
 
 
 def crear_caja(ancho, alto, h):
@@ -87,9 +87,12 @@ def iterar(caja, caja_next, caja_carga, numero_pasos, h, w=1):
             if (esta_bajo_linea(i, j)):
                 iteracion_bajo_linea(i, j, caja, caja_next, caja_carga,
                                      numero_pasos, h, w=1)
-            elif esta_en_linea(i, j) or esta_sobre_linea(i, j):
+            elif esta_en_linea(i, j):
                 iteracion_linea(i, j, caja, caja_next, caja_carga,
                                 numero_pasos, h, w=1)
+            elif esta_sobre_linea(i, j):
+                iteracion_sobre_linea(i, j, caja, caja_next, caja_carga,
+                                      numero_pasos, h, w=1)
             elif (esta_en_letra(i, j)):
                 iteracion_letra(i, j, caja, caja_next, caja_carga,
                                 numero_pasos, h, w=1)
@@ -122,8 +125,8 @@ def iteracion_linea(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
     caja_next[i, j] = caja_next[i, j-1] + h*g_1
 
 
-def iteracion_bajo_linea(i, j, caja, caja_next,
-                         caja_carga, numero_pasos, h, w=1):
+def iteracion_bajo_linea(i, j, caja, caja_next, caja_carga,
+                         numero_pasos, h, w=1):
     '''avanza el algoritmo de sobre relajación 1 vez en los
     casilleros inferiores vecinos a la linea'''
     g_1 = DERIVADA
@@ -133,15 +136,15 @@ def iteracion_bajo_linea(i, j, caja, caja_next,
                                                caja_next[i, y-1] + h*g_1))
 
 
-def iteracion_sobre_linea(i, j, caja, caja_next,
-                          caja_carga, numero_pasos, h, w=1):
+def iteracion_sobre_linea(i, j, caja, caja_next, caja_carga,
+                          numero_pasos, h, w=1):
     '''avanza el algoritmo de sobre relajación 1 vez en los
     casilleros superiores vecinos a la linea'''
     g_1 = DERIVADA
-    y = 2 / H - 1
+    y = 2 / H + 1
     caja_next[i, y] = ((1-w)*caja[i, y] + w/3*(caja_next[i-1, y] +
                                                caja[i+1, y] +
-                                               caja_next[i, y-1] + h*g_1))
+                                               caja_next[i, y+1] - h*g_1))
 
 
 def convergio(caja, caja_next, tolerancia):
@@ -168,25 +171,76 @@ def f_caja_potencial_next(x, y):
     return caja_potencial_next[x, y]
 
 
-def mostrar(f_caja, caja, titulo):
+def mostrar(i, f_caja, caja, titulo):
     '''plotea la solución en 3D'''
+    x_original = [0, 2.5, 5, 7.5, 10]
+    y_original = [0, 3, 6, 9, 12, 15]
+    x_scale = [0, 12.5, 25, 37.5, 50]
+    y_scale = [0, 15, 30, 45, 60, 75]
     (ancho, alto) = caja.shape
     x = np.linspace(0, ancho-1, ancho)
     y = np.linspace(0, alto-1, alto)
     xg, yg = np.meshgrid(x, y)
     vector_f = np.vectorize(f_caja)
     z = vector_f(xg, yg)
-    '''
-    fig = plt.figure(1)
+
+    fig = plt.figure(1 + 2 * (i - 1))
     fig.clf()
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(xg,yg,z, rstride=1, cstride=1)
-    '''
-    fig2 = plt.figure()
+    ax.plot_surface(xg, yg, z, rstride=1, cstride=1)
+    ax.set_title(titulo)
+
+    ax.set_xticks(x_scale)
+    ax.set_xticklabels(x_original)
+    ax.set_yticks(y_scale)
+    ax.set_yticklabels(y_original)
+    ax.set_xlabel("X [cm]")
+    ax.set_ylabel("Y [cm]")
+    if titulo == "valor del potencial":
+        ax.set_zlabel("Potencial [erg/C]")
+        fig.savefig("potencial2.jpg")
+    else:
+        ax.set_zlabel("Carga [erg/C]")
+        fig.savefig("distr_carga2.jpg")
+
+    fig2 = plt.figure(2 + 2 * (i - 1))
     fig2.clf()
     ax2 = fig2.add_subplot(111)
-    ax2.imshow(z, origin='bottom', interpolation='nearest')
+    cax = ax2.imshow(z, origin='bottom', interpolation='nearest')
     ax2.contour(z, origin='lower')
+    ax2.set_title(titulo)
+    ax2.set_xticks(x_scale)
+    ax2.set_xticklabels(x_original)
+    ax2.set_yticks(y_scale)
+    ax2.set_yticklabels(y_original)
+    ax2.set_xlabel("X [cm]")
+    ax2.set_ylabel("Y [cm]")
+    cbar = fig2.colorbar(cax)
+
+    if titulo == "valor del potencial":
+        cbar.set_label("Potencial [erg/C]")
+        fig2.savefig("potencial3.jpg")
+    else:
+        cbar.set_label("Carga [C]")
+        fig2.savefig("distr_carga3.jpg")
+
+    if titulo == "valor del potencial":
+        fig3 = plt.figure(3 + 2 * (i - 1))
+        fig3.clf()
+        ax3 = fig3.add_subplot(111)
+        ax3.set_title("Corte transversal en X = 5")
+
+        ax3.set_xticks(y_scale)
+        ax3.set_xticklabels(y_original)
+        ax3.set_xlabel("Y [cm]")
+        ax3.set_ylabel("Potencial [erg/C]")
+
+        x = np.linspace(0, 75, 75)
+        z = np.zeros(75)
+        for i in range(0, 75, 1):
+            z[i] = caja[25, i]
+        ax3.plot(x, z)
+        fig3.savefig("corte_trans2.jpg")
 
 
 def es_horizontal(ini, fin):
@@ -281,14 +335,14 @@ caja_potencial = poner_condiciones_borde(caja_potencial)
 
 iterar(caja_potencial, caja_potencial_next, caja_carga, numero_pasos, H, w)
 contador = 1
-tolerancia = 1e-2
-while (contador < 800 and not convergio(caja_potencial, caja_potencial_next,
+tolerancia = 1e-3
+while (contador < 100 and not convergio(caja_potencial, caja_potencial_next,
                                         tolerancia)):
     caja_potencial = caja_potencial_next.copy()
 
     iterar(caja_potencial, caja_potencial_next, caja_carga, numero_pasos, H, w)
     contador += 1
 print("numero iteraciones: "+str(contador))
-mostrar(f_caja_carga, caja_carga, "distribucion carga")
-mostrar(f_caja_potencial_next, caja_potencial_next, "potencial")
+mostrar(1, f_caja_carga, caja_carga, "distribucion carga")
+mostrar(2, f_caja_potencial_next, caja_potencial_next, "valor del potencial")
 plt.show()
