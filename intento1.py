@@ -42,7 +42,14 @@ def no_ha_convergido(phi, phi_n, toler = 1e-5):
     '''
     ve si la funcion ya ha convergido
     '''
-    pass
+    not_zero = (phi_next != 0)
+    res = (phi - phi_n)[not_zero]/ phi_n[not_zero]
+    max_res = np.max(np.fabs(res))
+    if max_diff > tolerancia:
+        return True
+    else:
+        return False
+#    pass
 
 
 #condiciones de borde y/o iniciales
