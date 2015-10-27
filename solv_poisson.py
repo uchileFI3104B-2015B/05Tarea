@@ -19,10 +19,14 @@ if __name__ == '__main__':
     box.draw_letter()
 
     # Escribir condiciones de borde constantes
-
+    box.define_border_conditions(0,0,0,0)
 
     # Escribir condicion de borde derivativa
+    box.define_deritative_conditions(-3, 3 , -5.5 , -5.5 , 1.0)
+
     # Resolver
+    
+
     # Presentar resultados
 
     showbox = np.array(box.charge_box)

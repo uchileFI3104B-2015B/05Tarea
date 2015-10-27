@@ -1,4 +1,6 @@
 
+import numpy
+
 class box(object):
 
     RETICULADO = 0.1
@@ -12,6 +14,10 @@ class box(object):
     ''' Arreglos con caja de voltajes y de carga electrica '''
     volt_box = []
     charge_box = []
+
+    ''' Arreglo con indices de condicion de borde derivativa '''
+    deriv_index = []
+    deriv_val = []
 
     def __init__(self):
 
@@ -126,10 +132,34 @@ class box(object):
         self.draw_charged_block(x_inf , y_inf , 2 , 7 , dens_carga )
         self.draw_charged_block(x_inf + 2, y_inf + 3, 3 , 1 , dens_carga )
         self.draw_charged_block(x_inf + 2, y_inf + 5, 3 , 2 , dens_carga )
-        
+
     #END of create_letter
 
 
     def get_box(self):
         return self.box
     #END of get_box
+
+    def define_border_conditions(self, bc_top, bc_right, bc_bot, bc_left):
+        ''' Define condiciones de borde para cada lado de la caja de voltajes
+        con valores entregados por el usuario.
+        Tapa superior = bc_top
+        Tapa derecha = bc_right
+        '''
+        ''' Para este problema no es necesario, baja prioridad de implementacion '''
+        return 0
+
+    def define_deritative_conditions(self, x_inf, x_sup, y_inf, y_sup , deriv_val):
+        ''' Recibe indices en cm de ubicacion de condicion de borde derivativa.
+        Por el momento solo puede existir una CB derivativa a la vez '''
+
+        self.deriv_val = deriv_val
+        assert len([deriv_val]) == 1 , 'Se ingresaron multiples valores de condicion de borde derivativa'
+
+        # Se definen vectores de posiciones en cm
+        x = numpy.arange(x_inf, x_sup + self.RETICULADO, self.RETICULADO)
+        y = numpy.arange(y_inf, y_sup + self.RETICULADO, self.RETICULADO)
+
+        for i in range(len(x)):
+            for j in range(len(y)):
+                self.deriv_index.append( self.coord( x[i] , y[j] ) )
