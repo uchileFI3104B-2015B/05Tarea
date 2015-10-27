@@ -43,7 +43,7 @@ def una_iteracion(V, V_next, N_pasosx, N_pasosy, h, w=1.):
                             w / 4 * (V[i+1, j] + V_next[i-1, j] +
                                      V[i, j+1] + V_next[i, j-1] +
                                      h**2 * rho(i, j, h)))
-        # Encima de la linea
+        #Encima de la linea
         for j in range(14, int(N_pasosy) - 1):
             V_next[i, j] = ((1 - w) * V[i, j] +
                             w / 4 * (V[i+1, j] + V_next[i-1, j] +
@@ -97,7 +97,7 @@ Ly = 15
 h = 0.2
 N_pasosx = (Lx / h) + 1
 N_pasosy = (Ly / h) + 1
-w = 1.4
+w = 1.2
 
 V = np.zeros((N_pasosx, N_pasosy))
 V_next = np.zeros((N_pasosx, N_pasosy))
@@ -127,12 +127,19 @@ y = np.linspace(-1, 1, N_pasosy)
 X, Y = np.meshgrid(x, y)
 
 ax.plot_surface(X, Y, V_next_transpuesta, rstride=1, cstride=1)
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_zlabel('V potencial')
+
 fig.show()
 
 fig2 = plt.figure(2)
 fig2.clf()
 ax2 = fig2.add_subplot(111)
-ax2.imshow(np.arcsinh(V_next_transpuesta), origin='bottom', interpolation='nearest')
+ax2.imshow(np.arcsinh(V_next_transpuesta), origin='bottom', interpolation='nearest',)
+ax2.set_xlabel('x')
+ax2.set_ylabel('y')
+
 fig2.show()
 
 plt.draw()
