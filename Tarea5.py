@@ -166,7 +166,69 @@ def una_iteracion_linea(V, V_next, Rho, h, w=1.2):
         V_next[i, 13 / h] = V[i, 13 / h - 1] + h  # condicion g=1
         V_next[i, 13 / h + 1] = V[i, 13 / h] - h  # condicion g=-1
 
+#######################################################
 
+def una_iteracion_completa(V, V_next, Rho, h, w=1.2):
+    Nx = len(V[:,0])
+    Ny = len(V[0,:])
+    cajalinea = crea_caja(Lx,Ly,h)
+    cajalinea[2 / h : 8 / h + 1 , 13 / h - 1 : 13 / h +1] = 3  #linea en 13 / h
+    a = int(round(2 / h))
+    b = int(round(8 / h)) + 1
+    linea = int(round(13 / h))
+
+    for i in range(1, Nx - 1): #primera parte de la caja
+        for j in range(1, linea - 2):
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                              w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                                       V[i, j + 1] + V_next[i, j - 1] +
+                                       h**2 * Rho[i,j]))
+
+    for i in range(int(a), int(b)): #1 antes de la linea g=1
+        V_next[i, 13 / h - 1] = ((1 - w) * V[i, 13 / h - 1]
+                                 + w / 3 * (V[i+1, 13 / h - 1]
+                                 + V_next[i-1, 13 / h - 1]
+                                 + V_next[i, 13 / h - 2]
+                                 + h + h**2 * Rho[i,j]))
+
+
+    for i in range(int(a), int(b)): #integracion sobre la linea
+        V_next[i, 13 / h] = V[i, 13 / h - 1] + h  # condicion g=1
+        V_next[i, 13 / h + 1] = V[i, 13 / h] - h  # condicion g=-1
+
+
+    for i in range(int(a), int(b)): #1 despues de la linea g=-1
+        V_next[i, 13 / h + 2] = ((1 - w) * V[i, 13 / h + 2]
+                                 + w / 3 * (V[i+1, 13 / h + 2]
+                                 + V_next[i-1, 13 / h + 2]
+                                 + V_next[i, 13 / h + 1]
+                                 - h + h**2 * Rho[i,j]))
+
+
+    for i in range(1, a - 1): #parte izquierda de la caja
+        for j in range(linea - 2 , linea + 2):
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                              w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                                       V[i, j + 1] + V_next[i, j - 1] +
+                                       h**2 * Rho[i,j]))
+
+    for i in range(b + 1, Nx - 1): #parte derecha de la caja
+        for j in range(linea - 2 , linea + 2):
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                              w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                                       V[i, j + 1] + V_next[i, j - 1] +
+                                       h**2 * Rho[i,j]))
+
+    for i in range(1, Nx - 1): #ultima parte de la caja
+        for j in range(linea + 2, Ny -1):
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                              w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                                       V[i, j + 1] + V_next[i, j - 1] +
+                                       h**2 * Rho[i,j]))
+
+
+
+#######################################################
 #######################################################
 #######################################################
 
@@ -256,19 +318,19 @@ V_next = crea_caja(Lx, Ly, h)
 #print np.transpose(caja)
 #print np.transpose(cajal)
 #print np.transpose(Rho)
-una_iteracion_linea(V, V_next, Rho, h, w=1.2)
-una_iteracion_normal(V, V_next, Rho, h, w=1.2)
-una_iteracion_linea(V, V_next, Rho, h, w=1.2)
+#una_iteracion_linea(V, V_next, Rho, h, w=1.2)
+#una_iteracion_normal(V, V_next, Rho, h, w=1.2)
+#una_iteracion_linea(V, V_next, Rho, h, w=1.2)
+una_iteracion_completa(V, V_next, Rho, h, w=1.2)
 counter = 1
-while counter < 50 :
+while counter < 1500 :
     V = V_next.copy()
-    una_iteracion_linea(V, V_next, Rho, h, w=1.2)
-    una_iteracion_normal(V, V_next, Rho, h, w=1.2)
-    una_iteracion_linea(V, V_next, Rho, h, w=1.2)
+    una_iteracion_completa(V, V_next, Rho, h, w=1.2)
     counter += 1
 
 
 plt.imshow(np.transpose(V_next) , interpolation = 'nearest')
+#plt.imshow(np.arcsinh(np.transpose(V_next)) , interpolation = 'nearest')
 plt.show()
 
 #######################################################
