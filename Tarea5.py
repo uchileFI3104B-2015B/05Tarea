@@ -39,9 +39,9 @@ def letra_M(caja, h, rho):
     '''
     Llx = (len(caja[:, 0]) - 1 ) * h              #largo caja de letra eje x
     Lly = (len(caja[0, :]) - 1 ) * h              #largo caja de letra eje y
-    Nlx = len(caja[:, 0])  #numero de pasos en caja de letra a dar en eje x
+    Nlx = len(caja[:, 0])   #numero de pasos en caja de letra a dar en eje x
     Nly = len(caja[0, :])   #numero de pasos en caja de ltera a dar en eje y
-    N_pasos_1cm = 1. / h  #numero de pasos para tener 1 cm
+    N_pasos_1cm = 1. / h    #numero de pasos para tener 1 cm
 
     cajal = crea_caja(Llx, Lly, h)
 
@@ -55,68 +55,9 @@ def letra_M(caja, h, rho):
 
     cajal[Nlx / 2 - N_pasos_1cm / 2 : Nlx / 2 + N_pasos_1cm / 2 + 1 ,
     N_pasos_1cm : 2 * N_pasos_1cm ] = caja[Nlx / 2 - N_pasos_1cm / 2 :
-     Nlx / 2 + N_pasos_1cm / 2 + 1 , N_pasos_1cm : 2 * N_pasos_1cm ] #-centrosup
+     Nlx / 2 + N_pasos_1cm / 2 + 1 , N_pasos_1cm : 2 * N_pasos_1cm ] #-cen-sup
 
     return cajal
-
-#######################################################
-
-def asignar_letra(caja, Lx , Ly, cajal, Llx, Lly, h):
-    '''
-    asigna la letra a la caja principal
-    caja principal caja Lx x Ly
-    caja de letra cajal Llx x Lly
-    paso h
-    '''
-    Nx = len(caja[:, 0])   #numero de pasos a dar en eje x
-    Ny = len(caja[0, :])  #numero de pasos a dar en eje y
-    Nlx = len(cajal[:, 0])    #numero de pasos en caja de letra a dar en eje x
-    Nly = len(cajal[0, :])   #numero de pasos en caja de ltera a dar en eje y
-
-    bordex_caja = round((Nx / 2 ) - (Nlx / 2 ))
-    bordey_caja = round((Ny / 2 ) - (Nly / 2 ))
-
-    ly = int(round(Nlx))
-    lx = int(round(Nly))
-
-    try:
-        lx = int(round(Nly))
-        try:
-            ly = int(round(Nlx))
-            for i in range(ly):
-                for j in range(lx):
-                    if cajal[i][j] != 0:
-                        if cajal[i][j] != 0:
-                            caja[bordex_caja : bordex_caja + Nlx ,
-                            bordey_caja : bordey_caja + Nly][i][j] = cajal[i][j]
-        except:
-            ly = int(round(Nlx)) -1
-            for i in range(ly):
-                for j in range(lx):
-                    if cajal[i][j] != 0:
-                        if cajal[i][j] != 0:
-                            caja[bordex_caja : bordex_caja + Nlx ,
-                            bordey_caja : bordey_caja + Nly][i][j] = cajal[i][j]
-    except:
-        lx = int(round(Nly)) - 1
-        try:
-            ly = int(round(Nlx))
-            for i in range(ly):
-                for j in range(lx):
-                    if cajal[i][j] != 0:
-                        if cajal[i][j] != 0:
-                            caja[bordex_caja : bordex_caja + Nlx ,
-                            bordey_caja : bordey_caja + Nly][i][j] = cajal[i][j]
-        except:
-            ly = int(round(Nlx)) -1
-            for i in range(ly):
-                for j in range(lx):
-                    if cajal[i][j] != 0:
-                        if cajal[i][j] != 0:
-                            caja[bordex_caja : bordex_caja + Nlx ,
-                            bordey_caja : bordey_caja + Nly][i][j] = cajal[i][j]
-
-    return caja
 
 #######################################################
 
@@ -127,9 +68,9 @@ def asignar_caja_letra(caja, cajal, h):
     caja de letra cajal Llx x Lly
     paso h
     '''
-    Nx = len(caja[:, 0])   #numero de pasos a dar en eje x
+    Nx = len(caja[:, 0])  #numero de pasos a dar en eje x
     Ny = len(caja[0, :])  #numero de pasos a dar en eje y
-    Nlx = len(cajal[:, 0])    #numero de pasos en caja de letra a dar en eje x
+    Nlx = len(cajal[:, 0])   #numero de pasos en caja de letra a dar en eje x
     Nly = len(cajal[0, :])   #numero de pasos en caja de ltera a dar en eje y
 
     bordex_caja = round((Nx / 2 ) - (Nlx / 2 ))
@@ -142,33 +83,11 @@ def asignar_caja_letra(caja, cajal, h):
 
 #######################################################
 
-def una_iteracion_normal(V, V_next, Rho, h, w=1.2):
-    Nx = len(V[:,0])
-    Ny = len(V[0,:])
-    for i in range(1, Nx - 1):
-        for j in range(1, Ny - 1):
-            V_next[i, j] = ((1 - w) * V[i, j] +
-                              w / 4 * (V[i+1, j] + V_next[i-1, j] +
-                                       V[i, j + 1] + V_next[i, j - 1] +
-                                       h**2 * Rho[i,j]))   # + porque es -Rho
-
-#######################################################
-
-def una_iteracion_linea(V, V_next, Rho, h, w=1.2):
-    Nx = len(V[:,0])
-    Ny = len(V[0,:])
-    cajalinea = crea_caja(Lx,Ly,h)
-    cajalinea[2 / h : 8 / h + 1 , 13 / h - 1 : 13 / h +1] = 3  #linea en 13 / h
-    Nlx = len(cajalinea[ 2 / h : 8 / h +1 , 13 / h])
-    a = round(2 / h)
-    b = round(8 / h) + 1
-    for i in range(int(a), int(b)):
-        V_next[i, 13 / h] = V[i, 13 / h - 1] + h  # condicion g=1
-        V_next[i, 13 / h + 1] = V[i, 13 / h] - h  # condicion g=-1
-
-#######################################################
-
 def una_iteracion_completa(V, V_next, Rho, h, w=1.2):
+    '''
+    Hace una iteracion completa sobre toda la caja
+    se hace la iteracion por partes, desde la parte superior a la inferior
+    '''
     Nx = len(V[:,0])
     Ny = len(V[0,:])
     cajalinea = crea_caja(Lx,Ly,h)
@@ -191,12 +110,8 @@ def una_iteracion_completa(V, V_next, Rho, h, w=1.2):
                                  + V_next[i, linea - 2]
                                  - h + h**2 * Rho[i,j]))
 
-
     for i in range(a, b): #integracion sobre la linea
         V_next[i, linea] = V[i, linea - 1] + h  # condicion g=1
-        #V_next[i, linea + 1] = V[i, linea] - h  # condicion g=-1
-        #V_next[i, linea] = V[i, linea + 1] - h
-
 
     for i in range(a, b): #1 despues de la linea g=-1
         V_next[i, linea + 1] = ((1 - w) * V[i, linea + 1]
@@ -205,15 +120,14 @@ def una_iteracion_completa(V, V_next, Rho, h, w=1.2):
                                  + V_next[i, linea + 2]
                                  + h + h**2 * Rho[i,j]))
 
-
-    for i in range(1, a): #parte izquierda de la caja
+    for i in range(1, a): #parte izquierda de la linea
         for j in range(linea - 1 , linea + 2):
             V_next[i, j] = ((1 - w) * V[i, j] +
                               w / 4 * (V[i+1, j] + V_next[i-1, j] +
                                        V[i, j + 1] + V_next[i, j - 1] +
                                        h**2 * Rho[i,j]))
 
-    for i in range(b , Nx - 1): #parte derecha de la caja
+    for i in range(b , Nx - 1): #parte derecha de la linea
         for j in range(linea - 1 , linea + 2):
             V_next[i, j] = ((1 - w) * V[i, j] +
                               w / 4 * (V[i+1, j] + V_next[i-1, j] +
@@ -229,7 +143,18 @@ def una_iteracion_completa(V, V_next, Rho, h, w=1.2):
 
 #######################################################
 
-#def convergencia():
+def no_ha_convergido(V, V_next, tolerancia=1e-5):
+    '''
+    Compara el potencial actual con el del paso anterior y determina si
+    ha convergido o no a partir de nuestra tolerancia
+    '''
+    not_zero = (V_next != 0)
+    diff_relativa = (V - V_next)[not_zero] / V_next[not_zero]
+    max_diff = np.max(np.fabs(diff_relativa))
+    if max_diff > tolerancia:
+        return True
+    else:
+        return False
 
 #######################################################
 #######################################################
@@ -247,8 +172,8 @@ esquina de caja = (0,0)
 
 Lx = 10.           #[cm] largo de la caja en eje x
 Ly = 15.           #[cm] largo de la caja en eje y
-h = 0.25           #[cm] tamanho del paso (recomiendo 0.25 (?))
-w = 1.             # w parametro del metodo de sobrerelajacion
+h = 0.25           #[cm] tamanho del paso
+w = 1.2            # w parametro del metodo de sobrerelajacion
 
 caja = crea_caja(Lx, Ly, h)  #se construye caja
 
@@ -263,8 +188,8 @@ grosor 1cm
 Llx = 5.       #largo caja de letra eje x
 Lly = 7.       #largo caja de letra eje y
 
-#rho = (1. /  17.) * h**2      #densidad de carga, son 17cm2 de letra
-rho=0.5
+rho = (1. /  17.) * h**2      #densidad de carga, son 17cm2 de letra
+#rho = 0.5
 cajal = crea_caja(Llx, Lly, h)    #se construye caja de letra
 cajal = letra_M(cajal, h, rho) #se construye letra M en la caja de letra
 
@@ -276,75 +201,54 @@ caja = asignar_caja_letra(caja, cajal, h) #se asigna letra a caja principal
 
 #######################################################
 
-#construir condiciiones
-'''
-voltaje en los borde = 0 ... construir en la iteracion
-rho esta en la definicion de la letra
-'''
-#crear linea
-'''
-la linea se encuetra en el cm 13 en y, y entre el cm 2 y 8 en x
-'''
-
-
-cajalinea = crea_caja(Lx,Ly,h)
-cajalinea[2 / h : 8 / h + 1 , 13 / h - 1 : 13 / h +1] = 3  #linea en 13 / h
-
-
-
-#######################################################
-
 #aplicar metodo de sobrerelajacion
 '''
 rho solo existe en la letra, en los demas puntos es cero
 '''
+Lx = 10.           #[cm] largo de la caja en eje x
+Ly = 15.           #[cm] largo de la caja en eje y
+h = 0.25           #[cm] tamanho del paso
+w = 1.2            # w parametro del metodo de sobrerelajacion
+tolerancia = 1e-7  # Diferencia esperada para considerar convergencia
+Niteracion = 5000  # Numero de iteracion maxima
+
 Rho = crea_caja(Lx, Ly, h)
 Rho = asignar_caja_letra(Rho, cajal, h) #G_ij
 
 V = crea_caja(Lx, Ly, h)
 V_next = crea_caja(Lx, Ly, h)
 
+una_iteracion_completa(V, V_next, Rho, h, w)
+counter = 1
+'''
+while counter < Niteracion and no_ha_convergido(V, V_next, tolerancia):
+    V = V_next.copy()
+    una_iteracion_completa(V, V_next, Rho, h, w)
+    counter += 1
+'''
+print("w = {}".format(w))
+print("Numero de iteracion maxima = {}".format(Niteracion))
+print("counter = {}".format(counter))
 
-
-
-
+sum_rho = sum(sum(Rho))
+print 'densidad de carga = ', rho , '[C / cm2]'
+print 'carga total = ', sum_rho , '[C]'
 
 #######################################################
+#graficos
 
-
-#zona de pruebas
-#print bordex_caja
-#print bordey_caja
-
-#caja[(Nx-1)/2,(Ny-1)/2] = 1
-
-#print sum(sum(cajal)) #carga total en letra
-#print np.transpose(caja)
-#print np.transpose(cajal)
-#print np.transpose(Rho)
-#una_iteracion_linea(V, V_next, Rho, h, w=1.2)
-#una_iteracion_normal(V, V_next, Rho, h, w=1.2)
-#una_iteracion_linea(V, V_next, Rho, h, w=1.2)
-una_iteracion_completa(V, V_next, Rho, h, w=1.2)
-counter = 1
-while counter < 150 :
-    V = V_next.copy()
-    una_iteracion_completa(V, V_next, Rho, h, w=1.2)
-    counter += 1
-
-
-#plt.imshow(np.transpose(V_next) , interpolation = 'nearest', extent=[-5, 5, -7.5, 7.5])
-#
 plt.imshow(np.arcsinh(np.transpose(V_next)) , interpolation = 'nearest',
  extent=[-5, 5, -7.5, 7.5])
 
-
-plt.imshow(np.transpose(Rho) , interpolation = 'nearest',
- extent=[-5, 5, -7.5, 7.5])
-
 plt.title('Potencial electroestatico')
-plt.xlabel('[cm]')
-plt.ylabel('[cm]')
+
+#plt.imshow(np.transpose(Rho) , interpolation = 'nearest',
+# extent=[-5, 5, -7.5, 7.5])
+
+#plt.title('Densidad de carga')
+
+plt.xlabel('eje x [cm]')
+plt.ylabel('eje y [cm]')
 plt.colorbar()
 plt.show()
 
