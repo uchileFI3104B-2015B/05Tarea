@@ -9,10 +9,9 @@ class box(object):
     N_x0 = []
     N_y0 = []
 
-    ''' Arreglo con la caja '''
-    box = []
-    forbidden_indexes = []
-
+    ''' Arreglos con caja de voltajes y de carga electrica '''
+    volt_box = []
+    charge_box = []
 
     def __init__(self):
 
@@ -30,9 +29,12 @@ class box(object):
         assert N_y * self.RETICULADO == self.LENGTH , 'Eje Y no se puede dividir en numero entero de celdas'
 
         for x in range( N_x ):
-            self.box.append([])
+            self.volt_box.append([])
+            self.charge_box.append([])
             for y in range( N_y ):
-                self.box[-1].append(0)
+                self.volt_box[-1].append(0)
+                self.charge_box[-1].append(0)
+
     #END create_box
 
 
@@ -40,8 +42,8 @@ class box(object):
         ''' Calcula el centro de una matriz 2D
         con numero de indices x e y '''
 
-        x_size = len( self.box )
-        y_size = len( self.box[0] )
+        x_size = len( self.volt_box )
+        y_size = len( self.volt_box[0] )
 
         self.N_x0 = int( x_size / 2 )
         self.N_y0 = int( y_size / 2 )
@@ -62,8 +64,8 @@ class box(object):
 
     def position( self, x_index, y_index):
         ''' Convierte posicion de indices a cm '''
-        assert 0 <= x_index < len(self.box), 'Indice x fuera de la caja'
-        assert 0 <= y_index < len(self.box[0]), 'Indice y fuera de la caja'
+        assert 0 <= x_index < len(self.volt_box), 'Indice x fuera de la caja'
+        assert 0 <= y_index < len(self.volt_box[0]), 'Indice y fuera de la caja'
         assert type(x_index) is int, 'Indice x no es entero'
         assert type(y_index) is int, 'Indice y no es entero'
 
@@ -73,7 +75,7 @@ class box(object):
         return x_cm, y_cm
     #END of position
 
-    def draw_block(self, x_origin, y_origin , x_size , y_size , density_per_cm2 ):
+    def draw_charged_block(self, x_origin, y_origin , x_size , y_size , density_per_cm2 ):
         ''' Llena bloque de x_size x y_size [cm] con densidad density_per_cm2
         x_origin, y_origin son las coordenadas del vertice inferior izquierdo del bloque
         Se le puede solicitar que retorne los indices ocupados por la letra'''
@@ -97,7 +99,7 @@ class box(object):
 
         for i in range( N_x , N_x_end ):
             for j in range( N_y , N_y_end ):
-                self.box[i][j] = density_adjusted
+                self.charge_box[i][j] = density_adjusted
                 used_indexes.append( (i,j) )
 
         return used_indexes
@@ -121,15 +123,10 @@ class box(object):
 
         ''' Dibujar letra usando bloques (Arte)
         Bloquear indices ocupados por la letra'''
-        ind = self.draw_block(x_inf , y_inf , 2 , 7 , dens_carga )
-        self.forbidden_indexes.append(ind)
-
-        ind = self.draw_block(x_inf + 2, y_inf + 3, 3 , 1 , dens_carga )
-        self.forbidden_indexes.append(ind)
-
-        ind = self.draw_block(x_inf + 2, y_inf + 5, 3 , 2 , dens_carga )
-        self.forbidden_indexes.append(ind)
-
+        self.draw_charged_block(x_inf , y_inf , 2 , 7 , dens_carga )
+        self.draw_charged_block(x_inf + 2, y_inf + 3, 3 , 1 , dens_carga )
+        self.draw_charged_block(x_inf + 2, y_inf + 5, 3 , 2 , dens_carga )
+        
     #END of create_letter
 
 

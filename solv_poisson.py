@@ -19,15 +19,15 @@ if __name__ == '__main__':
     box.draw_letter()
 
     # Escribir condiciones de borde constantes
-    
+
 
     # Escribir condicion de borde derivativa
     # Resolver
     # Presentar resultados
 
-    showbox = np.array(box.box)
+    showbox = np.array(box.charge_box)
 
-    print(showbox.sum())
+    # print(showbox.sum())
 
     fig = plt.figure()
 
