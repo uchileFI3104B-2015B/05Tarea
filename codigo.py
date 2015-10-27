@@ -3,6 +3,8 @@ Descripcion
 '''
 from __future__ import division
 import numpy as np
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import axes3d
 
 #Definimos la funcion rho que asignara un valor de densidad
 #a cada punto de la grilla, diferenciando los espacios en
@@ -17,7 +19,7 @@ def rho(i, j, h):
         return rho_letra
     if x >= 1.5 and x <= 2.5 and y >= -3.5 and y <= 3.5:
         return rho_letra
-    if y <= 3.5 and x >= 2.5 and x > -1.5 and x < 1.5:
+    if y <= 3.5 and y >= 2.5 and x > -1.5 and x < 1.5:
         return rho_letra
     if y <= 0.5 and y >= -0.5 and x > -1.5 and x < 1.5:
         return rho_letra
@@ -92,3 +94,27 @@ print("counter = {}".format(counter))
 
 #Mostramos nuestra grilla
 print V_next
+
+#Graficamos para 10 iteraciones
+
+V_next_trans=V_next.transpose()
+
+fig = plt.figure(1)
+fig.clf()
+ax = fig.add_subplot(111, projection='3d')
+
+x = np.linspace(-1, 1, N_pasos_x)
+y = np.linspace(-1, 1, N_pasos_y)
+
+X, Y = np.meshgrid(x, y)
+
+ax.plot_surface(X, Y, V_next_trans, rstride=1, cstride=1)
+fig.show()
+
+fig2 = plt.figure(2)
+fig2.clf()
+ax2 = fig2.add_subplot(111)
+ax2.imshow(V_next_trans, origin='bottom', interpolation='nearest')
+fig2.show()
+
+plt.draw()
