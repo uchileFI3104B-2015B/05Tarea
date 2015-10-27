@@ -31,20 +31,45 @@ def r(i, j, Lx, Ly, h):
         return 0
 
 
+def una_iter(phi, phi_n, N_x, N_y, h, w = 1.):
+    '''
+    Da un paso en la iteracion para toda la grilla
+    '''
+    pass
+
+
+def no_ha_convergido(phi, phi_n, toler = 1e-5):
+    '''
+    ve si la funcion ya ha convergido
+    '''
+    pass
+
+
 #condiciones de borde y/o iniciales
 
 Lx = 10
 Ly = 15
-N_x = 10
-N_y = 15
+h = 0.2
+w = 1
+N_x = Lx/ h
+N_y = Ly/ h
 
 v = np.zeros((N_x, N_y))
 v_s = np.zeros((N_x, N_y))
 
-h = 0.2
-
 
 #iteracion
+
+una_iter(phi, phi_n, N_x, N_y, h, w)
+n = 1
+Nf = 800
+while n < Nf and no_ha_convergido(phi, phi_n):
+    phi = phi_n.copy()
+    una_iter(phi, phi_n, N_x, N_y, h, w)
+    n += 1
+
+
+
 
 
 
