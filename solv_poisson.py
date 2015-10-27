@@ -4,7 +4,8 @@ de tamano 10 x 15 [cm], reticulado de 0.2 [cm]
 uso: solv_poisson.py
 '''
 
-import math, box
+import math
+import box
 import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -19,19 +20,17 @@ if __name__ == '__main__':
     box.draw_letter()
 
     # Escribir condiciones de borde constantes
-    box.define_border_conditions(0,0,0,0)
+    box.define_border_conditions(0, 0, 0, 0)
 
     # Escribir condicion de borde derivativa
-    box.define_deritative_conditions(-3, 3 , -5.5 , -5.5 , 1.0)
+    box.define_deritative_conditions(-3, 3, -5.5, -5.5, 1.0)
 
     # Resolver
-    
+    box.solv_poisson()
 
     # Presentar resultados
 
-    showbox = np.array(box.charge_box)
-
-    # print(showbox.sum())
+    showbox = np.array(box.volt_box)
 
     fig = plt.figure()
 
