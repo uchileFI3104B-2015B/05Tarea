@@ -31,10 +31,9 @@ def r(i, j, Lx, Ly, h):
     return r
 
 
+'''
 def paso_sin_carga(phi, phi_n, N_x, N_y):
-    '''
-    solo la iteracion son considerar el valor de la densidad
-    '''
+    'solo la iteracion son considerar el valor de la densidad'
     N_x = int(N_x)
     N_y = int(N_y)
     for i in range(1, N_x - 1):
@@ -44,10 +43,9 @@ def paso_sin_carga(phi, phi_n, N_x, N_y):
                                        phi[i, j+1] + phi_n[i, j-1] ))
 
 
-def paso_con_carga(phi, phi_n, N_x, N_y):
-    '''
-    solo la iteracion en las zonas con carga
-    '''
+def paso_con_carga(phi, phi_n, p, nx_i, ny_i, nx_f, ny_f):
+    'solo la iteracion en las zonas con carga'
+    N_x, N_y, Lx, Ly, h, w = p
     N_x = int(N_x)
     N_y = int(N_y)
     for i in range(1, N_x - 1):
@@ -56,6 +54,8 @@ def paso_con_carga(phi, phi_n, N_x, N_y):
                               w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
                                        phi[i, j+1] + phi_n[i, j-1] +
                                        h**2. * r(i, j, Lx, Ly, h)))
+'''
+
 
 
 def una_iter(phi, phi_n, p): # = N_x, N_y, Lx, Ly, h, w = 1.
@@ -65,7 +65,12 @@ def una_iter(phi, phi_n, p): # = N_x, N_y, Lx, Ly, h, w = 1.
     N_x, N_y, Lx, Ly, h, w = p
     N_x = int(N_x)
     N_y = int(N_y)
-    paso_con_carga(phi, phi_n, N_x, N_y)
+    for i in range(1, N_x - 1):
+        for j in range(1, N_y - 1):
+            phi_n[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
+                                       phi[i, j+1] + phi_n[i, j-1] +
+                                       h**2. * r(i, j, Lx, Ly, h)))
 
 
 
