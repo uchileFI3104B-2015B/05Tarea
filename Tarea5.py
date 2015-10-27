@@ -178,41 +178,41 @@ def una_iteracion_completa(V, V_next, Rho, h, w=1.2):
     linea = int(round(13 / h))
 
     for i in range(1, Nx - 1): #primera parte de la caja
-        for j in range(1, linea - 2):
+        for j in range(1, linea - 1):
             V_next[i, j] = ((1 - w) * V[i, j] +
                               w / 4 * (V[i+1, j] + V_next[i-1, j] +
                                        V[i, j + 1] + V_next[i, j - 1] +
                                        h**2 * Rho[i,j]))
 
     for i in range(int(a), int(b)): #1 antes de la linea g=1
-        V_next[i, 13 / h - 1] = ((1 - w) * V[i, 13 / h - 1]
-                                 + w / 3 * (V[i+1, 13 / h - 1]
-                                 + V_next[i-1, 13 / h - 1]
-                                 + V_next[i, 13 / h - 2]
+        V_next[i, linea - 1] = ((1 - w) * V[i, linea - 1]
+                                 + w / 3 * (V[i+1, linea - 1]
+                                 + V_next[i-1, linea - 1]
+                                 + V_next[i, linea - 2]
                                  + h + h**2 * Rho[i,j]))
 
 
     for i in range(int(a), int(b)): #integracion sobre la linea
-        V_next[i, 13 / h] = V[i, 13 / h - 1] + h  # condicion g=1
-        V_next[i, 13 / h + 1] = V[i, 13 / h] - h  # condicion g=-1
+        V_next[i, linea] = V[i, linea - 1] + h  # condicion g=1
+        V_next[i, linea + 1] = V[i, linea] - h  # condicion g=-1
 
 
     for i in range(int(a), int(b)): #1 despues de la linea g=-1
-        V_next[i, 13 / h + 2] = ((1 - w) * V[i, 13 / h + 2]
-                                 + w / 3 * (V[i+1, 13 / h + 2]
-                                 + V_next[i-1, 13 / h + 2]
-                                 + V_next[i, 13 / h + 1]
+        V_next[i, linea + 2] = ((1 - w) * V[i, linea + 2]
+                                 + w / 3 * (V[i+1, linea + 2]
+                                 + V_next[i-1, linea + 2]
+                                 + V_next[i, linea + 1]
                                  - h + h**2 * Rho[i,j]))
 
 
-    for i in range(1, a - 1): #parte izquierda de la caja
+    for i in range(1, a): #parte izquierda de la caja
         for j in range(linea - 2 , linea + 2):
             V_next[i, j] = ((1 - w) * V[i, j] +
                               w / 4 * (V[i+1, j] + V_next[i-1, j] +
                                        V[i, j + 1] + V_next[i, j - 1] +
                                        h**2 * Rho[i,j]))
 
-    for i in range(b + 1, Nx - 1): #parte derecha de la caja
+    for i in range(b , Nx - 1): #parte derecha de la caja
         for j in range(linea - 2 , linea + 2):
             V_next[i, j] = ((1 - w) * V[i, j] +
                               w / 4 * (V[i+1, j] + V_next[i-1, j] +
@@ -260,7 +260,7 @@ Llx = 5.       #largo caja de letra eje x
 Lly = 7.       #largo caja de letra eje y
 
 rho = (1. /  17.) * h**2      #densidad de carga, son 17cm2 de letra
-rho=1
+#rho=1
 cajal = crea_caja(Llx, Lly, h)    #se construye caja de letra
 cajal = letra_M(cajal, h, rho) #se construye letra M en la caja de letra
 
@@ -323,7 +323,7 @@ V_next = crea_caja(Lx, Ly, h)
 #una_iteracion_linea(V, V_next, Rho, h, w=1.2)
 una_iteracion_completa(V, V_next, Rho, h, w=1.2)
 counter = 1
-while counter < 1500 :
+while counter < 150 :
     V = V_next.copy()
     una_iteracion_completa(V, V_next, Rho, h, w=1.2)
     counter += 1
