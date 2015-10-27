@@ -80,5 +80,15 @@ w=1
 V=np.zeros( ( N_pasos_x , N_pasos_y ) )
 V_next=np.zeros( ( N_pasos_x , N_pasos_y ) )
 
+#Probamos para 10 iteraciones
+una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
+counter = 1
+while counter < 10:
+    V = V_next.copy()
+    una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
+    counter += 1
+
+print("counter = {}".format(counter))
+
 #Mostramos nuestra grilla
 print V_next
