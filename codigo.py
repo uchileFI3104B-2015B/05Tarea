@@ -26,6 +26,45 @@ def rho(i, j, h):
     else:
         return rho_blanco
 
+#Definimos la funcion 'una_iteracion'
+def una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w):
+    for i in range(1, int(N_pasos_x) - 1):
+        #Separamos la grilla para aislar el lugar con condicion derivativa
+
+        #Bajo la condicion derivativa
+        for j in range(1, 12):
+            V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
+                            + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
+
+        #sobre la condicion derivativa
+        for j in range(14, int(N_pasos_y) - 1):
+            V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
+                            + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
+
+
+    for j in range(12,14):
+
+        #A la izquierda de la condicion derivativa
+        for i in range(1,11):
+            V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
+                            + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
+
+        #A la derecha de la condicion derivativa
+        for i in range(41,int(N_pasos_x)-1):
+            V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
+                            + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
+
+    #Ahora iteramos dentro de la condicion derivativa
+    for i in range(11,41):
+        #Bajo la condicion derivativa -1
+        for j in range(12,13):
+            V_next[i,j] =  ((1 - w) * V[i, j] + w / 3 * (V[i+1, j] + V_next[i-1, j]
+                            + V[i, j-1] + h**2 * rho(i, j, h) + h*(-1.)))
+
+        #Sobre la condicion derivativa +1
+        for j in range(13,14):
+            V_next[i,j] =  ((1 - w) * V[i, j] + w / 3 * (V[i+1, j] + V_next[i-1, j]
+                            + V[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
 
 
 #Main
@@ -40,46 +79,6 @@ w=1
 #Creamos la grilla
 V=np.zeros( ( N_pasos_x , N_pasos_y ) )
 V_next=np.zeros( ( N_pasos_x , N_pasos_y ) )
-
-
-# 1 Iteracion
-for i in range(1, int(N_pasos_x) - 1):
-    #Separamos la grilla para aislar el lugar con condicion derivativa
-
-    #Bajo la condicion derivativa
-    for j in range(1, 12):
-        V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
-                        + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
-
-    #sobre la condicion derivativa
-    for j in range(14, int(N_pasos_y) - 1):
-        V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
-                        + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
-
-
-for j in range(12,14):
-
-    #A la izquierda de la condicion derivativa
-    for i in range(1,11):
-        V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
-                        + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
-
-    #A la derecha de la condicion derivativa
-    for i in range(41,int(N_pasos_x)-1):
-        V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
-                        + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
-
-#Ahora iteramos dentro de la condicion derivativa
-for i in range(11,41):
-    #Bajo la condicion derivativa -1
-    for j in range(12,13):
-        V_next[i,j] =  ((1 - w) * V[i, j] + w / 3 * (V[i+1, j] + V_next[i-1, j]
-                        + V[i, j-1] + h**2 * rho(i, j, h) + h*(-1.)))
-
-    #Sobre la condicion derivativa +1
-    for j in range(13,14):
-        V_next[i,j] =  ((1 - w) * V[i, j] + w / 3 * (V[i+1, j] + V_next[i-1, j]
-                        + V[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
 
 #Mostramos nuestra grilla
 print V_next
