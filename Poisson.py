@@ -46,62 +46,79 @@ def Rho_Letra(i, j, h):
 
 
 def una_iteracion(phi, phi_next, Nx_pasos, Ny_pasos, h, w=1.):
+    '''
+
+    '''
     #Parte Izquierda del area, la cual no contiene la letra
-    for i in range(1, 10):
-        for j in range(1, Ny_pasos - 1):
+    for j in range(20, Ny_pasos - 1):
+        for i in range(1, 13):
             phi_next[i, j] = ((1 - w) * phi[i, j] +
                               w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
-                                       phi[i, j+1] + phi_next[i, j-1] #+
+                                       phi[i, j+1] + phi_next[i, j-1])) #+
                                      #  h**2 * Rho_Letra(i, j, h)))
-    #Parte Derecha del area, tampoco tiene letra
-    for i in range(40, Nx_pasos - 1):
-        for j in range(1, Ny_pasos-1):
+        #Parte Derecha del area, tampoco tiene letra
+        for i in range(37, Nx_pasos - 1):
             phi_next[i, j] = ((1 - w) * phi[i, j] +
                               w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
-                                       phi[i, j+1] + phi_next[i, j-1] #+
+                                       phi[i, j+1] + phi_next[i, j-1])) #+
                                        #h**2 * Rho_Letra(i, j, h)))
-    #Parte Central Superior
-    for i in range(10, 40)
-        for j in range(56, Ny_pasos - 1):
+    #Parte Central Superior sobre la letra
+    for i in range(13, 38):
+        for j in range(55, Ny_pasos - 1):
             phi_next[i, j] = ((1 - w) * phi[i, j] +
                               w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
-                                       phi[i, j+1] + phi_next[i, j-1] #+
+                                       phi[i, j+1] + phi_next[i, j-1])) #+
                                        #h**2 * Rho_Letra(i, j, h)))
-    #Linea
-    #Parte Central Baja Lejana a la linea por bajo esta esta
-    for i in range(10, 40):
-        for j in range(1, 20):
+    #Letra
+    for i in range(13, 38):
+        for j in range(20, 56):
             phi_next[i, j] = ((1 - w) * phi[i, j] +
                               w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
-                                       phi[i, j+1] + phi_next[i, j-1] #+
+                                       phi[i, j+1] + phi_next[i, j-1] +
+                                       h**2 * Rho_Letra(i, j, h)))
+    #laterales de la linea
+    for j in range(1, 20):
+        for i in range(1, 10):#Parte izquierda de la linea
+            phi_next[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
+                                       phi[i, j+1] + phi_next[i, j-1]))
                                        #h**2 * Rho_Letra(i, j, h)))
-    #Parte Central Baja Lejana a la linea por sobre esta esta
-    for i in range(10, 40):
-        for j in range(20, 27):
+        #Parte derecha de la linea
+        for i in range(40, Nx_pasos - 1):
             phi_next[i, j] = ((1 - w) * phi[i, j] +
                               w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
-                                       phi[i, j+1] + phi_next[i, j-1]
-    #Linea en si
-    for i in range(10, 40):
-        phi_next[i, 27] = ((1 - w) * phi[i, 27] + w / 4 * (phi[i+1, 27] + phi_next[i-1, 27] +
-                                   phi[i, 27+1] + phi_next[i, 27-1] #+
+                                       phi[i, j+1] + phi_next[i, j-1]))
                                        #h**2 * Rho_Letra(i, j, h)))
-    #Linea
-    #Parte Central Baja Lejana a la linea por bajo esta esta
-    for i in range(10, 40):
-        for j in range(1, 20):
-            phi_next[i, j] = ((1 - w) * phi[i, j] +
-                              w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
-                                       phi[i, j+1] + phi_next[i, j-1] #+
-                                       #h**2 * Rho_Letra(i, j, h)))
-    #Parte Central Baja Lejana a la linea por sobre esta esta
-    for i in range(10, 40):
-        for j in range(20, 27):
-            phi_next[i, j] = ((1 - w) * phi[i, j] +
-                              w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
-                                       phi[i, j+1] + phi_next[i, j-1]
 
+    #Parte Central lejana bajo la linea
+    for i in range(10, 40):
+        for j in range(1, 10):
+            phi_next[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
+                                       phi[i, j+1] + phi_next[i, j-1])) #+
+                                       #h**2 * Rho_Letra(i, j, h)))
+    #Parte Central Lejana sobre la linea
+        for j in range(12, 20):
+            phi_next[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
+                                       phi[i, j+1] + phi_next[i, j-1]))
+                                       #h**2 * Rho_Letra(i, j, h)))
+#Podria ponerse de inmediato j==12 sin embargo de esta forma es mas generico
+    for j in range(10, 11): #inmediatamente bajo la linea
+        for i in range(11, 41):
+            phi_next[i, j] =  ((1 - w) * phi[i, j] +
+                            w / 3 * (phi[i+1, j] + phi_next[i-1, j] +
+                                     phi_next[i, j-1] + h*(-1.)))
+                                     #(-1) Condicion Derivativa
+                                     #h**2 * Rho_Letra(i, j, h)))
 
+    for j in range(11, 12): #inmediatamente sobre la linea
+        for i in range(11, 41):
+            phi_next[i, j] =  ((1 - w) * phi[i, j] +
+                            w / 3 * (phi[i+1, j] + phi_next[i-1, j] +
+                                     phi_next[i, j-1] + h*(1.)))
+                                     #(1) Condicion derivativa
+                                     #h**2 * Rho_Letra(i, j, h)))
 
 def no_ha_convergido(phi, phi_next, tolerancia=1e-5):
     not_zero = (phi_next != 0)
@@ -120,44 +137,39 @@ def no_ha_convergido(phi, phi_next, tolerancia=1e-5):
 Lx = 10
 Ly = 15
 h = 0.2
-N_pasos_x = int(Lx/h +1)
-N_pasos_y = int(Ly/h +1)
+Nx_pasos = int(Lx/h +1)
+Ny_pasos = int(Ly/h +1)
 
-v_rho = np.zeros((N_pasos_x, N_pasos_y))
-v_rho_next = np.zeros((N_pasos_x, N_pasos_y))
+v_rho = np.zeros((Nx_pasos, Ny_pasos))
+v_rho_next = np.zeros((Nx_pasos, Ny_pasos))
 
-phi = np.zeros((N_pasos, N_pasos))
-phi_next = np.zeros((N_pasos, N_pasos))
 
 # iteracion
-una_iteracion(phi, phi_next, N_pasos, h, w=1.)
+una_iteracion(v_rho, v_rho_next, Nx_pasos, Ny_pasos, h, w=1.5)
 counter = 1
-while counter < 800 and no_ha_convergido(phi, phi_next, tolerancia=1e-7):
-    phi = phi_next.copy()
-    una_iteracion(phi, phi_next, N_pasos, h, w=0.8)
+while counter < 1000 and no_ha_convergido(v_rho, v_rho_next, tolerancia=1e-7):
+    v_rho = v_rho_next.copy()
+    una_iteracion(v_rho, v_rho_next, Nx_pasos, Ny_pasos, h, w=0.8)
     counter += 1
 
 print("counter = {}".format(counter))
-print(phi[(N_pasos - 1) / 2, (N_pasos - 1) / 2])
+
+v_next_rotada=v_rho_next.transpose()
+
 
 fig = plt.figure(1)
 fig.clf()
 ax = fig.add_subplot(111, projection='3d')
-
-x = np.linspace(-1, 1, N_pasos)
-y = np.linspace(-1, 1, N_pasos)
-
+x = np.linspace(-1, 1, Nx_pasos)
+y = np.linspace(-1, 1, Ny_pasos)
 X, Y = np.meshgrid(x, y)
-
-ax.plot_surface(X, Y, phi_next, rstride=1, cstride=1)
+ax.plot_surface(X, Y, v_next_rotada, rstride=1, cstride=1)
 fig.show()
+plt.savefig('plot_surface.png')
 
 fig2 = plt.figure(2)
 fig2.clf()
 ax2 = fig2.add_subplot(111)
-ax2.imshow(phi_next, origin='bottom', interpolation='nearest')
-ax2.contour(phi_next, origin='lower')
+ax2.imshow(np.arcsinh(v_next_rotada), origin='bottom', interpolation='nearest')
 fig2.show()
-
-plt.draw()
-'''
+plt.savefig('plot_imshow.png')
