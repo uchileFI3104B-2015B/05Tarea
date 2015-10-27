@@ -338,9 +338,14 @@ while counter < 150 :
 plt.imshow(np.arcsinh(np.transpose(V_next)) , interpolation = 'nearest',
  extent=[-5, 5, -7.5, 7.5])
 
+
+plt.imshow(np.transpose(Rho) , interpolation = 'nearest',
+ extent=[-5, 5, -7.5, 7.5])
+
 plt.title('Potencial electroestatico')
 plt.xlabel('[cm]')
 plt.ylabel('[cm]')
+plt.colorbar()
 plt.show()
 
 #######################################################
