@@ -9,7 +9,8 @@ L_x=10 #ancho de la grilla, está en centímetros
 L_y=15 #alto de la grilla, está en centímetros
 Steps_x=int((L_x/h)+1) #número de pasos en X
 Steps_y=int((L_y/h)+1) #número de pasos en Y
-omega=1.2
+omega=1.9
+tolerance=1e-2
 
 def rho(i, j, h):
     x=i*h-(L_x/2.) #los x e y están en centímetros, el origen está en el centro de la grilla
@@ -44,7 +45,7 @@ def una_iteracion(v,v_next,Steps_x,Steps_y,h,w=omega): #aquí hay que separar pa
         for j in range(13,14): #justo sobre la línea, donde aplica la condición +1
             v_next[i,j]=((1-w)*v[i,j]+(w/3.)*(v[i+1,j]+v_next[i-1,j]+v_next[i,j-1]+h**2*rho(i,j,h)+h))
 
-def no_ha_convergido(v,v_next,tol=1e-4):
+def no_ha_convergido(v,v_next,tol=tolerance):
     not_zero=(v_next!=0)
     diff_relativa=(v-v_next)[not_zero]/v_next[not_zero]
     max_diff=np.max(np.fabs(diff_relativa))
@@ -58,11 +59,12 @@ V_next=np.zeros((Steps_x,Steps_y))
 
 una_iteracion(V,V_next,Steps_x,Steps_y,h,w=omega)
 counter=1
-while counter<1000 and no_ha_convergido(V,V_next,tol=1e-4):
+while counter<2000 and no_ha_convergido(V,V_next,tol=tolerance):
     V=V_next.copy()
     una_iteracion(V,V_next,Steps_x,Steps_y,h,w=omega)
     counter+=1
 print("counter={}".format(counter))
+print(omega)
 V_trans=V_next.transpose()
 
 fig=plt.figure(1)
