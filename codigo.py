@@ -60,12 +60,23 @@ def una_iteracion(V, V_next, N_pasosx, N_pasosy, h, w=1.):
         for j in range(12,13):
             V_next[i,j] = ((1 - w) * V[i, j] +
                               w / 3 * (V[i+1, j] + V_next[i-1, j] +
-                                       V[i, j-1] + h**2 * rho(i, j, h) + h*(-1.)))
+                                       V_next[i, j-1] + h**2 * rho(i, j, h) + h*(-1.)))
         #Puntos sobre la linea: +1
         for j in range(13,14):
             V_next[i,j] = ((1 - w) * V[i, j] +
                               w / 3 * (V[i+1, j] + V_next[i-1, j] +
-                                       V[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
+                                       V_next[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
+
+def no_ha_convergido(V, V_next, tolerancia=1e-2):
+    not_zero = (V_next != 0)
+    diff_relativa = (V - V_next)[not_zero] / V_next[not_zero]
+    max_diff = np.max(np.fabs(diff_relativa))
+    if max_diff > tolerancia:
+        return True
+    else:
+        return False
+
+
 
 
 #Main
@@ -76,7 +87,6 @@ Ly = 15
 h= 0.2
 N_pasosx = (Lx / h) + 1
 N_pasosy = (Ly / h) + 1
-w=1.0
 
 
 V = np.zeros((N_pasosx, N_pasosy))
@@ -86,7 +96,7 @@ V_next= np.zeros((N_pasosx, N_pasosy))
 #Iteracion
 una_iteracion(V, V_next, N_pasosx, N_pasosy, h, w=1.)
 counter = 1
-while counter < 10: #and no_ha_convergido(phi, phi_next, tolerancia=1e-7):
+while counter < 100 and no_ha_convergido(V, V_next, tolerancia=1e-2):
     V = V_next.copy()
     una_iteracion(V, V_next, N_pasosx, N_pasosy, h, w=1.)
     counter += 1
@@ -113,7 +123,6 @@ fig2 = plt.figure(2)
 fig2.clf()
 ax2 = fig2.add_subplot(111)
 ax2.imshow(V_next_traspuesta, origin='bottom', interpolation='nearest')
-ax2.contour(V_next_traspuesta, origin='lower')
 fig2.show()
 
 plt.draw()
