@@ -26,6 +26,7 @@ class box(object):
         self.set_center()
     # END of __init__
 
+
     def create_box(self):
         ''' Crea una caja llena de ceros de 10 x 15 cm, reticulado 0.1 cm '''
 
@@ -69,6 +70,7 @@ class box(object):
         return Nx_box, Ny_box
     # END of coord
 
+
     def position( self, x_index, y_index):
         ''' Convierte posicion de indices a cm '''
         assert 0 <= x_index < len(self.volt_box), 'Indice x fuera de la caja'
@@ -81,6 +83,7 @@ class box(object):
 
         return x_cm, y_cm
     # END of position
+
 
     def draw_charged_block(self, x_origin, y_origin , x_size , y_size , density_per_cm2 ):
         ''' Llena bloque de x_size x y_size [cm] con densidad density_per_cm2
@@ -141,6 +144,7 @@ class box(object):
         return self.box
     # END of get_box
 
+
     def define_border_conditions(self, bc_top, bc_right, bc_bot, bc_left):
         ''' Define condiciones de borde para cada lado de la caja de voltajes
         con valores entregados por el usuario.
@@ -150,6 +154,7 @@ class box(object):
         ''' Para este problema no es necesario, baja prioridad de implementacion '''
         return 0
     # END of define_border_conditions
+
 
     def define_deritative_conditions(self, x_inf, x_sup, y_inf, y_sup , deriv_val):
         ''' Recibe indices en cm de ubicacion de condicion de borde derivativa.
@@ -167,15 +172,31 @@ class box(object):
                 self.deriv_index.append( self.coord( x[i] , y[j] ) )
     # END of define_deritative_conditions
 
+
+    def calc_derivative_conditions(self, phi, h):
+        ''' Impone condicion de borde derivativa en indices
+        guardados en deriv_index.'''
+        for coord in self.deriv_index:
+            i = coord[0]
+            j = coord[1]
+            phi[i, j+1] = h * self.deriv_val + phi[i, j]
+
+    # END of calc_derivative_conditions
+
+
     def one_iteration(self, phi, phi_next, right_side, h, w=1.):
-        ''' Calcula una iteracion del metodo de relajacion '''
+        ''' Calcula una iteracion del metodo de relajacion
+        Incluye posterior correccion por condiciones de borde derivativas'''
         for i in range(1, len(phi) - 1):
             for j in range(1, len(phi[0]) - 1):
                 phi_next[i, j] = ((1 - w) * phi[i, j] +
                                   w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
                                            phi[i, j+1] + phi_next[i, j-1] -
                                            h**2 * right_side[i, j]))
+
+        self.calc_derivative_conditions(phi_next, h)
     # END of one_iteration
+
 
     def not_converged(self, phi, phi_next, tolerance=1e-5):
         ''' Revisa si el metodo de relajacion convergio '''
@@ -188,7 +209,12 @@ class box(object):
             return False
     # END of not_converged
 
-    def solv_poisson(self, w = 0.8, epsilon = 1.):
+
+    def solv_poisson(self, epsilon = 1., w = 0.8, tolerance = 1e-7):
+        ''' Resuelve el voltaje en la matriz volt_box
+        epsilon es la permitividad del material
+        w es el parametro de convergencia
+        tolerance es la tolerancia de convergencia '''
 
         self.volt_box = numpy.array(self.volt_box)
         volt_box_next = self.volt_box.copy()
@@ -196,9 +222,12 @@ class box(object):
 
         # iteracion
         self.one_iteration(self.volt_box, volt_box_next, charge_box, self.RETICULADO, 1.)
+
         counter = 1
-        while counter < 800 and self.not_converged(self.volt_box, volt_box_next, tolerance=1e-7):
+        while counter < 800 and self.not_converged(self.volt_box, volt_box_next, tolerance):
+
             self.volt_box = volt_box_next.copy()
             self.one_iteration(self.volt_box, volt_box_next, charge_box, self.RETICULADO, w)
             counter += 1
+
     # END of solv_poisson
