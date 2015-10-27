@@ -7,10 +7,8 @@ from caja import Caja
 
 C = Caja()
 C.agregar_letra_B()
-#C.agregar_linea_horizontal(dV=0.1)
-for i in range(1000):
+for i in range(200):
     C.pasada_sobre_relajacion(1,"all")
-C.relaja(1,1000)
 V = C.get_potencial()
 V_y = np.zeros(C.Ny)
 for k in range(C.Ny):
@@ -23,8 +21,9 @@ ax.plot(y,V_y)
 plt.show()
 plt.draw()
 
-plt.figure(2)
-plt.imshow(V, origin='bottom', interpolation='nearest') #, vmin=-3, vmax=3)
+fig2 = plt.figure(2)
+plt.clf()
+plt.imshow(V, origin='bottom', interpolation='nearest', extent= [-5,5,-7.5,7.5])
 plt.colorbar()
-plt.show()
-plt.draw()
+plt.title('Potencial electrostatico V [C]')
+plt.savefig('Vletra.eps')
