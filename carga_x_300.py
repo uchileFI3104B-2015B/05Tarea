@@ -335,8 +335,8 @@ caja_potencial = poner_condiciones_borde(caja_potencial)
 
 iterar(caja_potencial, caja_potencial_next, caja_carga, numero_pasos, H, w)
 contador = 1
-tolerancia = 1e-3
-while (contador < 100 and not convergio(caja_potencial, caja_potencial_next,
+tolerancia = 1e-1
+while (contador < 500 and not convergio(caja_potencial, caja_potencial_next,
                                         tolerancia)):
     caja_potencial = caja_potencial_next.copy()
 
