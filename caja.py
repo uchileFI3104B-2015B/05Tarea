@@ -1,6 +1,14 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+'''
+Este archivo implementa la clase Caja, que contiene dentro de sí una
+distribución de carga y tiene definido un potencial electrostático. Tiene
+métodos implementados para agregar una línea horizontal con condición
+derivativa y una distribución de carga predefinida. Dispone además de métodos
+para relajar el sistema hacia la solución de la ecuación de Poisson.
+'''
+
 import numpy as np
 
 
@@ -101,6 +109,8 @@ class Caja(object):
             for j in range(1, self.indice_linea + 1):
                 for i in range(1, self.Nx - 1):
                     self.paso_sobre_relajacion(i, j, w, region)
+        # Si no se especifica una región, entonces se asume que se quiere
+        # iterar sobre todo el rectángulo.
         else:
             for j in range(1, self.Ny - 1):
                 for i in range(1, self.Nx - 1):
