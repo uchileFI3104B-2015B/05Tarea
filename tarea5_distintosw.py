@@ -92,7 +92,7 @@ N_pasos_x = int(Lx / h + 1)
 N_pasos_y = int(Ly / h + 1)
 
 
-w=[0.8, 1.0, 1.2, 1.4, 1.8]
+w = [0.8, 1.0, 1.2, 1.4, 1.8]
 for w in w:
     v = np.zeros((N_pasos_x, N_pasos_y))
     v_next = np.zeros((N_pasos_x, N_pasos_y))
