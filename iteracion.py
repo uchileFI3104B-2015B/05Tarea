@@ -74,7 +74,7 @@ plt.xlabel('$w$')
 plt.title('N'u'ú''mero de iteraciones para converger en funci'u'ó''n de w')
 plt.savefig('convergencia.eps')
 
-y = C.reticulado * np.array(range(C.Ny))
+y = C.reticulado * np.array(range(C.Ny)) - 7.5
 for n in range(9):
     V = V_iter[n]
     V_y = np.zeros(C.Ny)
@@ -92,7 +92,8 @@ for n in range(9):
 
     plt.figure(4)
     plt.clf()
-    plt.imshow(V, origin='bottom', interpolation='nearest')
+    plt.imshow(V, origin='bottom', interpolation='nearest',
+               extent=[-5, 5, -7.5, 7.5])
     plt.colorbar()
     plt.title('Potencial electrostatico V [C]')
     plt.xlabel('x [cm]')
@@ -101,7 +102,8 @@ for n in range(9):
 
     plt.figure(5)
     plt.clf()
-    plt.imshow(np.arctan(10*V), origin='bottom', interpolation='nearest')
+    plt.imshow(np.arctan(10*V), origin='bottom', interpolation='nearest',
+               extent=[-5, 5, -7.5, 7.5])
     plt.colorbar()
     plt.title('$arctan(10*V)$')
     plt.xlabel('x [cm]')

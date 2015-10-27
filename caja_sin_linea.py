@@ -21,7 +21,7 @@ for k in range(C.Ny):
     V_y[k] = V[k][20]
 
 # Gráficos
-y = C.reticulado * np.array(range(C.Ny))
+y = C.reticulado * np.array(range(C.Ny)) - 7.5
 fig = plt.figure(1)
 plt.clf()
 ax = fig.add_subplot(111)
