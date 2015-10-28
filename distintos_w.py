@@ -10,7 +10,7 @@ ANCHO = 10
 ALTO = 15
 H = 0.2
 DERIVADA = 1  # 1E-3 * 3
-CARGA_TOTAL = 500
+CARGA_TOTAL = 1
 
 
 def crear_caja(ancho, alto, h):
@@ -198,10 +198,10 @@ def mostrar(i, f_caja, caja, titulo):
     ax.set_ylabel("Y [cm]")
     if titulo == "valor del potencial":
         ax.set_zlabel("Potencial [erg/C]")
-        fig.savefig("potencial2.jpg")
+        fig.savefig("potencial1.jpg")
     else:
         ax.set_zlabel("Carga [erg/C]")
-        fig.savefig("distr_carga2.jpg")
+        fig.savefig("distr_carga1.jpg")
 
     fig2 = plt.figure(2 + 2 * (i - 1))
     fig2.clf()
@@ -219,10 +219,10 @@ def mostrar(i, f_caja, caja, titulo):
 
     if titulo == "valor del potencial":
         cbar.set_label("Potencial [erg/C]")
-        fig2.savefig("potencial3.jpg")
+        fig2.savefig("potencial.jpg")
     else:
         cbar.set_label("Carga [C]")
-        fig2.savefig("distr_carga3.jpg")
+        fig2.savefig("distr_carga.jpg")
 
     if titulo == "valor del potencial":
         fig3 = plt.figure(3 + 2 * (i - 1))
@@ -240,7 +240,7 @@ def mostrar(i, f_caja, caja, titulo):
         for i in range(0, 75, 1):
             z[i] = caja[25, i]
         ax3.plot(x, z)
-        fig3.savefig("corte_trans2.jpg")
+        fig3.savefig("corte_trans.jpg")
 
 
 def es_horizontal(ini, fin):
@@ -321,28 +321,28 @@ def poner_carga(caja, coordenadas, total):
 
 
 # main
-w = 1.8
-numero_pasos = np.array([ANCHO/H + 1, ALTO/H + 1])
-coordenadas_carga = armar_letra()
+for w in np.linspace(1, 2, 5):
 
-caja_carga = crear_caja(ANCHO, ALTO, H)
-caja_potencial = crear_caja(ANCHO, ALTO, H)
-caja_potencial_next = crear_caja(ANCHO, ALTO, H)
+    numero_pasos = np.array([ANCHO/H + 1, ALTO/H + 1])
+    coordenadas_carga = armar_letra()
 
-caja_carga = poner_carga(caja_carga, coordenadas_carga, CARGA_TOTAL)
+    caja_carga = crear_caja(ANCHO, ALTO, H)
+    caja_potencial = crear_caja(ANCHO, ALTO, H)
+    caja_potencial_next = crear_caja(ANCHO, ALTO, H)
 
-caja_potencial = poner_condiciones_borde(caja_potencial)
+    caja_carga = poner_carga(caja_carga, coordenadas_carga, CARGA_TOTAL)
 
-iterar(caja_potencial, caja_potencial_next, caja_carga, numero_pasos, H, w)
-contador = 1
-tolerancia = 1e-7
-while (contador < 1000 and not convergio(caja_potencial, caja_potencial_next,
-                                         tolerancia)):
-    caja_potencial = caja_potencial_next.copy()
+    caja_potencial = poner_condiciones_borde(caja_potencial)
 
     iterar(caja_potencial, caja_potencial_next, caja_carga, numero_pasos, H, w)
-    contador += 1
-print("numero iteraciones: "+str(contador))
-mostrar(1, f_caja_carga, caja_carga, "distribucion carga")
-mostrar(2, f_caja_potencial_next, caja_potencial_next, "valor del potencial")
-plt.show()
+    contador = 1
+    tolerancia = 1e-2
+    while (contador < 1000 and not convergio(caja_potencial,
+                                             caja_potencial_next, tolerancia)):
+        caja_potencial = caja_potencial_next.copy()
+
+        iterar(caja_potencial, caja_potencial_next,
+               caja_carga, numero_pasos, H, w)
+        contador += 1
+    print("w = "+str(w))
+    print("numero iteraciones: "+str(contador))

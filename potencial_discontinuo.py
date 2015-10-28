@@ -86,19 +86,19 @@ def iterar(caja, caja_next, caja_carga, numero_pasos, h, w=1):
         for j in range(int(rango_y[0]) + 1, int(rango_y[1])):
             if (esta_bajo_linea(i, j)):
                 iteracion_bajo_linea(i, j, caja, caja_next, caja_carga,
-                                     numero_pasos, h, w=1)
+                                     numero_pasos, h, w)
             elif esta_en_linea(i, j):
                 iteracion_linea(i, j, caja, caja_next, caja_carga,
-                                numero_pasos, h, w=1)
+                                numero_pasos, h, w)
             elif esta_sobre_linea(i, j):
                 iteracion_sobre_linea(i, j, caja, caja_next, caja_carga,
-                                      numero_pasos, h, w=1)
+                                      numero_pasos, h, w)
             elif (esta_en_letra(i, j)):
                 iteracion_letra(i, j, caja, caja_next, caja_carga,
-                                numero_pasos, h, w=1)
+                                numero_pasos, h, w)
             else:
                 iteracion_resto(i, j, caja, caja_next, caja_carga,
-                                numero_pasos, h, w=1)
+                                numero_pasos, h, w)
 
 
 def iteracion_resto(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
@@ -335,9 +335,9 @@ caja_potencial = poner_condiciones_borde(caja_potencial)
 
 iterar(caja_potencial, caja_potencial_next, caja_carga, numero_pasos, H, w)
 contador = 1
-tolerancia = 1e-1
-while (contador < 500 and not convergio(caja_potencial, caja_potencial_next,
-                                        tolerancia)):
+tolerancia = 1e-7
+while (contador < 1000 and not convergio(caja_potencial, caja_potencial_next,
+                                         tolerancia)):
     caja_potencial = caja_potencial_next.copy()
 
     iterar(caja_potencial, caja_potencial_next, caja_carga, numero_pasos, H, w)
