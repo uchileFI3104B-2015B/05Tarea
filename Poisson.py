@@ -12,9 +12,13 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 import pdb
 
+# Condiciones iniciales
+
 L_x = 10
 L_y = 15
 h = 0.2
+
+#Funciones
 
 def crear_caja(x, y, h):
     '''Recibe las dimensiones de la caja  y el tamaño del reticulado
@@ -231,7 +235,7 @@ def iteracion_sobre_linea(i, j, caja, caja_next, caja_carga,
                                                caja[i+1, y] +
                                                caja_next[i, y+1] - h))
 
-def no_converge(V, V_next, tolerancia=1e-7):
+def no_converge(V, V_next, tolerancia):
     ''' Devuelve True si es que la iteracion converge'''
     not_zero = (V_next != 0)
     diff_relativa = (V - V_next)[not_zero] / V_next[not_zero]
@@ -240,22 +244,41 @@ def no_converge(V, V_next, tolerancia=1e-7):
         return True
     else:
         return False
+        
+def poner_carga(caja, coordenadas):
+    '''recibe la caja a modificar, la carga total a colocar y
+     las coordenadas para setear el arreglo de cargas inicial '''
+    carga_en_un_punto = 1 / len(coordenadas)
+    for par in coordenadas:
+        caja[par[0], par[1]] = carga_en_un_punto
+    return caja
 
 #Main
 
 #Inicializacion
 
+w=1.2
 N_pasos = np.array([(L_x / h) + 1], [(L_y / h) + 1])
+coordenadas_carga = armar_letra_B()
 
-V = np.zeros((N_pasos_x, N_pasos_y))
-V_next = np.zeros((N_pasos_x, N_pasos_y))
+carga_caja = crear_caja(L_x, L_y, h)
+V_actual = crear_caja(L_x, L_y, h)
+V_next = crear_caja(L_x, L_y, h)
+
+carga_caja = poner_carga(carga_caja, coordenadas_carga)
+
+V_actual = poner_condiciones_borde(V_actual)
+
 
 #Iteracion
 
-Iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
+iterar(V_actual, V_next, carga_caja, N_pasos, h, w)
 contador = 1
-while contador < 900 or no_converge(V, V_next, tolerancia=1e-7):
-    V = V_next.copy()
-    Iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
+tolerancia = 1e-1
+while (contador < 500 and no_converge(V_actual, V_next, tolerancia)):
+    V_actual = V_next.copy()
+    iterar(V_actual, V_next, carga_caja, N_pasos, h, w)
     contador += 1
+    
+#Graficar
     
