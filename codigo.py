@@ -6,9 +6,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import axes3d
 
-#Definimos la funcion rho que asignara un valor de densidad
-#a cada punto de la grilla, diferenciando los espacios en
-#blanco de los espacios que pertenecen a la letra 'B'
+# Definimos la funcion rho que asignara un valor de densidad
+# a cada punto de la grilla, diferenciando los espacios en
+# blanco de los espacios que pertenecen a la letra 'B'
+
+
 def rho(i, j, h):
     x = i * h - 5
     y = j * h - 7.5
@@ -28,45 +30,52 @@ def rho(i, j, h):
     else:
         return rho_blanco
 
-#Definimos la funcion 'una_iteracion'
+# Definimos la funcion 'una_iteracion'
+
+
 def una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w):
     for i in range(1, int(N_pasos_x) - 1):
-        #Separamos la grilla para aislar el lugar con condicion derivativa
+        # Separamos la grilla para aislar el lugar con condicion derivativa
 
-        #Bajo la condicion derivativa
+        # Bajo la condicion derivativa
         for j in range(1, 12):
-            V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
-                            + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                            w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                            V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
 
-        #sobre la condicion derivativa
+        # sobre la condicion derivativa
         for j in range(14, int(N_pasos_y) - 1):
-            V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
-                            + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                            w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                            V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
 
+    for j in range(12, 14):
+        # A la izquierda de la condicion derivativa
+        for i in range(1, 11):
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                            w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                            V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
 
-    for j in range(12,14):
+        # A la derecha de la condicion derivativa
+        for i in range(41, int(N_pasos_x)-1):
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                            w / 4 * (V[i+1, j] + V_next[i-1, j] +
+                            V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
 
-        #A la izquierda de la condicion derivativa
-        for i in range(1,11):
-            V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
-                            + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
+    # Ahora iteramos dentro de la condicion derivativa
+    for i in range(11, 41):
+        # Bajo la condicion derivativa -1
+        for j in range(12, 13):
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                            w / 3 * (V[i+1, j] + V_next[i-1, j] +
+                            V[i, j-1] + h**2 * rho(i, j, h) + h*(-1.)))
 
-        #A la derecha de la condicion derivativa
-        for i in range(41,int(N_pasos_x)-1):
-            V_next[i, j] = ((1 - w) * V[i, j] + w / 4 * (V[i+1, j] + V_next[i-1, j]
-                            + V[i, j+1] + V_next[i, j-1] + h**2 * rho(i, j, h)))
+        # Sobre la condicion derivativa +1
+        for j in range(13, 14):
+            V_next[i, j] = ((1 - w) * V[i, j] +
+                            w / 3 * (V[i+1, j] + V_next[i-1, j] +
+                            V[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
 
-    #Ahora iteramos dentro de la condicion derivativa
-    for i in range(11,41):
-        #Bajo la condicion derivativa -1
-        for j in range(12,13):
-            V_next[i,j] =  ((1 - w) * V[i, j] + w / 3 * (V[i+1, j] + V_next[i-1, j]
-                            + V[i, j-1] + h**2 * rho(i, j, h) + h*(-1.)))
-
-        #Sobre la condicion derivativa +1
-        for j in range(13,14):
-            V_next[i,j] =  ((1 - w) * V[i, j] + w / 3 * (V[i+1, j] + V_next[i-1, j]
-                            + V[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
 
 def no_ha_convergido(V, V_next, tolerancia):
     not_zero = (V_next != 0)
@@ -77,23 +86,23 @@ def no_ha_convergido(V, V_next, tolerancia):
     else:
         return False
 
-#Main
+# Main
 
-#Setup
-Lx=10
-Ly=15
-h=0.2
+# Setup
+Lx = 10
+Ly = 15
+h = 0.2
 N_pasos_x = Lx / h + 1
 N_pasos_y = Ly / h + 1
-w=1.4
-tolerancia=1e-5
-iteraciones=4000
+w = 1
+tolerancia = 1e-5
+iteraciones = 10
 
-#Creamos la grilla
-V=np.zeros( ( N_pasos_x , N_pasos_y ) )
-V_next=np.zeros( ( N_pasos_x , N_pasos_y ) )
+# Creamos la grilla
+V = np.zeros((N_pasos_x, N_pasos_y))
+V_next = np.zeros((N_pasos_x, N_pasos_y))
 
-#Probamos para 10 iteraciones
+# Probamos para 10 iteraciones
 una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
 counter = 1
 while counter < iteraciones and no_ha_convergido(V, V_next, tolerancia):
@@ -104,9 +113,9 @@ while counter < iteraciones and no_ha_convergido(V, V_next, tolerancia):
 print("counter = {}".format(counter))
 
 
-#Graficamos
+# Graficamos
 
-V_next_trans=V_next.transpose()
+V_next_trans = V_next.transpose()
 
 fig = plt.figure(1)
 fig.clf()
