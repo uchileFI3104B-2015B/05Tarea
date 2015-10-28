@@ -132,14 +132,44 @@ def armar_letra_B():
     letra = np.append(letra, trazo_6, axis=0)
     return letra
 
+def rho(caja, coordenadas, total):
+    '''Recibe la caja a modificar, la carga total a colocar y
+     las coordenadas para setear el arreglo de cargas inicial '''
+    carga_en_un_punto = total / len(coordenadas)
+    for par in coordenadas:
+        caja[par[0], par[1]] = carga_en_un_punto
+    return caja
+    
+def esta_bajo_linea(i, j):
+    '''Devuele true si la coordenada es inmediatamente bajo la linea '''
+    if (j == 2 / h - 1):
+        if(2 / h <= i and i <= 8 / h):
+            return True
+    return False
 
-def Iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w):
+
+def esta_sobre_linea(i, j):
+    '''Devuelve true si la coordenada esta sobre la linea con condiciones
+    derivativas'''
+    if(j == 2 / h + 1):
+        if(2 / h <= i and i <= 8 / h):
+            return True
+    return False
+
+
+def esta_en_linea(i, j):
+    '''Devuelve true si la coordenada pertenece a la linea'''
+    if(j == 2 / h):
+        if(2 / h <= i and i <= 8 / h):
+            return True
+    return False
+
+def Iteracion_resto_caja(V, V_next, N_pasos_x, N_pasos_y, h, w):
     for i in range(1, N_pasos_x-1):
         for j in range (1, N_pasos_y-1):
             V_next[i, j] = ((1 - w) * V[i, j] +
                             w / 4 * (V[i+1, j] + V[i-1, j]
-                                    + V[i, j+1] + V[i, j-1] + 
-                                    h**2 * rho(i, j, h)))
+                                    + V[i, j+1] + V[i, j-1]))
 
 def no_converge(V, V_next, tolerancia=1e-7):
     ''' Devuelve True si es que la iteracion converge'''
