@@ -19,7 +19,7 @@ def LetraN(a, b):
     else:
         return 0
 
-def SobreRelax(V, w=1.3):
+def SobreRelax(V, w=1):
     for i in range(1, 10):
         for j in range(1, 75):
             V[i][j] = ((1 - w) * V[i][j] +
@@ -46,15 +46,27 @@ def SobreRelax(V, w=1.3):
         for j in range(10, 11):
             V[i][j] = V[i][j+1] - h
         for j in range(11, 12):
+            V[i][j] = V[i][j-1] + h
+        for j in range(12, 13):
             V[i][j] = ((1 - w) * V[i][j] +
                             w / 3 * (V[i+1][j] + V[i-1][j] +
                                      V[i][j-1] + h**2* LetraN(i,j)
                                      +h))
-        for j in range(12, 75):
+        for j in range(13, 75):
             V[i][j] = ((1 - w) * V[i][j] +
                             w / 4 * (V[i+1][j] + V[i-1][j] +
                                      V[i][j+1] + V[i][j-1] +
                                      h**2 * LetraN(i,j)))
+            
+def Convergencia(V, NewV):
+    QuitaCero = (NewV != 0)
+    Dif = (V - NewV)[QuitaCero] / NewV[QuitaCero]
+    DifMax = np.max(np.fabs(Dif))
+    if DifMax > 1e-3:
+        return True
+    else:
+        return False
+
 
 Npuntos = []
 for a in range(51):
@@ -68,11 +80,13 @@ plt.colorbar()
 plt.show()
 
 V = np.zeros((51, 76))
-GuardaV = V
+GuardaV = np.zeros((51, 76))
 SobreRelax(V) 
 N = 0
-while N < 400:
-    GuardaV = V
+while N < 3000 and Convergencia(GuardaV, V):
+    for a in range(len(GuardaV)):
+        for b in range(len(GuardaV[a])):
+            GuardaV[a][b]=V[a][b]
     SobreRelax(V)   
     N += 1
 print (N)
