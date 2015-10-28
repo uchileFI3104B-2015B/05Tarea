@@ -103,3 +103,23 @@ def no_ha_convergido(phi, phi_next, tolerancia=1e-5):
         return True
     else:
         return False
+
+
+w = 1.2
+
+phi = np.zeros((N_pasos_x, N_pasos_y))
+phi_next = np.zeros((N_pasos_x, N_pasos_y))
+
+# iteracion
+una_iteracion(phi, phi_next, N_pasos_x, N_pasos_y, h, w=1.2)
+counter = 1
+
+while counter < 5 and no_ha_convergido(phi, phi_next, tolerancia=1e-5):
+    phi = phi_next.copy()
+    una_iteracion(phi, phi_next, N_pasos_x, N_pasos_y, h, w=1.2)
+    counter += 1
+
+print("counter = {}".format(counter))
+
+
+phi_next_transpuesta = phi_next.transpose()
