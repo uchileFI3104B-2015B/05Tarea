@@ -85,9 +85,9 @@ Ly=15
 h=0.2
 N_pasos_x = Lx / h + 1
 N_pasos_y = Ly / h + 1
-w=1.2
-tolerancia=0.1
-iteraciones=2000
+w=1.4
+tolerancia=1e-5
+iteraciones=4000
 
 #Creamos la grilla
 V=np.zeros( ( N_pasos_x , N_pasos_y ) )
@@ -103,10 +103,8 @@ while counter < iteraciones and no_ha_convergido(V, V_next, tolerancia):
 
 print("counter = {}".format(counter))
 
-#Mostramos nuestra grilla
-print V_next
 
-#Graficamos para 10 iteraciones
+#Graficamos
 
 V_next_trans=V_next.transpose()
 
