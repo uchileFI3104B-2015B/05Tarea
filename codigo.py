@@ -68,6 +68,14 @@ def una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w):
             V_next[i,j] =  ((1 - w) * V[i, j] + w / 3 * (V[i+1, j] + V_next[i-1, j]
                             + V[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
 
+def no_ha_convergido(V, V_next, tolerancia):
+    not_zero = (V_next != 0)
+    diff_relativa = (V - V_next)[not_zero] / V_next[not_zero]
+    max_diff = np.max(np.fabs(diff_relativa))
+    if max_diff > tolerancia:
+        return True
+    else:
+        return False
 
 #Main
 
@@ -77,7 +85,10 @@ Ly=15
 h=0.2
 N_pasos_x = Lx / h + 1
 N_pasos_y = Ly / h + 1
-w=1
+w=1.2
+tolerancia=0.1
+iteraciones=2000
+
 #Creamos la grilla
 V=np.zeros( ( N_pasos_x , N_pasos_y ) )
 V_next=np.zeros( ( N_pasos_x , N_pasos_y ) )
@@ -85,7 +96,7 @@ V_next=np.zeros( ( N_pasos_x , N_pasos_y ) )
 #Probamos para 10 iteraciones
 una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
 counter = 1
-while counter < 10:
+while counter < iteraciones and no_ha_convergido(V, V_next, tolerancia):
     V = V_next.copy()
     una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
     counter += 1
@@ -109,12 +120,17 @@ y = np.linspace(-1, 1, N_pasos_y)
 X, Y = np.meshgrid(x, y)
 
 ax.plot_surface(X, Y, V_next_trans, rstride=1, cstride=1)
+ax.set_xlabel('x')
+ax.set_ylabel('y')
+ax.set_zlabel('V Potencial')
 fig.show()
 
 fig2 = plt.figure(2)
 fig2.clf()
 ax2 = fig2.add_subplot(111)
 ax2.imshow(V_next_trans, origin='bottom', interpolation='nearest')
+ax2.set_xlabel('x')
+ax2.set_ylabel('y')
 fig2.show()
 
 plt.draw()
