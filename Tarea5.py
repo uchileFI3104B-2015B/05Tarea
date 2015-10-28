@@ -41,12 +41,12 @@ def abajo_linea(i,j, abLinea):
 def una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, Letra,Ab_linea,Ar_linea,w=1.):
     for i in range(1, Nx_pasos-1):
             for j in range(1, Ny_pasos-1):
-                if arriba_linea():
+                if arriba_linea(i,j,Ar_linea):
                     V_next[i, j] = ((1 - w) * V[i, j] +
                                   w / 3 * (V[i+1, j] + V_next[i-1, j] +
                                            V[i, j-1] + h))
                 
-                elif abajo_linea():
+                elif abajo_linea(i,j,Ab_linea):
                     V_next[i, j] = ((1 - w) * V[i, j] +
                                   w / 3 * (V[i+1, j] + V_next[i-1, j] +
                                            V[i, j-1] - h))
@@ -120,7 +120,7 @@ for X in range(8,43):
 # iteracion
 una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, LetraM,Abajo_Linea,Arriba_Linea,w=1.)
 counter = 1
-while counter < 800 and no_ha_convergido(V, V_next, tolerancia=1e-7):
+while counter < 1200 and no_ha_convergido(V, V_next, tolerancia=1e-5):
     V = V_next.copy()
     una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, LetraM,Abajo_Linea,Arriba_Linea, w=1.)
     counter += 1
@@ -137,12 +137,17 @@ y = np.linspace(-1, 1, Ny_pasos)
 X, Y = np.meshgrid(x, y)
 
 ax.plot_surface(X, Y, V_next, rstride=1, cstride=1)
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Potencial Electrostatico (V)')
 fig.show()
 
 fig2 = plt.figure(2)
 fig2.clf()
 ax2 = fig2.add_subplot(111)
 ax2.imshow(V_next, origin='bottom', interpolation='nearest')
+ax2.set_xlabel('X')
+ax2.set_ylabel('Y')
 ax2.contour(V_next, origin='lower')
 fig2.show()
 
