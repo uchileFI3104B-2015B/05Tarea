@@ -15,8 +15,10 @@ from mpl_toolkits.mplot3d import axes3d
 
 
 def muestra_phi(phi):
-    'esta wea hace bla'
-    # print(phi[::-1, :])
+    '''
+    Ejes modificados
+    '''
+    print(phi[::-1, :])
     pass
 
 
@@ -30,15 +32,15 @@ def Rho_Letra(i, j, h):
     x = i * h - 5
     y = j * h - 7.5
     value_rho = 1./15
-    if y >= -3.5 and y <= 3.5 and x >= -2.5 and x <= -1.5:
+    if y > -3.5 and y < 3.5 and x > -2.5 and x < -1.5:
         return value_rho
-    if y >= -3.5 and y <= 3.5 and x >= 1.5 and x <= 2.5:
+    if y > -3.5 and y < 3.5 and x >= 1.5 and x < 2.5:
         return value_rho
-    if y >= 0.5 and y <= 2.5 and x > -1.5 and x <= -0.5:
+    if y > 0.5 and y < 2.5 and x > -1.5 and x < -0.5:
         return value_rho
-    if y >= 0.5 and y <= 2.5 and x >= 0.5 and x < 1.5:
+    if y > 0.5 and y < 2.5 and x > 0.5 and x < 1.5:
             return value_rho
-    if y >= -0.5 and y <= 1.5 and x > -0.5 and x < 0.5:
+    if y > -0.5 and y < 1.5 and x > -0.5 and x < 0.5:
         return value_rho
     else:
         return 0
@@ -76,7 +78,7 @@ def una_iteracion(phi, phi_next, Nx_pasos, Ny_pasos, h, w=1.):
             phi_next[i, j] = ((1 - w) * phi[i, j] +
                               w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
                                        phi[i, j+1] + phi_next[i, j-1] +
-                                       h**2 * Rho_Letra(i, j, h)))
+                                       (h**2) * Rho_Letra(i, j, h)))
     # laterales de la linea
     for j in range(1, 20):
         # Parte izquierda de la linea
@@ -108,15 +110,17 @@ def una_iteracion(phi, phi_next, Nx_pasos, Ny_pasos, h, w=1.):
     for i in range(11, 41):
         # inmediatamente bajo la linea
         for j in range(10, 11):
-            phi_next[i, j] = ((1 - w) * phi[i, j] +
-                              w / 3 * (phi[i+1, j] + phi_next[i-1, j] +
-                                       phi_next[i, j-1] + h*(-1.)))
+            y = 2 / h - 1
+            phi_next[i, y] = ((1 - w) * phi[i, y] +
+                              w / 3 * (phi[i+1, y] + phi_next[i-1, y] +
+                                       phi_next[i, y-1] + h*(-1.)))
 
         # inmediatamente sobre la linea
         for j in range(11, 12):
-            phi_next[i, j] = ((1 - w) * phi[i, j] +
-                              w / 3 * (phi[i+1, j] + phi_next[i-1, j] +
-                                       phi_next[i, j-1] + h*(1.)))
+            y = 2 / h + 1
+            phi_next[i, y] = ((1 - w) * phi[i, y] +
+                              w / 3 * (phi[i+1, y] + phi_next[i-1, y] +
+                                       phi_next[i, y-1] + h*(1.)))
 
 
 def no_ha_convergido(phi, phi_next, tolerancia=1e-5):
@@ -143,11 +147,11 @@ v_rho_next = np.zeros((Nx_pasos, Ny_pasos))
 
 
 # iteracion
-una_iteracion(v_rho, v_rho_next, Nx_pasos, Ny_pasos, h, w=1.5)
+una_iteracion(v_rho, v_rho_next, Nx_pasos, Ny_pasos, h, w=1.8)
 counter = 1
-while counter < 1000 and no_ha_convergido(v_rho, v_rho_next, tolerancia=1e-7):
+while counter < 2000 and no_ha_convergido(v_rho, v_rho_next, tolerancia=1e-7):
     v_rho = v_rho_next.copy()
-    una_iteracion(v_rho, v_rho_next, Nx_pasos, Ny_pasos, h, w=0.8)
+    una_iteracion(v_rho, v_rho_next, Nx_pasos, Ny_pasos, h, w=1.8)
     counter += 1
 
 print("counter = {}".format(counter))
@@ -158,8 +162,8 @@ v_next_rotada = v_rho_next.transpose()
 fig = plt.figure(1)
 fig.clf()
 ax = fig.add_subplot(111, projection='3d')
-x = np.linspace(-1, 1, Nx_pasos)
-y = np.linspace(-1, 1, Ny_pasos)
+x = np.linspace(-5, 5, Nx_pasos)
+y = np.linspace(-7.5, 7.5, Ny_pasos)
 X, Y = np.meshgrid(x, y)
 ax.plot_surface(X, Y, v_next_rotada, rstride=1, cstride=1)
 fig.show()
@@ -167,7 +171,12 @@ plt.savefig('plot_surface.png')
 
 fig2 = plt.figure(2)
 fig2.clf()
-ax2 = fig2.add_subplot(111)
-ax2.imshow(np.arcsinh(v_next_rotada), origin='bottom', interpolation='nearest')
+plt.imshow(np.arcsinh(v_next_rotada), origin='bottom', interpolation='nearest',
+           extent=[-5, 5, -7.5, 7.5])
+plt.colorbar()
+plt.title('Densidad de carga en el rect'u'á''ngulo')
+plt.xlabel('x [cm]')
+plt.ylabel('y [cm]')
 fig2.show()
+
 plt.savefig('plot_imshow.png')
