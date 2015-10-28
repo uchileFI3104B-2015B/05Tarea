@@ -71,13 +71,22 @@ class Caja(object):
             return False
 
     def paso_sobre_relajacion(self, i, j, w, region):
+        '''
+        Este método permite actualizar el valor de la posición (i,j) en la
+        grilla según el tipo de condición que debe satisfacer. Además recibe
+        como parámetro el valor de w y la región sobre la cual se debe relajar
+        la solución.
+        '''
         h = self.reticulado
+        # Si se está sobre un punto con condición de borde derivativa
         if (i, j) in self.pt_cond_der.keys():
             dV = self.pt_cond_der[(i, j)]
             if region == "up":
                 self.potencial[i][j] = self.potencial[i][j+1] - dV * h
             else:
                 self.potencial[i][j] = self.potencial[i][j-1] + dV * h
+        # Si se está en un punto adyacente a uno con condición de borde
+        # derivativa
         elif self.adyacente_linea_horizontal(i, j):
             P0 = self.potencial[i][j] * (1.0 - w)
             P1 = self.potencial[i-1][j]
@@ -90,6 +99,7 @@ class Caja(object):
                 P4 = h * self.pt_cond_der[(i, j+1)]
             P5 = h**2 * self.carga[i][j]
             self.potencial[i][j] = P0 + w * (P1 + P2 + P3 + P4 + P5)/3.0
+        # Si se está en un punto cualquiera
         else:
             P0 = self.potencial[i][j] * (1.0 - w)
             P1 = self.potencial[i-1][j]
@@ -110,7 +120,8 @@ class Caja(object):
                 for i in range(1, self.Nx - 1):
                     self.paso_sobre_relajacion(i, j, w, region)
         # Si no se especifica una región, entonces se asume que se quiere
-        # iterar sobre todo el rectángulo.
+        # iterar sobre todo el rectángulo (salvo el perímetro, que se mantiene
+        # a valor constante).
         else:
             for j in range(1, self.Ny - 1):
                 for i in range(1, self.Nx - 1):
