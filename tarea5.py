@@ -23,7 +23,7 @@ def RHO(i, j, h):
     ''' Retorna Rho para cuando está dentro de los cuadros que definfen M'''
     x = Lx / 2. - i * h    # La resta es para dejar el eje al centro
     y = Ly / 2. - j * h
-    densidad = 0.5 / 20.
+    densidad = 1 / 20.
     if (x >= -2.5 and x <= 2.5) and (y >= -3.5 and y <= 3.5):
         # Esta condicion es para entrar a la caja donde esta M
         if (x >= -2.5 and x <= -1.5) or (x >= 1.5 and x <= 2.5):
@@ -129,7 +129,7 @@ def no_ha_convergido(V, V_next, tolerancia):
 
 V = np.zeros((N_pasos_x, N_pasos_y))
 V_next = np.zeros((N_pasos_x, N_pasos_y))
-w = 1.4
+w = 1.2
 
 # Matriz que define rho
 rho = np.zeros((Lx / h, Ly / h))
