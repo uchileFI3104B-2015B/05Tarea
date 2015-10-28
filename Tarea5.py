@@ -64,7 +64,7 @@ def una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h,
                                     V[i, j+1] + V_next[i, j-1]))
 
 
-def no_ha_convergido(V, V_next, tolerancia=1e-5):
+def no_ha_convergido(V, V_next, tolerancia=1e-4):
     not_zero = (V_next != 0)
     diff_relativa = (V - V_next)[not_zero] / V_next[not_zero]
     max_diff = np.max(np.fabs(diff_relativa))
@@ -123,7 +123,7 @@ for X in range(8, 43):
 una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h,
               LetraM, Abajo_Linea, Arriba_Linea, w=1.)
 counter = 1
-while counter < 2000 and no_ha_convergido(V, V_next, tolerancia=1e-5):
+while counter < 1300 and no_ha_convergido(V, V_next, tolerancia=1e-4):
     V = V_next.copy()
     una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h,
                   LetraM, Abajo_Linea, Arriba_Linea, w=1.)
@@ -154,5 +154,12 @@ ax2.set_xlabel('X')
 ax2.set_ylabel('Y')
 ax2.contour(V_next, origin='lower')
 fig2.show()
+
+fig3 = plt.figure(3)
+fig3.clf()
+ax3 = fig3.add_subplot(111)
+ax2.set_ylabel('X')
+ax2.set_xlabel('Y')
+ax3.imshow(np.arcsinh(V))
 
 plt.draw()
