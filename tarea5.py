@@ -93,3 +93,13 @@ def una_iteracion(phi, phi_next, N_pasos_x, N_pasos_y, h=0.2, w=1.):
                               w / 3 * (phi[i+1, j] + phi_next[i-1, j] +
                                        phi_next[i, j-1] + h**2 * rho(i, j, h) +
                                        h*(1.)))
+
+
+def no_ha_convergido(phi, phi_next, tolerancia=1e-5):
+    not_zero = (phi_next != 0)
+    diff_relativa = (phi - phi_next)[not_zero] / phi_next[not_zero]
+    max_diff = np.max(np.fabs(diff_relativa))
+    if max_diff > tolerancia:
+        return True
+    else:
+        return False
