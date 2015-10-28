@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 
 '''
-Aquí va la descripcion de mi tarea
+Esta tarea resuelv la ecuacion de Poisson en 2D para el porencial electrostático
+en una caja, con una letra M en el medio, y una línea con condiciones
+derivativas
 '''
 from __future__ import division
 import numpy as np
@@ -21,7 +23,7 @@ def RHO(i, j, h):
     ''' Retorna Rho para cuando está dentro de los cuadros que definfen M'''
     x = Lx / 2. - i * h    # La resta es para dejar el eje al centro
     y = Ly / 2. - j * h
-    densidad = 1. / 20.
+    densidad = 0.5 / 20.
     if (x >= -2.5 and x <= 2.5) and (y >= -3.5 and y <= 3.5):
         # Esta condicion es para entrar a la caja donde esta M
         if (x >= -2.5 and x <= -1.5) or (x >= 1.5 and x <= 2.5):
@@ -41,15 +43,19 @@ def RHO(i, j, h):
             return densidad
 
         else:
-            # Dentro de la caja pero no es la letra M
+            # Dentro del area de la letra pero no es la letra M
             return 0
 
     else:
-        # Fuera de la caja
+        # Fuera del area de la letra
         return 0
 
 
 def una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w):
+    '''
+    Realiza una iteracion, la cual se divide en varias partes dependiendo
+    de en qué lado de la caja se esté
+    '''
     for i in range(1, N_pasos_x - 1):
         # Seccion arriba de la letra
         for j in range(1, 20):
@@ -105,6 +111,10 @@ def una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w):
 
 
 def no_ha_convergido(V, V_next, tolerancia):
+    '''
+    Retorna True si no cumple una cierta tolerancia,
+    y False si es que la cumple
+    '''
     not_zero = (V_next != 0)
     diff_relativa = (V - V_next)[not_zero] / V_next[not_zero]
     max_diff = np.max(np.fabs(diff_relativa))
@@ -119,7 +129,7 @@ def no_ha_convergido(V, V_next, tolerancia):
 
 V = np.zeros((N_pasos_x, N_pasos_y))
 V_next = np.zeros((N_pasos_x, N_pasos_y))
-w = 1
+w = 1.4
 
 # Matriz que define rho
 rho = np.zeros((Lx / h, Ly / h))
@@ -127,7 +137,7 @@ rho = np.zeros((Lx / h, Ly / h))
 
 una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
 counter = 1
-while counter < 2000 and no_ha_convergido(V, V_next, tolerancia=1e-2):
+while counter < 3000 and no_ha_convergido(V, V_next, tolerancia=1e-2):
     V = V_next.copy()
     una_iteracion(V, V_next, N_pasos_x, N_pasos_y, h, w)
     counter += 1
@@ -143,18 +153,18 @@ x = np.linspace(-1, 1, N_pasos_x)
 y = np.linspace(-1, 1, N_pasos_y)
 X, Y = np.meshgrid(x, y)
 ax.plot_surface(X, Y, V_next_rotada, rstride=1, cstride=1)
-plt.xlabel('x[cm]')
-plt.ylabel('y[cm]')
+plt.xlabel('x [cm]')
+plt.ylabel('y [cm]')
 plt.title('Potencial electrost'u'á''tico ')
 fig.show()
-# plt.savefig('plot_surface.png')
+#plt.savefig('plot_surface.png')
 
 plt.figure(2)
 plt.clf()
 plt.imshow(V_next_rotada, origin='bottom', interpolation='nearest')
 plt.colorbar()
-plt.xlabel('x[cm]')
-plt.ylabel('y[cm]')
+plt.xlabel('x [cm]')
+plt.ylabel('y [cm]')
 plt.title('Potencial electrost'u'á''tico ')
-plt.savefig('plot_imshow.png')
+#plt.savefig('plot_imshow.png')
 plt.show()
