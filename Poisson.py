@@ -252,6 +252,49 @@ def poner_carga(caja, coordenadas):
     for par in coordenadas:
         caja[par[0], par[1]] = carga_en_un_punto
     return caja
+    
+def f_carga_caja(x, y):
+    '''función auxilar para graficar'''
+    return carga_caja[x, y]
+
+
+def f_V_next(x, y):
+    '''función auxilar para graficar'''
+    return V_next[x, y]
+    
+def mostrar(f_caja, caja, titulo):
+    '''plotea la solución en 3D'''
+    x_original = [0, 2.5, 5, 7.5, 10]
+    y_original = [0, 3, 6, 9, 12, 15]
+    x_scale = [0, 12.5, 25, 37.5, 50]
+    y_scale = [0, 15, 30, 45, 60, 75]
+    (ancho, alto) = caja.shape
+    x = np.linspace(0, ancho-1, ancho)
+    y = np.linspace(0, alto-1, alto)
+    xg, yg = np.meshgrid(x, y)
+    vector_f = np.vectorize(f_caja)
+    z = vector_f(xg, yg)
+    
+    fig = plt.figure(1)
+    fig.clf()
+    ax = fig.add_subplot(111)
+    cax = ax.imshow(z, origin='bottom', interpolation='nearest')
+    ax.contour(z, origin='lower')
+    ax.set_title(titulo)
+    ax.set_xticks(x_scale)
+    ax.set_xticklabels(x_original)
+    ax.set_yticks(y_scale)
+    ax.set_yticklabels(y_original)
+    ax.set_xlabel("X [cm]")
+    ax.set_ylabel("Y [cm]")
+    cbar = fig.colorbar(cax)
+    
+    if titulo == "valor del potencial":
+        cbar.set_label("Potencial [erg/C]")
+        fig.savefig("potencial.jpg")
+    else:
+        cbar.set_label("Carga [C]")
+        fig.savefig("distr_carga.jpg")
 
 #Main
 
@@ -280,5 +323,11 @@ while (contador < 500 and no_converge(V_actual, V_next, tolerancia)):
     iterar(V_actual, V_next, carga_caja, N_pasos, h, w)
     contador += 1
     
-#Graficar
+#Resultados
     
+print("numero iteraciones: "+str(contador))
+
+mostrar(f_carga_caja, carga_caja, "distribucion carga")
+mostrar(f_V_next, V_next, "valor del potencial")
+plt.show()
+
