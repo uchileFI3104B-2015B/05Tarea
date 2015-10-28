@@ -33,12 +33,21 @@ def r(i, j, Lx, Ly, h):
 
 
 def una_iter(phi, phi_n, p):
+    '= N_x, N_y, Lx, Ly, h, w = 1.'
     '''
     Da un paso en la iteracion para toda la grilla parte por parte
     '''
     N_x, N_y, Lx, Ly, h, w = p
     N_x = int(N_x)
     N_y = int(N_y)
+    '''
+    for i in range(1, N_x - 1):
+        for j in range(1, N_y - 1):
+            phi_n[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
+                                       phi[i, j+1] + phi_n[i, j-1] +
+                                       h**2. * r(i, j, Lx, Ly, h)))
+    '''
     for j in range(1, 12):
         'abajo de la linea'
         for i in range(1, N_x - 1):
@@ -47,7 +56,7 @@ def una_iter(phi, phi_n, p):
                            w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
                                     phi[i, j+1] + phi_n[i, j-1]))
 
-    for j in range(12, 14):
+    for j in range(12, 15):
         'en la linea'
         for i in range(1, 11):
             'para el borde antes de la linea'
@@ -61,22 +70,25 @@ def una_iter(phi, phi_n, p):
                                     phi[i, j+1] + phi_n[i, j-1]))
         'esta parte es redundante, pero me sirve para ordenar mis ideas'
         for j in range(12, 13):
-            'bajo la linea, usando la condicion -1'
+            'bajo la linea, usando la condicion 1'
             for i in range(11, 41):
                 phi_n[i, j] = ((1 - w) * phi[i, j] +
                                w / 3 * (phi[i+1, j] + phi_n[i-1, j] +
                                         phi_n[i, j-1] +
-                                        h ** 2 * r(i, j, Lx, Ly, h) +
-                                        h * (-1.)))
+                                        h ** 2 * r(i, j, Lx, Ly, h) + h))
         for j in range(13, 14):
-            'encima de la linea, usando condicion +1'
+            'en la linea'
+            for i in range(11, 41):
+                phi_n[i, j] = phi_n[i, j-1] + h
+        for j in range(14, 15):
+            'sobre la linea, usando condicion -1'
             for i in range(11, 41):
                 phi_n[i, j] = ((1 - w) * phi[i, j] +
-                               w / 3 * (phi[i+1, j] + phi_n[i-1, j] +
-                                        phi_n[i, j-1] +
+                               w / 3 * (phi[i+1, j] + phi_n[i-1, j] -
+                                        h +
                                         h ** 2 * r(i, j, Lx, Ly, h) +
-                                        h * (1.)))
-    for j in range(14, 17):
+                                        phi_n[i, j+1]))
+    for j in range(15, 17):
         'sobre la linea y antes del rectangulo de la letra'
         for i in range(1, N_x - 1):
             phi_n[i, j] = ((1 - w) * phi[i, j] +
@@ -139,7 +151,8 @@ def n_relajacion(w=1, N=5000):
         phi = phi_s.copy()
         una_iter(phi, phi_s, p)
         n = n + 1
-        print n 'permite ver si el algoritmo esta avanzando o se queda pegado'
+        print n
+        'permite ver si el algoritmo esta avanzando o se queda pegado'
     return n
 
 

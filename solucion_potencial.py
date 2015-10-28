@@ -101,18 +101,17 @@ def una_iter(phi, phi_n, p):
                 phi_n[i, j] = ((1 - w) * phi[i, j] +
                                w / 3 * (phi[i+1, j] + phi_n[i-1, j] +
                                         phi_n[i, j-1] +
-                                        h ** 2 * r(i, j, Lx, Ly, h) +
-                                        phi_n[i, j+1] * h))
+                                        h ** 2 * r(i, j, Lx, Ly, h) + h))
         for j in range(13, 14):
             'en la linea'
             for i in range(11, 41):
-                phi_n[i,j] = phi_n[i, j-1] + h
+                phi_n[i, j] = phi_n[i, j-1] + h
         for j in range(14, 15):
             'sobre la linea, usando condicion -1'
             for i in range(11, 41):
                 phi_n[i, j] = ((1 - w) * phi[i, j] +
                                w / 3 * (phi[i+1, j] + phi_n[i-1, j] -
-                                        phi_n[i, j-1] * h +
+                                        h +
                                         h ** 2 * r(i, j, Lx, Ly, h) +
                                         phi_n[i, j+1]))
     for j in range(15, 17):
@@ -148,7 +147,7 @@ def una_iter(phi, phi_n, p):
                                     phi[i, j+1] + phi_n[i, j-1]))
 
 
-def no_ha_convergido(phi, phi_n, toler=1e-3):
+def no_ha_convergido(phi, phi_n, toler=1e-5):
     '''
     ve si la funcion ya ha convergido
     '''
@@ -176,7 +175,7 @@ p = (N_x, N_y, Lx, Ly, h, w)
 'mas practico definir el vector para usar como parametro'
 una_iter(phi, phi_s, p)
 n = 1
-Nf = 3000
+Nf = 10000
 while n < Nf and no_ha_convergido(phi, phi_s):
     phi = phi_s.copy()
     una_iter(phi, phi_s, p)
@@ -195,9 +194,9 @@ fig2.clf()
 ax2 = fig2.add_subplot(111)
 ax2.imshow(phi_fin_trasp, origin='bottom', interpolation='nearest')
 ax2.contour(phi_fin_trasp, origin='lower')
-plt.savefig('potencial1.png')
 ax2.set_xlabel('X')
 ax2.set_ylabel('Y')
+plt.savefig('potencial1.png')
 fig2.show()
 
 plt.draw()
@@ -205,10 +204,23 @@ plt.draw()
 fig = plt.figure(1)
 fig.clf()
 ax = fig.add_subplot(111, projection='3d')
-x = np.linspace(-1, 1, N_x)
-y = np.linspace(-1, 1, N_y)
+x = np.linspace(-5, 5, N_x)
+y = np.linspace(-7.5, 7.5, N_y)
 X, Y = np.meshgrid(x, y)
 ax.plot_surface(X, Y, phi_fin_trasp, rstride=1, cstride=1)
+ax2.set_xlabel('X [cm]')
+ax2.set_ylabel('Y [cm]')
 
 plt.savefig('potencial2.png')
 fig.show()
+
+fig3 = plt.figure(2)
+fig3.clf()
+ax3 = fig2.add_subplot(111)
+ax3.imshow(np.arctan(10*phi_fin_trasp), origin='bottom',
+           interpolation='nearest')
+ax3.contour(phi_fin_trasp, origin='lower')
+ax3.set_xlabel('X')
+ax3.set_ylabel('Y')
+plt.savefig('potencial3.png')
+fig3.show()

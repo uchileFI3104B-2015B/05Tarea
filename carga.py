@@ -34,7 +34,6 @@ c = np.zeros((N_x, N_y))
 for i in range(0, N_x - 1):
     for j in range(0, N_y - 1):
         c[i, j] = r(i, j, Lx, Ly, h)
-
 c_tras = c.transpose()
 fig2 = plt.figure(2)
 fig2.clf()
