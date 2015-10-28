@@ -1,5 +1,11 @@
 '''
-Este script...
+Este script integra la ecuacion de Poisson en 2D mediante el metodo
+de sobre-relajacion sucesiva, para una caja de dimensiones ya definidas
+(10cmx15cm) y con una distribucion de carga en inicial de la
+letra F centrada en la caja, en un rectangulo de (5cmx7cm). La carga total
+es 1C. La convergencia se hace mediante una funcion
+donde uno puede variar la tolerancia deseada. Se utiliza w=1.0 y se grafica
+en colores y contornos y en superficie 3D.
 '''
 
 from __future__ import division
