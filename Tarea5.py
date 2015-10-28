@@ -39,7 +39,7 @@ def una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, w=1.):
                     V_next[i, j] = ((1 - w) * V[i, j] +
                                   w / 4 * (V[i+1, j] + V_next[i-1, j] +
                                            V[i, j+1] + V_next[i, j-1] +
-                                           10./20.*(h**2)))
+                                           1./20.*(h**2)))
                 else:
                     V_next[i, j] = ((1 - w) * V[i, j] +
                                   w / 4 * (V[i+1, j] + V_next[i-1, j] +
