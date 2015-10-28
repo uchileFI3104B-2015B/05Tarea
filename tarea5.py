@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 '''
-Esta tarea resuelv la ecuacion de Poisson en 2D para el porencial electrostático
-en una caja, con una letra M en el medio, y una línea con condiciones
-derivativas
+Esta tarea resuelv la ecuacion de Poisson en 2D para el porencial
+electrostático en una caja, con una letra M en el medio, y una línea
+con condiciones derivativas
 '''
 from __future__ import division
 import numpy as np
