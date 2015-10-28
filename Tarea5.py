@@ -112,10 +112,10 @@ def una_iteracion_completa(V, V_next, Rho, h, w=1.2):
     '''1 antes de la linea g=1'''
     for i in range(a, b):
         V_next[i, linea - 1] = ((1 - w) * V[i, linea - 1]
-                                (+ w / 3 * (V[i+1, linea - 1]
-                                 (+ V_next[i-1, linea - 1]
-                                  (+ V_next[i, linea - 2]
-                                   - h + h**2 * Rho[i, j])))))
+                                 + w / 3 * (V[i+1, linea - 1]
+                                 + V_next[i-1, linea - 1]
+                                 + V_next[i, linea - 2]
+                                 - h + h**2 * Rho[i, j]))
 
     '''integracion sobre la linea'''
     for i in range(a, b):
@@ -124,10 +124,10 @@ def una_iteracion_completa(V, V_next, Rho, h, w=1.2):
     '''1 despues de la linea g=-1'''
     for i in range(a, b):
         V_next[i, linea + 1] = ((1 - w) * V[i, linea + 1]
-                                (+ w / 3 * (V[i+1, linea + 1]
-                                 (+ V_next[i-1, linea + 1]
-                                  (+ V_next[i, linea + 2]
-                                   + h + h**2 * Rho[i, j])))))
+                                 + w / 3 * (V[i+1, linea + 1]
+                                 + V_next[i-1, linea + 1]
+                                 + V_next[i, linea + 2]
+                                 + h + h**2 * Rho[i, j]))
 
     '''parte izquierda de la linea'''
     for i in range(1, a):
