@@ -82,7 +82,7 @@ def una_iter(phi, phi_n, p):
                            w / 4 * (phi[i+1, j] + phi_n[i-1, j] +
                                     phi[i, j+1] + phi_n[i, j-1]))
 
-    for j in range(12, 14):
+    for j in range(12, 15):
         'en la linea'
         for i in range(1, 11):
             'para el borde antes de la linea'
@@ -96,22 +96,26 @@ def una_iter(phi, phi_n, p):
                                     phi[i, j+1] + phi_n[i, j-1]))
         'esta parte es redundante, pero me sirve para ordenar mis ideas'
         for j in range(12, 13):
-            'bajo la linea, usando la condicion -1'
+            'bajo la linea, usando la condicion 1'
             for i in range(11, 41):
                 phi_n[i, j] = ((1 - w) * phi[i, j] +
                                w / 3 * (phi[i+1, j] + phi_n[i-1, j] +
                                         phi_n[i, j-1] +
                                         h ** 2 * r(i, j, Lx, Ly, h) +
-                                        h * (-1.)))
+                                        phi_n[i, j+1] * h))
         for j in range(13, 14):
-            'encima de la linea, usando condicion +1'
+            'en la linea'
+            for i in range(11, 41):
+                phi_n[i,j] = phi_n[i, j-1] + h
+        for j in range(14, 15):
+            'sobre la linea, usando condicion -1'
             for i in range(11, 41):
                 phi_n[i, j] = ((1 - w) * phi[i, j] +
-                               w / 3 * (phi[i+1, j] + phi_n[i-1, j] +
-                                        phi_n[i, j-1] +
+                               w / 3 * (phi[i+1, j] + phi_n[i-1, j] -
+                                        phi_n[i, j-1] * h +
                                         h ** 2 * r(i, j, Lx, Ly, h) +
-                                        h * (1.)))
-    for j in range(14, 17):
+                                        phi_n[i, j+1]))
+    for j in range(15, 17):
         'sobre la linea y antes del rectangulo de la letra'
         for i in range(1, N_x - 1):
             phi_n[i, j] = ((1 - w) * phi[i, j] +
@@ -144,7 +148,7 @@ def una_iter(phi, phi_n, p):
                                     phi[i, j+1] + phi_n[i, j-1]))
 
 
-def no_ha_convergido(phi, phi_n, toler=1e-5):
+def no_ha_convergido(phi, phi_n, toler=1e-3):
     '''
     ve si la funcion ya ha convergido
     '''
@@ -177,7 +181,8 @@ while n < Nf and no_ha_convergido(phi, phi_s):
     phi = phi_s.copy()
     una_iter(phi, phi_s, p)
     n = n + 1
-    print n 'permite ver si el algoritmo esta avanzando o se queda pegado'
+    print n
+    'n permite ver si el algoritmo esta avanzando o se queda pegado'
 
 
 'graficos (?)'
@@ -190,7 +195,9 @@ fig2.clf()
 ax2 = fig2.add_subplot(111)
 ax2.imshow(phi_fin_trasp, origin='bottom', interpolation='nearest')
 ax2.contour(phi_fin_trasp, origin='lower')
-plt.savefig('fig1.png')
+plt.savefig('potencial1.png')
+ax2.set_xlabel('X')
+ax2.set_ylabel('Y')
 fig2.show()
 
 plt.draw()
@@ -202,5 +209,6 @@ x = np.linspace(-1, 1, N_x)
 y = np.linspace(-1, 1, N_y)
 X, Y = np.meshgrid(x, y)
 ax.plot_surface(X, Y, phi_fin_trasp, rstride=1, cstride=1)
-plt.savefig('fig2.png')
+
+plt.savefig('potencial2.png')
 fig.show()
