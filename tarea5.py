@@ -123,3 +123,31 @@ print("counter = {}".format(counter))
 
 
 phi_next_transpuesta = phi_next.transpose()
+
+fig = plt.figure(1)
+fig.clf()
+ax = fig.add_subplot(111, projection='3d')
+
+x = np.linspace(-1, 1, N_pasos_x)
+y = np.linspace(-1, 1, N_pasos_y)
+
+X, Y = np.meshgrid(x, y)
+
+ax.plot_surface(X, Y, phi_next_transpuesta, rstride=1, cstride=1)
+ax.set_xlabel('$\ x $', fontsize=15)
+ax.set_ylabel('$\ y $', fontsize=15)
+ax.set_zlabel('$\ Potencial$', fontsize=15)
+
+fig.show()
+
+fig2 = plt.figure(2)
+fig2.clf()
+ax2 = fig2.add_subplot(111)
+ax2.imshow(np.arcsinh(phi_next_transpuesta),
+           origin='bottom', interpolation='nearest')
+ax.set_xlabel('$\ x $', fontsize=15)
+ax.set_ylabel('$\ y $', fontsize=15)
+
+fig2.show()
+
+plt.draw()
