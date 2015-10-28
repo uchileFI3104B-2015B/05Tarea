@@ -208,9 +208,9 @@ rho solo existe en la letra, en los demas puntos es cero
 Lx = 10.           #[cm] largo de la caja en eje x
 Ly = 15.           #[cm] largo de la caja en eje y
 h = 0.25           #[cm] tamanho del paso
-w = 1.2            # w parametro del metodo de sobrerelajacion
+w = 1.4            # w parametro del metodo de sobrerelajacion
 tolerancia = 1e-7  # Diferencia esperada para considerar convergencia
-Niteracion = 5000  # Numero de iteracion maxima
+Niteracion = 10000  # Numero de iteracion maxima
 
 Rho = crea_caja(Lx, Ly, h)
 Rho = asignar_caja_letra(Rho, cajal, h) #G_ij
@@ -220,12 +220,12 @@ V_next = crea_caja(Lx, Ly, h)
 
 una_iteracion_completa(V, V_next, Rho, h, w)
 counter = 1
-'''
+
 while counter < Niteracion and no_ha_convergido(V, V_next, tolerancia):
     V = V_next.copy()
     una_iteracion_completa(V, V_next, Rho, h, w)
     counter += 1
-'''
+
 print("w = {}".format(w))
 print("Numero de iteracion maxima = {}".format(Niteracion))
 print("counter = {}".format(counter))
