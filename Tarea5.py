@@ -14,13 +14,29 @@ from mpl_toolkits.mplot3d import axes3d
 def muestra_phi(phi):
     print(phi[::-1, :])
 
-def rho(i,j,h):
-    x=i*h-1
-    y=j*h-1
-    if en_letra():
-        return 1./20.  
+def en_letra(i,j,Letra):
+    if Letra.count((i,j))!=0:
+        return True
     else:
-        return 0
+        return False
+
+def en_linea(i,j, Linea):
+    if Linea.count((i,j))!=0:
+        return True
+    else:
+        return False
+
+def arriba_linea(i,j, arLinea):
+    if arLinea.count((i,j))!=0:
+        return True
+    else:
+        return False
+        
+def abajo_linea(i,j, abLinea):
+    if abLinea.count((i,j))!=0:
+        return True
+    else:
+        return False
     
 def una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, w=1.):
     for i in range(1, Nx_pasos-1):
@@ -38,8 +54,8 @@ def una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, w=1.):
                 elif en_letra(i,j,Letra):
                     V_next[i, j] = ((1 - w) * V[i, j] +
                                   w / 4 * (V[i+1, j] + V_next[i-1, j] +
-                                           V[i, j+1] + V_next[i, j-1] +
-                                           1./20.*(h**2)))
+                                           V[i, j+1] + V_next[i, j-1] -
+                                           1./20.))
                 else:
                     V_next[i, j] = ((1 - w) * V[i, j] +
                                   w / 4 * (V[i+1, j] + V_next[i-1, j] +
@@ -62,8 +78,6 @@ def no_ha_convergido(V, V_next, tolerancia=1e-5):
 
 Lx = 10.
 Ly = 15.
-N_pasos = 51
-h = Lx / (N_pasos - 1)
 h=0.2
 Nx_pasos = int(Lx/h+1)
 Ny_pasos = int(Ly/h+1)
@@ -90,9 +104,8 @@ for X in range(33,38):
     for Y in range(21,56):
         LetraM.append((X,Y))
 
-#Densidad de carga
-
-RHO=1./20./(h**2)
+#Densidad de carga=
+#RHO=1./20./(h**2)
 
 #Crear linea
 
@@ -113,7 +126,6 @@ while counter < 800 and no_ha_convergido(V, V_next, tolerancia=1e-7):
     counter += 1
 
 print("counter = {}".format(counter))
-print(V[(Nx_pasos - 1) / 2, (Ny_pasos - 1) / 2])
 
 fig = plt.figure(1)
 fig.clf()
