@@ -164,12 +164,72 @@ def esta_en_linea(i, j):
             return True
     return False
 
-def Iteracion_resto_caja(V, V_next, N_pasos_x, N_pasos_y, h, w):
-    for i in range(1, N_pasos_x-1):
-        for j in range (1, N_pasos_y-1):
-            V_next[i, j] = ((1 - w) * V[i, j] +
-                            w / 4 * (V[i+1, j] + V[i-1, j]
-                                    + V[i, j+1] + V[i, j-1]))
+def iterar(caja, caja_next, caja_carga, numero_pasos, h, w=1):
+    '''Avanza el algoritmo de sobre relajación y llama a la iteración
+    correspondiente para cada coordenada.
+    '''
+    rango_x = np.array([0 / h, 10 / h])
+    rango_y = np.array([0 / h, 15 / h])
+    for i in range(int(rango_x[0]) + 1, int(rango_x[1])):
+        for j in range(int(rango_y[0]) + 1, int(rango_y[1])):
+            if (esta_bajo_linea(i, j)):
+                iteracion_bajo_linea(i, j, caja, caja_next, caja_carga,
+                                     numero_pasos, h, w=1)
+            elif esta_en_linea(i, j):
+                iteracion_linea(i, j, caja, caja_next, caja_carga,
+                                numero_pasos, h, w=1)
+            elif esta_sobre_linea(i, j):
+                iteracion_sobre_linea(i, j, caja, caja_next, caja_carga,
+                                      numero_pasos, h, w=1)
+            elif (dentro_letra_B(i, j)):
+                iteracion_letra(i, j, caja, caja_next, caja_carga,
+                                numero_pasos, h, w=1)
+            else:
+                iteracion_resto(i, j, caja, caja_next, caja_carga,
+                                numero_pasos, h, w=1)
+
+
+def iteracion_resto(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
+    '''avanza el algoritmo de sobre relajación 1 vez, fuera del rectangulo
+    interior y lejos de la linea'''
+    caja_next[i, j] = ((1 - w) * caja[i, j] +
+                       w / 4 * (caja[i + 1, j] + caja_next[i - 1, j] +
+                                caja[i, j+1] + caja_next[i, j-1]))
+
+
+def iteracion_letra(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
+    '''avanza el algoritmo de sobre relajación 1 vez, en el casillero interior
+    que contiene la letra'''
+    caja_next[i, j] = ((1 - w) * caja[i, j] +
+                       w / 4 * (caja[i+1, j] + caja_next[i-1, j] +
+                                caja[i, j+1] + caja_next[i, j-1] +
+                                h**2 * caja_carga[i, j]))
+
+
+def iteracion_linea(i, j, caja, caja_next, caja_carga, numero_pasos, h, w=1):
+    '''evalua el potencial en la linea con la condición de que la derivada
+    debe ser 1'''
+    caja_next[i, j] = caja_next[i, j-1] + h
+
+
+def iteracion_bajo_linea(i, j, caja, caja_next, caja_carga,
+                         numero_pasos, h, w=1):
+    '''avanza el algoritmo de sobre relajación 1 vez en los
+    casilleros inferiores vecinos a la linea'''
+    y = 2 / h - 1
+    caja_next[i, y] = ((1-w)*caja[i, y] + w/3*(caja_next[i-1, y] +
+                                               caja[i+1, y] +
+                                               caja_next[i, y-1] + h))
+
+
+def iteracion_sobre_linea(i, j, caja, caja_next, caja_carga,
+                          numero_pasos, h, w=1):
+    '''avanza el algoritmo de sobre relajación 1 vez en los
+    casilleros superiores vecinos a la linea'''
+    y = 2 / h + 1
+    caja_next[i, y] = ((1-w)*caja[i, y] + w/3*(caja_next[i-1, y] +
+                                               caja[i+1, y] +
+                                               caja_next[i, y+1] - h))
 
 def no_converge(V, V_next, tolerancia=1e-7):
     ''' Devuelve True si es que la iteracion converge'''
@@ -185,8 +245,7 @@ def no_converge(V, V_next, tolerancia=1e-7):
 
 #Inicializacion
 
-N_pasos_x = (L_x / h) + 1
-N_pasos_y = (L_y / h) + 1
+N_pasos = np.array([(L_x / h) + 1], [(L_y / h) + 1])
 
 V = np.zeros((N_pasos_x, N_pasos_y))
 V_next = np.zeros((N_pasos_x, N_pasos_y))
