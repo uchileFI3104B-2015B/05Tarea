@@ -124,7 +124,7 @@ while counter < 800 and no_ha_convergido(V, V_next, tolerancia=1e-7):
     V = V_next.copy()
     una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, LetraM,Abajo_Linea,Arriba_Linea, w=1.)
     counter += 1
-
+V_next= V_next.transpose()
 print("counter = {}".format(counter))
 
 fig = plt.figure(1)
