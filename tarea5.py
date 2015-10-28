@@ -1,50 +1,76 @@
 import matplotlib.pyplot as plt
 import numpy as np
-def N(x, y):
-    if x < -1.5:
-        return x, y
-    elif x > 1.5:
-        return x, y
-    elif x >= -1.5 and x < -0.5:
-        if y >= 0.5 and y < 2.5:
-            return x, y
-        else:
-            return 0, 0
-    elif x >= -0.5 and x < 0.5:
-        if y >= -1 and y < 1:
-            return x, y
-        else:
-            return 0, 0
-    elif x >= 0.5 and x < 1.5:
-        if y >= -2.5 and y < -0.5:
-            return x, y
-        else:
-            return 0, 0
-    else:
-        return 0, 0
-h = 0.02
-X = np.linspace(-2.5, 2.5, 251).tolist()
-Y = np.linspace(-3.5, 3.5, 351).tolist()
-Z = []
-Letra = []
-LetraX = []
-LetraY = []
-for a in range(len(X)):
-    Z.append([])
-for a in range(len(X)):
-    for b in range(len(Y)):
-        Z[a].append((X[a], Y[b]))
 
-for a in range(len(X)):
-    for b in range(len(Y)):
-        L = N(Z[a][b][0], Z[a][b][1])
-        Letra.append((L[0], L[1]))
+h=0.2
+
+def LetraN(a, b):
+    x = a * h - 5
+    y = b * h - 7.5
+    if x >= -2.5 and x < -1.5 and y >= -3.5  and y < 3.5:
+            return 0.05
+    elif x >= 1.5 and x < 2.5 and y >= -3.5 and y < 3.5:
+            return 0.05
+    elif x >= -1.5 and x < -0.5 and y >= 0.5 and y < 2.5:
+            return 0.05
+    elif x >= -0.5 and x < 0.5 and y >= -1 and y < 1:
+            return 0.05
+    elif x >= 0.5 and x < 1.5 and y >= -2.5 and y < -0.5:
+            return 0.05
+    else:
+        return 0
+
+def SobreRelax(V, w=1.4):
+    for i in range(1, 50):
+        for j in range(1, 10):
+            V[i][j] = ((1 - w) * V[i][j] +
+                            w / 4 * (V[i+1][j] + V[i-1][j] +
+                                     V[i][j+1] + V[i][j-1] +
+                                     h**2 * LetraN(i,j)))
+        for j in range(11, 75):
+            V[i][j] = ((1 - w) * V[i][j] +
+                            w / 4 * (V[i+1][j] + V[i-1][j] +
+                                     V[i][j+1] + V[i][j-1] +
+                                     h**2 * LetraN(i,j)))
+    for j in range(9, 12):
+        for i in range(1, 10):
+            V[i][j] = ((1 - w) * V[i][j] +
+                            w / 4 * (V[i+1][j] + V[i-1][j] +
+                                     V[i][j+1] + V[i][j-1] +
+                                     h**2 * LetraN(i,j)))
+        for i in range(41, 50):
+            V[i][j] = ((1 - w) * V[i][j] +
+                            w / 4 * (V[i+1][j] + V[i-1][j] +
+                                     V[i][j+1] + V[i][j-1] +
+                                     h**2 * LetraN(i,j)))
+    for i in range(10, 41):
+        for j in range(9, 10):
+            V[i][j] = ((1 - w) * V[i][j] +
+                            w / 3 * (V[i+1][j] + V[i-1][j] +
+                                     V[i][j-1] + h**2* LetraN(i,j) +
+                                     -h))
+        for j in range(10, 11):
+            V[i][j] = ((1 - w) * V[i][j] +
+                            w / 3 * (V[i+1][j] + V[i-1][j] +
+                                     V[i][j-1] + h**2 * LetraN(i,j) +
+                                     h))
+
+Npuntos = []
+for a in range(51):
+    Npuntos.append([])
+    for b in range(76):
+        Npuntos[a].append(LetraN(a,b))
         
-for a in Letra:
-    LetraX.append(a[0])
-    LetraY.append(a[1])
-    
-plt.plot(LetraX, LetraY, 'o')
-plt.xlim(-5, 5)
-plt.ylim(-7.5, 7.5)
+Npuntos=np.arcsinh(np.transpose(Npuntos))
+plt.imshow(Npuntos, origin='bottom', interpolation='nearest', extent=[-5, 5, -7.5, 7.5])
+plt.show()
+
+V = np.zeros((51, 76))
+counter = 0
+while counter < 50:
+    SobreRelax(V)
+    counter += 1
+
+V=np.arcsinh(np.transpose(V))
+plt.imshow(V, origin='bottom', interpolation='nearest', extent=[-5, 5, -7.5, 7.5])
+plt.colorbar()
 plt.show()
