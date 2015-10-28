@@ -31,45 +31,71 @@ def rho(i, j, h):
 # hay una ec para los puntos lejanos a la linea neumann
 # hay otra para los inmediatamente vecinos a la linea neumann
 
-def una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h=0.2, w=1.2):
-    for i in range(1, N_pasos_x-1):
-        # abajo
-        for j in range(1, 12):
-            v_next[i, j] = ((1 - w) * v[i, j] +
-                            w / 4 * (v[i+1, j] + v_next[i-1, j] +
-                            v[i, j+1] + v_next[i, j-1] +
-                            h**2 * rho(i, j, h)))
-        # arriba
-        for j in range(14, N_pasos_y-1):
+def una_iteracion(v, v_next, N_pasos_x, N_pasos_y, h=0.2, w=1.0):
+#sector bajo linea
+    for j in range(1, 11):
+        for i in range(1, N_pasos_x-1):
             v_next[i, j] = ((1 - w) * v[i, j] +
                             w / 4 * (v[i+1, j] + v_next[i-1, j] +
                             v[i, j+1] + v_next[i, j-1] +
                             h**2 * rho(i, j, h)))
 
-    for j in range(11, 15):
-        # izq
+#sector sobre linea
+    for j in range(14, N_pasos_y-1):
+        for i in range(1, N_pasos_x-1):
+            v_next[i, j] = ((1 - w) * v[i, j] +
+                            w / 4 * (v[i+1, j] + v_next[i-1, j] +
+                            v[i, j+1] + v_next[i, j-1] +
+                            h**2 * rho(i, j, h)))
+
+# antes de la linea
+    for j in range(11, 12):
         for i in range(1, 10):
             v_next[i, j] = ((1 - w) * v[i, j] +
                             w / 4 * (v[i+1, j] + v_next[i-1, j] +
                             v[i, j+1] + v_next[i, j-1] +
                             h**2 * rho(i, j, h)))
-        # der
         for i in range(41, N_pasos_x-1):
             v_next[i, j] = ((1 - w) * v[i, j] +
                             w / 4 * (v[i+1, j] + v_next[i-1, j] +
                             v[i, j+1] + v_next[i, j-1] +
                             h**2 * rho(i, j, h)))
+        for i in range(10, 41):
+            v_next[i, j] = ((1 - w) * v[i, j] +
+                            w / 3 * (v[i+1, j] + v_next[i-1, j] +
+                            v_next[i, j-1] - h**2 * rho(i, j, h) + h))
 
-    # vecinos inmdiatos
-    for i in range(10, 41):
-        for j in range(12, 13):  # abajo
+# despues de la linea
+    for j in range(13, 14):
+        for i in range(1, 10):
+            v_next[i, j] = ((1 - w) * v[i, j] +
+                            w / 4 * (v[i+1, j] + v_next[i-1, j] +
+                            v[i, j+1] + v_next[i, j-1] +
+                            h**2 * rho(i, j, h)))
+        for i in range(41, N_pasos_x-1):
+            v_next[i, j] = ((1 - w) * v[i, j] +
+                            w / 4 * (v[i+1, j] + v_next[i-1, j] +
+                            v[i, j+1] + v_next[i, j-1] +
+                            h**2 * rho(i, j, h)))
+        for i in range(10, 41):
             v_next[i, j] = ((1 - w) * v[i, j] +
                             w / 3 * (v[i+1, j] + v_next[i-1, j] +
-                            v_next[i, j-1] + h**2 * rho(i, j, h) + h*(-1.)))
-        for j in range(13, 14):  # arriba
+                            v_next[i, j-1] - h**2 * rho(i, j, h) - h))
+# en la linea
+    for j in range(12, 13):
+        for i in range(1, 10):
             v_next[i, j] = ((1 - w) * v[i, j] +
-                            w / 3 * (v[i+1, j] + v_next[i-1, j] +
-                            v_next[i, j-1] + h**2 * rho(i, j, h) + h*(1.)))
+                            w / 4 * (v[i+1, j] + v_next[i-1, j] +
+                            v[i, j+1] + v_next[i, j-1] +
+                            h**2 * rho(i, j, h)))
+        for i in range(41, N_pasos_x-1):
+            v_next[i, j] = ((1 - w) * v[i, j] +
+                            w / 4 * (v[i+1, j] + v_next[i-1, j] +
+                            v[i, j+1] + v_next[i, j-1] +
+                            h**2 * rho(i, j, h)))
+        for i in range(10, 41):
+            v_next[i, j] = v_next[i, j-1] + h
+
 
 
 def no_ha_convergido(v, v_next, tolerancia=1e-3):
