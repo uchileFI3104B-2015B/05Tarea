@@ -34,3 +34,62 @@ def rho(i, j, h):
         return densidad
     else:
         return 0
+
+
+def una_iteracion(phi, phi_next, N_pasos_x, N_pasos_y, h=0.2, w=1.):
+
+    ''' esta funcion lo que realiza es dividir la caja y calcular el potencial
+    segun
+    las condiciones dadas previamente
+
+    condiciones cercano a la linea bajo la letra
+    primero: calculamos el tramo bajo la linea la linea esta en -5.5
+    que en nuestra grilla seria posicion 10 y sobre la linea, luego
+    al lado de la linea y finalmente las condiciones derivativas o como se
+    escriba jiji'''
+
+    for i in range(1, N_pasos_x - 1):
+
+        for j in range(1, 10):  # recorremos bajo la linea
+            phi_next[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
+                                       phi[i, j+1] + phi_next[i, j-1] +
+                                       h**2 * rho(i, j, h)))
+
+        for j in range(12, N_pasos_y-1):  # recorremos sobre la linea
+            phi_next[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
+                                       phi[i, j+1] + phi_next[i, j-1] +
+                                       h**2 * rho(i, j, h)))
+
+        '''alrededor de la linea costado izquiedo y costado derecho :C '''
+
+    for j in range(10, 12):
+
+        for i in range(1, 11):  # izquierda
+            phi_next[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
+                                       phi[i, j+1] + phi_next[i, j-1] +
+                                       h**2 * rho(i, j, h)))
+        for i in range(41, N_pasos_x-1):
+            phi_next[i, j] = ((1 - w) * phi[i, j] +
+                              w / 4 * (phi[i+1, j] + phi_next[i-1, j] +
+                                       phi[i, j+1] + phi_next[i, j-1] +
+                                       h**2 * rho(i, j, h)))
+
+        '''en la linea'''
+
+    for i in range(10, 41):
+        # deajo de la linea
+
+        for j in range(10, 11):
+            phi_next[i, j] = ((1 - w) * phi[i, j] +
+                              w / 3 * (phi[i+1, j] + phi_next[i-1, j] +
+                                       phi_next[i, j-1] + h**2 * rho(i, j, h) +
+                                       h*(-1.)))
+        # sobre la linea
+        for j in range(11, 12):
+            phi_next[i, j] = ((1 - w) * phi[i, j] +
+                              w / 3 * (phi[i+1, j] + phi_next[i-1, j] +
+                                       phi_next[i, j-1] + h**2 * rho(i, j, h) +
+                                       h*(1.)))
