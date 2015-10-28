@@ -301,7 +301,7 @@ def mostrar(f_caja, caja, titulo):
 #Inicializacion
 
 w=1.2
-N_pasos = np.array([(L_x / h) + 1], [(L_y / h) + 1])
+N_pasos = np.array([(L_x/h) + 1, (L_y/h) + 1])
 coordenadas_carga = armar_letra_B()
 
 carga_caja = crear_caja(L_x, L_y, h)
