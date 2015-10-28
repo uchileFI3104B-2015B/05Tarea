@@ -9,7 +9,6 @@ usando la ecuación de Poisson.
 from __future__ import division
 import numpy as np
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import axes3d
 import pdb
 
 # Condiciones iniciales
@@ -135,14 +134,6 @@ def armar_letra_B():
     letra = np.append(letra, trazo_5, axis=0)
     letra = np.append(letra, trazo_6, axis=0)
     return letra
-
-def rho(caja, coordenadas, total):
-    '''Recibe la caja a modificar, la carga total a colocar y
-     las coordenadas para setear el arreglo de cargas inicial '''
-    carga_en_un_punto = total / len(coordenadas)
-    for par in coordenadas:
-        caja[par[0], par[1]] = carga_en_un_punto
-    return caja
     
 def esta_bajo_linea(i, j):
     '''Devuele true si la coordenada es inmediatamente bajo la linea '''
@@ -168,7 +159,7 @@ def esta_en_linea(i, j):
             return True
     return False
 
-def iterar(caja, caja_next, caja_carga, numero_pasos, h, w=1):
+def Iteracion(caja, caja_next, caja_carga, numero_pasos, h, w=1):
     '''Avanza el algoritmo de sobre relajación y llama a la iteración
     correspondiente para cada coordenada.
     '''
@@ -315,12 +306,12 @@ V_actual = poner_condiciones_borde(V_actual)
 
 #Iteracion
 
-iterar(V_actual, V_next, carga_caja, N_pasos, h, w)
+Iteracion(V_actual, V_next, carga_caja, N_pasos, h, w)
 contador = 1
 tolerancia = 1e-1
 while (contador < 500 and no_converge(V_actual, V_next, tolerancia)):
     V_actual = V_next.copy()
-    iterar(V_actual, V_next, carga_caja, N_pasos, h, w)
+    Iteracion(V_actual, V_next, carga_caja, N_pasos, h, w)
     contador += 1
     
 #Resultados
