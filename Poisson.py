@@ -113,14 +113,14 @@ def una_iteracion(phi, phi_next, Nx_pasos, Ny_pasos, h, w=1.):
             y = 2 / h - 1
             phi_next[i, y] = ((1 - w) * phi[i, y] +
                               w / 3 * (phi[i+1, y] + phi_next[i-1, y] +
-                                       phi_next[i, y-1] + h*(-1.)))
+                                       phi_next[i, y-1] + h*(1.)))
 
         # inmediatamente sobre la linea
         for j in range(11, 12):
             y = 2 / h + 1
             phi_next[i, y] = ((1 - w) * phi[i, y] +
                               w / 3 * (phi[i+1, y] + phi_next[i-1, y] +
-                                       phi_next[i, y-1] + h*(1.)))
+                                       phi_next[i, y-1] + h*(-1.)))
 
 
 def no_ha_convergido(phi, phi_next, tolerancia=1e-5):
@@ -147,11 +147,11 @@ v_rho_next = np.zeros((Nx_pasos, Ny_pasos))
 
 
 # iteracion
-una_iteracion(v_rho, v_rho_next, Nx_pasos, Ny_pasos, h, w=1.8)
+una_iteracion(v_rho, v_rho_next, Nx_pasos, Ny_pasos, h, w=1.9)
 counter = 1
-while counter < 2000 and no_ha_convergido(v_rho, v_rho_next, tolerancia=1e-7):
+while counter < 5000 and no_ha_convergido(v_rho, v_rho_next, tolerancia=1e-7):
     v_rho = v_rho_next.copy()
-    una_iteracion(v_rho, v_rho_next, Nx_pasos, Ny_pasos, h, w=1.8)
+    una_iteracion(v_rho, v_rho_next, Nx_pasos, Ny_pasos, h, w=1.9)
     counter += 1
 
 print("counter = {}".format(counter))
@@ -166,6 +166,9 @@ x = np.linspace(-5, 5, Nx_pasos)
 y = np.linspace(-7.5, 7.5, Ny_pasos)
 X, Y = np.meshgrid(x, y)
 ax.plot_surface(X, Y, v_next_rotada, rstride=1, cstride=1)
+plt.title('Densidad de carga en el rect'u'á''ngulo visto 3D')
+plt.xlabel('x [cm]')
+plt.ylabel('y [cm]')
 fig.show()
 plt.savefig('plot_surface.png')
 
