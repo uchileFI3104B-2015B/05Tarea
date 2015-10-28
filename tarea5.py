@@ -9,8 +9,8 @@ L_x=10 #ancho de la grilla, está en centímetros
 L_y=15 #alto de la grilla, está en centímetros
 Steps_x=int((L_x/h)+1) #número de pasos en X
 Steps_y=int((L_y/h)+1) #número de pasos en Y
-omega=1.9
-tolerance=1e-2
+omega=1.8
+tolerance=1e-3
 
 def rho(i, j, h):
     x=i*h-(L_x/2.) #los x e y están en centímetros, el origen está en el centro de la grilla
