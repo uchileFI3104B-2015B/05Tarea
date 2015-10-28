@@ -38,7 +38,7 @@ def abajo_linea(i,j, abLinea):
     else:
         return False
     
-def una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, w=1.):
+def una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, Letra,Ab_linea,Ar_linea,w=1.):
     for i in range(1, Nx_pasos-1):
             for j in range(1, Ny_pasos-1):
                 if arriba_linea():
@@ -118,11 +118,11 @@ for X in range(8,43):
     Arriba_Linea.append((X,14))
 
 # iteracion
-una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, w=1.)
+una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, LetraM,Abajo_Linea,Arriba_Linea,w=1.)
 counter = 1
 while counter < 800 and no_ha_convergido(V, V_next, tolerancia=1e-7):
     V = V_next.copy()
-    una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, w=1.)
+    una_iteracion(V, V_next, Nx_pasos, Ny_pasos, h, LetraM,Abajo_Linea,Arriba_Linea, w=1.)
     counter += 1
 
 print("counter = {}".format(counter))
