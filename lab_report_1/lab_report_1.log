@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.10.4)  8 OCT 2015 22:57
+This is pdfTeX, Version 3.14159265-2.6-1.40.15 (TeX Live 2014) (preloaded format=pdflatex 2015.10.26)  28 OCT 2015 00:01
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -750,47 +750,59 @@ Now handling font encoding U ...
    defining Unicode char U+2026 (decimal 8230)
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
-)) (./lab_report_1.aux
+))
+(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2010/09/12 v5.6 Page Geometry
 
-LaTeX Warning: Label `' multiply defined.
-
-
-LaTeX Warning: Label `' multiply defined.
-
-
-LaTeX Warning: Label `' multiply defined.
-
-
-LaTeX Warning: Label `' multiply defined.
-
+(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2010/03/01 v1.5 Detect VTeX and its facilities (HO)
+Package ifvtex Info: VTeX not detected.
 )
+(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
+)
+\Gm@cnth=\count152
+\Gm@cntv=\count153
+\c@Gm@tempcnt=\count154
+\Gm@bindingoffset=\dimen161
+\Gm@wd@mp=\dimen162
+\Gm@odd@mp=\dimen163
+\Gm@even@mp=\dimen164
+\Gm@layoutwidth=\dimen165
+\Gm@layoutheight=\dimen166
+\Gm@layouthoffset=\dimen167
+\Gm@layoutvoffset=\dimen168
+\Gm@dimlist=\toks27
+)
+(./lab_report_1.aux)
 \openout1 = `lab_report_1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 47.
-LaTeX Font Info:    ... okay on input line 47.
- (/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 52.
+LaTeX Font Info:    ... okay on input line 52.
+
+(/usr/share/texlive/texmf-dist/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count152
-\scratchdimen=\dimen161
+\scratchcounter=\count155
+\scratchdimen=\dimen169
 \scratchbox=\box50
-\nofMPsegments=\count153
-\nofMParguments=\count154
-\everyMPshowfont=\toks27
-\MPscratchCnt=\count155
-\MPscratchDim=\dimen162
-\MPnumerator=\count156
-\makeMPintoPDFobject=\count157
-\everyMPtoPDFconversion=\toks28
+\nofMPsegments=\count156
+\nofMParguments=\count157
+\everyMPshowfont=\toks28
+\MPscratchCnt=\count158
+\MPscratchDim=\dimen170
+\MPnumerator=\count159
+\makeMPintoPDFobject=\count160
+\everyMPtoPDFconversion=\toks29
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2010/02/09 v2.5 Base part for package epstopdf
 
@@ -905,109 +917,88 @@ Dictionary: translator-basic-dictionary, Language: English
 fg
 File: siunitx-abbreviations.cfg 2013/07/31 v2.5s siunitx: Abbreviated units
 )
-\c__siunitx_mathsf_int=\count158
-\c__siunitx_mathtt_int=\count159
- [1
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: <default>
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(86.72377pt, 440.84746pt, 86.72377pt)
+* v-part:(T,H,B)=(86.72377pt, 621.52245pt, 86.72377pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=440.84746pt
+* \textheight=621.52245pt
+* \oddsidemargin=14.45378pt
+* \evensidemargin=14.45378pt
+* \topmargin=-22.54622pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=65.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+\c__siunitx_mathsf_int=\count161
+\c__siunitx_mathtt_int=\count162
+[1
 
 {/usr/share/texlive/texmf-dist/fonts/map/pdftex/updmap/pdftex.map}]
-Overfull \hbox (36.70079pt too wide) in paragraph at lines 115--116
-[]\OT1/cmr/m/n/10 Los m^^Setodos de-scritos se en-cuen-tran im-ple-men-ta-dos e
-n la clase \OT1/cmr/m/it/10 os-cilador[]van[]der[]pool.py\OT1/cmr/m/n/10 . 
- []
+<images/situacion_inicial.png, id=15, 904.8204pt x 505.89pt>
+File: images/situacion_inicial.png Graphic file (type png)
 
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 122.
+<use images/situacion_inicial.png>
+Package pdftex.def Info: images/situacion_inicial.png used on input line 104.
+(pdftex.def)             Requested size: 452.4091pt x 252.94437pt.
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
-File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 122.
-
-<images/ampl_vs_tiempo_01-0.png, id=17, 578.16pt x 433.62pt>
-File: images/ampl_vs_tiempo_01-0.png Graphic file (type png)
-
-<use images/ampl_vs_tiempo_01-0.png>
-Package pdftex.def Info: images/ampl_vs_tiempo_01-0.png used on input line 141.
-
-(pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<images/vel_vs_amplitud_01-0.png, id=19, 578.16pt x 433.62pt>
-File: images/vel_vs_amplitud_01-0.png Graphic file (type png)
-
-<use images/vel_vs_amplitud_01-0.png>
-Package pdftex.def Info: images/vel_vs_amplitud_01-0.png used on input line 148
-.
-(pdftex.def)             Requested size: 289.07928pt x 216.80946pt.
-
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[2] [3 <./images/ampl_vs_tiempo_01-0.png> <./images/vel_vs_amplitud_01-0.png>]
-<images/ampl_vs_tiempo_4-0.png, id=30, 578.16pt x 433.62pt>
-File: images/ampl_vs_tiempo_4-0.png Graphic file (type png)
-
-<use images/ampl_vs_tiempo_4-0.png>
-Package pdftex.def Info: images/ampl_vs_tiempo_4-0.png used on input line 165.
-(pdftex.def)             Requested size: 231.2599pt x 173.44492pt.
-
-<images/vel_vs_amplitud_4-0.png, id=31, 578.16pt x 433.62pt>
-File: images/vel_vs_amplitud_4-0.png Graphic file (type png)
-
-<use images/vel_vs_amplitud_4-0.png>
-Package pdftex.def Info: images/vel_vs_amplitud_4-0.png used on input line 172.
-
-(pdftex.def)             Requested size: 231.2599pt x 173.44492pt.
- [4
-
- <./images/ampl_vs_tiempo_4-0.png> <./images/vel_vs_amplitud_4-0.png>] [5]
-<images/atractor_de_lorenz.png, id=40, 578.16pt x 433.62pt>
-File: images/atractor_de_lorenz.png Graphic file (type png)
-
-<use images/atractor_de_lorenz.png>
-Package pdftex.def Info: images/atractor_de_lorenz.png used on input line 232.
-(pdftex.def)             Requested size: 346.89867pt x 260.17401pt.
-
-Overfull \hbox (1.89867pt too wide) in paragraph at lines 232--234
+Overfull \hbox (11.56165pt too wide) in paragraph at lines 104--105
  [][] 
  []
 
+[2 <./images/situacion_inicial.png>]
+<images/volt_calculado.png, id=22, 578.16pt x 433.62pt>
+File: images/volt_calculado.png Graphic file (type png)
 
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[6
-
-] [7 <./images/atractor_de_lorenz.png>] (./lab_report_1.aux)
-
-LaTeX Warning: There were multiply-defined labels.
-
- ) 
+<use images/volt_calculado.png>
+Package pdftex.def Info: images/volt_calculado.png used on input line 146.
+(pdftex.def)             Requested size: 404.70924pt x 303.53192pt.
+ [3 <./images/volt_calculado.png>] [4]
+(./lab_report_1.aux) ) 
 Here is how much of TeX's memory you used:
- 11178 strings out of 493339
- 234395 string characters out of 6141382
- 257995 words of memory out of 5000000
- 14465 multiletter control sequences out of 15000+600000
- 12190 words of font info for 46 fonts, out of 8000000 for 9000
+ 11619 strings out of 493339
+ 240546 string characters out of 6141381
+ 271895 words of memory out of 5000000
+ 14902 multiletter control sequences out of 15000+600000
+ 11882 words of font info for 45 fonts, out of 8000000 for 9000
  953 hyphenation exceptions out of 8191
- 39i,9n,35p,10440b,492s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/te
-xmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts
-/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/
-amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
-10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on lab_report_1.pdf (7 pages, 463142 bytes).
+ 39i,6n,35p,10440b,488s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfont
+s/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/c
+mmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.p
+fb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share
+/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texliv
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-
+dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fon
+ts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/typ
+e1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmti10.pfb>
+Output written on lab_report_1.pdf (4 pages, 338224 bytes).
 PDF statistics:
- 91 PDF objects out of 1000 (max. 8388607)
- 58 compressed objects within 1 object stream
+ 66 PDF objects out of 1000 (max. 8388607)
+ 44 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 26 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 11 words of extra memory for PDF output out of 10000 (max. 10000000)
 
