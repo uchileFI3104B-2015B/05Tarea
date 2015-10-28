@@ -105,18 +105,19 @@ def no_ha_convergido(phi, phi_next, tolerancia=1e-5):
         return False
 
 
-w = 1.2
+w = 1.0
+# w=0.5 0.8 1.0, 1.2, 1.5
 
 phi = np.zeros((N_pasos_x, N_pasos_y))
 phi_next = np.zeros((N_pasos_x, N_pasos_y))
 
 # iteracion
-una_iteracion(phi, phi_next, N_pasos_x, N_pasos_y, h, w=1.2)
+una_iteracion(phi, phi_next, N_pasos_x, N_pasos_y, h, w)
 counter = 1
 
-while counter < 5 and no_ha_convergido(phi, phi_next, tolerancia=1e-5):
+while counter < 15000 and no_ha_convergido(phi, phi_next, tolerancia=1e-5):
     phi = phi_next.copy()
-    una_iteracion(phi, phi_next, N_pasos_x, N_pasos_y, h, w=1.2)
+    una_iteracion(phi, phi_next, N_pasos_x, N_pasos_y, h, w)
     counter += 1
 
 print("counter = {}".format(counter))
@@ -134,10 +135,10 @@ y = np.linspace(-1, 1, N_pasos_y)
 X, Y = np.meshgrid(x, y)
 
 ax.plot_surface(X, Y, phi_next_transpuesta, rstride=1, cstride=1)
-ax.set_xlabel('$\ x $', fontsize=15)
-ax.set_ylabel('$\ y $', fontsize=15)
-ax.set_zlabel('$\ Potencial$', fontsize=15)
-
+ax.set_xlabel('$\ x [cm]$', fontsize=15)
+ax.set_ylabel('$\ y [cm]$', fontsize=15)
+ax.set_zlabel('$\ Potencial [erg/C]$', fontsize=15)
+ax.set_title('$\ Potencial $')
 fig.show()
 
 fig2 = plt.figure(2)
@@ -145,8 +146,9 @@ fig2.clf()
 ax2 = fig2.add_subplot(111)
 ax2.imshow(np.arcsinh(phi_next_transpuesta),
            origin='bottom', interpolation='nearest')
-ax.set_xlabel('$\ x $', fontsize=15)
-ax.set_ylabel('$\ y $', fontsize=15)
+ax2.set_xlabel('$\ x [cm]$', fontsize=15)
+ax2.set_ylabel('$\ y [cm]$', fontsize=15)
+ax2.set_title('$\ Potencial $')
 
 fig2.show()
 
