@@ -15,11 +15,8 @@ Semestre Primavera 2015
 Nicolas Troncoso Kurtovic
 '''
 
-import matplotlib.pyplot as     p
-import numpy             as     np
-from   scipy.integrate   import ode
-from   scipy.optimize    import root
-from   scipy.optimize    import curve_fit
+import matplotlib.pyplot as p
+import numpy             as np
 
 ################################################################################
 #                                                                              #
@@ -75,16 +72,65 @@ def una_iteracion(V, V_sgte, Carga, paso, w, linea):
   paso es el paso en distancias de unidad normalizada, w es el criterio
   para variar la velocidad de convergencia y linea corresponde a si
   hay o no linea dentro de la caja. 
+  El algoritmo resuelve la caja entera si no hay linea, mientras que si
+  existe linea se resuelve la caja por trozos dependiendo de las 
+  condiciones de borde.
   Devuelve los parametros actualizados.
   '''
   l_x = len(V[0,:])
-  l_y = len(V[0,:])
+  l_y = len(V[:,0])
   
-  if linea == False:
+  if linea == False:  # Para el caso en que no hay linea
     for i in range(1, l_x - 1):
       for j in range(1, l_y - 1):
-        V_sgte[j,i] = (1 - w) * V[j,i] + w / 4. * (V[j,i+1] + V_sgte[j,i-1] + V[j+1,i] + V_sgte[j-1,i] + paso**2 * Carga[j,i])
+        V_sgte[j,i] = (1 - w) * V[j,i] + w / 4. * ( V[j,i+1] + V_sgte[j,i-1]
+                                                  + V[j+1,i] + V_sgte[j-1,i]
+                                                  + paso**2 * Carga[j,i] )
+  
+  else: 
+    linea = int(13. / paso)
+    a = int(2. / paso)
+    b = int(8. / paso)
+    for i in range(1, l_x-  1): # Parte superior de la caja, contiene la letra
+      for j in range(1, linea - 1):
+        V_sgte[j,i] = (1 - w) * V[j,i] + w / 4. * ( V[j,i+1] + V_sgte[j,i-1]
+                                                  + V[j+1,i] + V_sgte[j-1,i]
+                                                  + paso**2 * Carga[j,i] )
 
+    for i in range(a, b): # Sobre la linea
+      V_sgte[linea-1,i] = (1 - w) * V[linea-1,i] + w / 3. * ( V[linea - 1, i+1]
+                                     + V_sgte[linea - 1, i-1]
+                                     + V_sgte[linea - 2, i]
+                                     - paso + paso**2 * Carga[j,i] )
+
+    for i in range(a, b): # En la linea
+      V_sgte[linea,i] = V[linea - 1, i] + paso  # condicion g=1
+
+    for i in range(a, b): # Bajo la linea
+      V_sgte[linea+1,i] = (1 - w) * V[linea+1,i] + w / 3. * ( V[linea + 1, i+1]
+                                     + V_sgte[linea + 1, i-1]
+                                     + V_sgte[linea + 2, i]
+                                     + paso + paso**2 * Carga[j,i] )
+
+    for i in range(b , l_x - 1): # Parte lateral derecha de la linea
+      for j in range(linea - 1 , linea + 2):
+        V_sgte[j,i] = (1 - w) * V[j,i] + w / 4. * ( V[j,i+1] + V_sgte[j,i-1]
+                                                  + V[j+1,i] + V_sgte[j-1,i]
+                                                  + paso**2 * Carga[j,i] )
+
+    for i in range(1, a): # Parte lateral izquierda de la linea
+      for j in range(linea - 1 , linea + 2):
+        V_sgte[j,i] = (1 - w) * V[j,i] + w / 4. * ( V[j,i+1] + V_sgte[j,i-1]
+                                                  + V[j+1,i] + V_sgte[j-1,i]
+                                                  + paso**2 * Carga[j,i] )
+
+    for i in range(1, l_x - 1): # Parte baja de la caja
+      for j in range(linea + 2, l_y -1):
+        V_sgte[j,i] = (1 - w) * V[j,i] + w / 4. * ( V[j,i+1] + V_sgte[j,i-1]
+                                                  + V[j+1,i] + V_sgte[j-1,i]
+                                                  + paso**2 * Carga[j,i] )
+
+    
 
 def no_ha_convergido(V, V_sgte, tolerancia = 10**-5):
     '''
@@ -132,18 +178,32 @@ def graficar(V):
 
 box = caja(10, 15, 0.25)
 box_sgte = caja(10, 15, 0.25)
-carga = caja_letra_N(10, 15, 0.25, 1./17.)
+density = 1./(17.*16.)  # densidad de carga
+h = 0.25
+carga = caja_letra_N(10, 15, 0.25, 1.)
+ww = 1.8     # parametro w
+tolerancia = 10**-7
+iter_max = 10** 5
 
 
-box, i = resolvedor(box, box_sgte, carga, 0.25, 1.2, False, 10**5, 10**-7)
-print i
-graficar(box)
+box1, i1 = resolvedor(box, box_sgte, carga, h, ww, False, iter_max, tolerancia)
+print i1
+graficar(box1)
 
 graficar(carga)
 
+box2, i2 = resolvedor(box, box_sgte, carga, h, ww, True, iter_max, tolerancia)
+print i2
+graficar(box2)
 
 
+ww = 1.2
+
+box3, i3 = resolvedor(box, box_sgte, carga, h, ww, True, iter_max, tolerancia)
+print i3
+graficar(box3)
 
 
-
+box4 = box3-box1
+graficar(box4)
 
