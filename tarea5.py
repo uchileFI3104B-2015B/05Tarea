@@ -54,6 +54,57 @@ def una_iteracion(V, Vnext, Nx_pasos, Ny_pasos, h, w=1.):
 
 
 def no_ha_convergido(V, Vnext, tolerancia=1e-3):
+    not_zero = (Vnext != 0)
+    diff_relativa = (V - Vnext)[not_zero] / Vnext[not_zero]
+    max_diff = np.max(np.fabs(diff_relativa))
+    if max_diff > tolerancia:
+        return True
+    else:
+        return False
 
 
+# - - - Iteracion - - - #
 
+Lx = 10
+Ly = 15
+h = 0.2
+Nx_pasos = int(Lx/h)
+Ny_pasos = int(Ly/h)
+
+w = 0.001
+
+V = np.zeros((Nx_pasos, Ny_pasos))
+Vnext = np.zeros((Nx_pasos, Ny_pasos))
+
+una_iteracion(V, Vnext, Nx_pasos, Ny_pasos, h, w)
+counter = 1
+
+while counter < 2000 and no_ha_convergido(V, Vnext, tolerancia=1e-4):
+    V = Vnext.copy()
+    una_iteracion(V, Vnext, Nx_pasos, Ny_pasos, h, w)
+    counter += 1
+
+print("counter = {}".format(counter))
+
+Vnext_trans = Vnext.transpose()
+
+x = np.linspace(-1, 1, Nx_pasos)
+y = np.linspace(-1, 1, Ny_pasos)
+X, Y = np.meshgrid(x, y)
+
+fig = plt.figure(1)
+fig.clf()
+ax = fig.add_subplot(111, projection='3d')
+ax.plot_surface(X, Y, Vnext_trans, rstride=1, cstride=1)
+ax.set_xlabel('X')
+ax.set_ylabel('Y')
+ax.set_zlabel('Potencial')
+fig.savefig("grafico3d.png")
+
+fig2 = plt.figure(2)
+fig2.clf()
+ax2 = fig2.add_subplot(111)
+ax2.imshow(np.arcsinh(Vnext_trans), origin='bottom', interpolation='nearest')
+ax2.set_xlabel('X')
+ax2.set_ylabel('Y')
+fig2.savefig("grafico2d.png")
